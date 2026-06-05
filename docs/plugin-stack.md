@@ -11,6 +11,8 @@ This blueprint includes the standard Llummio plugin stack.
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
 | Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
+Internal Llummio plugins are documented in `docs/internal-plugins.md`.
+
 ## Premium Plugins
 
 This repo is private internal infrastructure. Premium plugin code is included for Llummio client builds, but license keys must not be committed.
