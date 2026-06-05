@@ -1,0 +1,49 @@
+.llummio-editor-helpers__notice {
+	margin: 12px 0 0;
+}
+
+.llummio-editor-helpers__notice.components-notice {
+	padding-right: 8px;
+}
+
+.llummio-editor-helpers__field.is-over-recommended-length .components-base-control__help {
+	color: #cc1818;
+}
+
+.llummio-editor-helpers__title-field {
+	margin-bottom: 20px;
+}
+
+.llummio-editor-helpers-sidebar .interface-complementary-area-header__title {
+	font-weight: 700;
+}
+
+.llummio-editor-helpers__wire-color-control {
+	margin-top: 16px;
+}
+
+.llummio-editor-helpers__wire-color-label {
+	font-size: 11px;
+	font-weight: 500;
+	margin: 0 0 8px;
+	text-transform: uppercase;
+}
+
+.llummio-editor-helpers__wire-color-swatches {
+	display: flex;
+	gap: 8px;
+}
+
+.llummio-editor-helpers__wire-color-swatch {
+	border: 1px solid #757575;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+	cursor: pointer;
+	height: 24px;
+	padding: 0;
+	width: 24px;
+}
+
+.llummio-editor-helpers__wire-color-swatch.is-selected {
+	box-shadow: 0 0 0 2px #1e1e1e;
+}

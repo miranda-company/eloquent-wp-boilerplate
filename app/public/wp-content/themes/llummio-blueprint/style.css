@@ -68,9 +68,9 @@ Tags:
     --text-l: clamp(1.15rem, 1.15rem + 0.25vw, 1rem) !important;
 }
 
-/* Wireframe: adds a red border to all elements with the class "wire" */
+/* Wireframe: disabled by default; the editor toggle can show the blue borders. */
 .wire {
-    border: 1px solid rgb(17, 0, 255);
+    border: 0 solid rgb(17, 0, 255);
 }
 
 /* --------------------------------------------------------- */

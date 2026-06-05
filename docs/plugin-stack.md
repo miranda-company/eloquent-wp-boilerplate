@@ -9,7 +9,7 @@ This blueprint includes the standard Llummio plugin stack.
 | Fluent Forms | `fluentform` | 6.2.4 |
 | GenerateBlocks | `generateblocks` | 2.2.1 |
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
-| Llummio SEO Fields | `llummio-seo-fields` | 0.1.0 |
+| Llummio Editor Helpers | `llummio-editor-helpers` | 0.1.0 |
 | Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
 Internal Llummio plugins are documented in `docs/internal-plugins.md`.
