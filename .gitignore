@@ -16,7 +16,7 @@ app/public/wp-content/plugins/*
 !app/public/wp-content/plugins/fluentform/
 !app/public/wp-content/plugins/generateblocks/
 !app/public/wp-content/plugins/generateblocks-pro/
-!app/public/wp-content/plugins/wp-svg-images/
+!app/public/wp-content/plugins/llummio-svg-uploads/
 
 # Keep the blueprint theme only.
 app/public/wp-content/themes/*

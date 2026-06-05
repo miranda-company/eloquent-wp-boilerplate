@@ -567,7 +567,7 @@ INSERT INTO `wp_options` VALUES (30,'rewrite_rules','a:123:{s:11:\"^wp-json/?$\"
 INSERT INTO `wp_options` VALUES (31,'hack_file','0','on');
 INSERT INTO `wp_options` VALUES (32,'blog_charset','UTF-8','on');
 INSERT INTO `wp_options` VALUES (33,'moderation_keys','','off');
-INSERT INTO `wp_options` VALUES (34,'active_plugins','a:6:{i:0;s:30:\"advanced-custom-fields/acf.php\";i:1;s:41:\"create-block-theme/create-block-theme.php\";i:2;s:25:\"fluentform/fluentform.php\";i:3;s:29:\"generateblocks-pro/plugin.php\";i:4;s:25:\"generateblocks/plugin.php\";i:5;s:31:\"wp-svg-images/wp-svg-images.php\";}','on');
+INSERT INTO `wp_options` VALUES (34,'active_plugins','a:6:{i:0;s:30:\"advanced-custom-fields/acf.php\";i:1;s:41:\"create-block-theme/create-block-theme.php\";i:2;s:25:\"fluentform/fluentform.php\";i:3;s:29:\"generateblocks-pro/plugin.php\";i:4;s:25:\"generateblocks/plugin.php\";i:5;s:43:\"llummio-svg-uploads/llummio-svg-uploads.php\";}','on');
 INSERT INTO `wp_options` VALUES (35,'category_base','','on');
 INSERT INTO `wp_options` VALUES (36,'ping_sites','https://rpc.pingomatic.com/','on');
 INSERT INTO `wp_options` VALUES (37,'comment_max_links','2','on');
@@ -690,7 +690,6 @@ INSERT INTO `wp_options` VALUES (328,'recovery_keys','a:0:{}','off');
 INSERT INTO `wp_options` VALUES (330,'finished_updating_comment_type','1','auto');
 INSERT INTO `wp_options` VALUES (342,'generateblocks_pro_classic_menu_support','','auto');
 INSERT INTO `wp_options` VALUES (357,'action_scheduler_migration_status','complete','auto');
-INSERT INTO `wp_options` VALUES (426,'wpsvg_settings','a:3:{s:18:\"role_administrator\";i:2;s:11:\"role_editor\";i:1;s:11:\"role_author\";i:1;}','auto');
 /*!40000 ALTER TABLE `wp_options` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -986,7 +985,6 @@ INSERT INTO `wp_usermeta` VALUES (13,1,'wp_user_level','10');
 INSERT INTO `wp_usermeta` VALUES (14,1,'dismissed_wp_pointers','');
 INSERT INTO `wp_usermeta` VALUES (15,1,'show_welcome_panel','1');
 INSERT INTO `wp_usermeta` VALUES (18,1,'wp_persisted_preferences','a:4:{s:4:\"core\";a:2:{s:26:\"isComplementaryAreaVisible\";b:1;s:24:\"enableChoosePatternModal\";b:1;}s:14:\"core/edit-post\";a:1:{s:12:\"welcomeGuide\";b:0;}s:9:\"_modified\";s:24:\"2026-05-14T08:08:33.737Z\";s:14:\"core/edit-site\";a:2:{s:12:\"welcomeGuide\";b:0;s:16:\"welcomeGuidePage\";b:0;}}');
-INSERT INTO `wp_usermeta` VALUES (19,1,'wpsvg_notice_dismissed','1');
 INSERT INTO `wp_usermeta` VALUES (20,1,'managenav-menuscolumnshidden','a:5:{i:0;s:11:\"link-target\";i:1;s:11:\"css-classes\";i:2;s:3:\"xfn\";i:3;s:11:\"description\";i:4;s:15:\"title-attribute\";}');
 INSERT INTO `wp_usermeta` VALUES (21,1,'metaboxhidden_nav-menus','a:1:{i:0;s:12:\"add-post_tag\";}');
 INSERT INTO `wp_usermeta` VALUES (23,1,'wp_user-settings','libraryContent=browse');

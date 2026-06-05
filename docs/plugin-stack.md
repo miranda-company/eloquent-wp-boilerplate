@@ -9,7 +9,7 @@ This blueprint includes the standard Llummio plugin stack.
 | Fluent Forms | `fluentform` | 6.2.4 |
 | GenerateBlocks | `generateblocks` | 2.2.1 |
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
-| WP SVG Images | `wp-svg-images` | 4.5 |
+| Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
 ## Premium Plugins
 
