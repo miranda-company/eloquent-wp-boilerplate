@@ -1,0 +1,212 @@
+/*
+Theme Name: Llummio Blueprint
+Theme URI: https://llumm.io/llummio-blueprint
+Author: Rodolfo Miranda Company - Llummio
+Author URI: https://llumm.io/
+Description: A reusable WordPress block theme foundation for custom websites.
+Requires at least: 6.9
+Tested up to: 6.9
+Requires PHP: 5.7
+Version: 0.1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: llummio-blueprint
+Tags: 
+*/
+
+/* Global Variables: defines custom properties for padding and border radius */
+:root {
+
+    /*----------------------------*/
+    /* Spacing & Sizing Variables */
+
+    /* Container Widths */
+    --container-large: 1440px;
+    --container-medium: 1024px;
+    --container-contained: 820px;
+
+    /* Desktop Section Paddings */
+    --padding-section-lateral-default: 40px;
+
+    --padding-section-unit: 8px;
+    --padding-section-xxs: 16px;
+    --padding-section-xs: 24px;
+    --padding-section-s: 40px;
+    --padding-section-m: 64px;
+    --padding-section-l: 112px;
+    --padding-section-xl: 144px;
+    --padding-section-xxl: 200px;
+
+    /* Mobile Section Paddings */
+    --padding-section-lateral-default-mobile: 16px;
+
+    --padding-section-unit-mobile: 8px;
+    --padding-section-xxs-mobile: 12px;
+    --padding-section-xs-mobile: 16px;
+    --padding-section-s-mobile: 28px;
+    --padding-section-m-mobile: 40px;
+    --padding-section-l-mobile: 64px;
+    --padding-section-xl-mobile: 112px;
+    --padding-section-xxl-mobile: 144px;
+
+    /*----------------------------*/
+    /* UI Styles */
+
+    /* Radius */
+    --border-radius-xs: 8px;
+    --border-radius-s: 16px;
+    --border-radius-m: 32px;
+    --border-radius-xl: 40px;
+
+    /* Stroke */
+    --border-width: 1px;
+
+
+    /*----------------------------*/
+    /* Texts */
+    --text-s: clamp(0.8rem, 0.8rem + 0.25vw, 1rem) !important;
+    --text-l: clamp(1.15rem, 1.15rem + 0.25vw, 1rem) !important;
+}
+
+/* Wireframe: adds a red border to all elements with the class "wire" */
+.wire {
+    border: 1px solid rgb(17, 0, 255);
+}
+
+/* --------------------------------------------------------- */
+
+/* Global Resets */
+* {
+    box-sizing: border-box;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-font-smoothing: antialiased !important;
+    text-rendering: optimizelegibility !important;
+    letter-spacing: .01em;
+}
+
+/* Anchor styles / resets */
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Heading styles / resets */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+/* Heading styles / resets */
+p {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* --------------------------------------------------------- */
+
+/* Sticky Header */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/*Control background color and blur on header*/
+.llummio-site-header {
+    background: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(12px);
+}
+
+/*Offset header if user is loggedin and the admin bar is shown*/
+.admin-bar header {
+    top: 32px;
+}
+
+@media (max-width: 782px) {
+    .admin-bar header {
+        top: 46px;
+    }
+}
+
+/* --------------------------------------------------------- */
+
+/* Submenu: adds a border to the bottom of the submenu items */
+.gb-sub-menu>li {
+    border-right: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
+    border-bottom: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
+    border-left: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
+}
+
+/* Site Blocks: removes the default margin from all direct child blocks of the site blocks container */
+:where(.wp-site-blocks)>* {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.sub-menu li a {
+    line-height: 22px;
+}
+
+/* Layout Flow: removes the default margin from the first and last element of the layout flow */
+/* In practice, it means:
+	•	paragraphs
+	•	headings
+	•	images
+	•	lists
+	•	any other direct child blocks
+*/
+:root :where(.is-layout-flow)>* {
+    margin-block-start: 0px;
+    margin-block-end: 0;
+}
+
+/* --------------------------------------------------------- */
+
+/* Video Background */
+.video-bg>video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: auto;
+    min-width: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    object-position: center center;
+    opacity: 0.64;
+}
+
+
+/* --------------------------------------------------------- */
+
+/* Shadows */
+.shadow-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-2 {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-3 {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-4 {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-5 {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* --------------------------------------------------------- */

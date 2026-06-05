@@ -1,0 +1,287 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.9/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": true,
+		"color": {
+			"custom": false,
+			"customGradient": false,
+			"defaultGradients": false,
+			"defaultPalette": false,
+			"palette": [
+				{
+					"color": "#3E110E",
+					"name": "Primary 100",
+					"slug": "color-primary-100"
+				},
+				{
+					"color": "#600F0A",
+					"name": "Primary 200",
+					"slug": "color-primary-200"
+				},
+				{
+					"color": "#90160C",
+					"name": "Primary 300",
+					"slug": "color-primary-300"
+				},
+				{
+					"color": "#B02115",
+					"name": "Primary 400",
+					"slug": "color-primary-400"
+				},
+				{
+					"color": "#DB1005",
+					"name": "Primary 500",
+					"slug": "color-primary-500"
+				},
+				{
+					"color": "#FA4338",
+					"name": "Primary 600",
+					"slug": "color-primary-600"
+				},
+				{
+					"color": "#FB726A",
+					"name": "Primary 700",
+					"slug": "color-primary-700"
+				},
+				{
+					"color": "#FDA19C",
+					"name": "Primary 800",
+					"slug": "color-primary-800"
+				},
+				{
+					"color": "#FDD0CD",
+					"name": "Primary 900",
+					"slug": "color-primary-900"
+				},
+				{
+					"color": "#161729",
+					"name": "Secondary 100",
+					"slug": "color-secondary-100"
+				},
+				{
+					"color": "#222443",
+					"name": "Secondary 200",
+					"slug": "color-secondary-200"
+				},
+				{
+					"color": "#2B2E4F",
+					"name": "Secondary 300",
+					"slug": "color-secondary-300"
+				},
+				{
+					"color": "#323767",
+					"name": "Secondary 400",
+					"slug": "color-secondary-400"
+				},
+				{
+					"color": "#41467A",
+					"name": "Secondary 500",
+					"slug": "color-secondary-500"
+				},
+				{
+					"color": "#575EA3",
+					"name": "Secondary 600",
+					"slug": "color-secondary-600"
+				},
+				{
+					"color": "#8186BA",
+					"name": "Secondary 700",
+					"slug": "color-secondary-700"
+				},
+				{
+					"color": "#ABAFD1",
+					"name": "Secondary 800",
+					"slug": "color-secondary-800"
+				},
+				{
+					"color": "#D5D6E8",
+					"name": "Secondary 900",
+					"slug": "color-secondary-900"
+				},
+				{
+					"color": "#0B0B39",
+					"name": "Accent 100",
+					"slug": "color-accent-100"
+				},
+				{
+					"color": "#0F0F48",
+					"name": "Accent 200",
+					"slug": "color-accent-200"
+				},
+				{
+					"color": "#111157",
+					"name": "Accent 300",
+					"slug": "color-accent-300"
+				},
+				{
+					"color": "#151571",
+					"name": "Accent 400",
+					"slug": "color-accent-400"
+				},
+				{
+					"color": "#2020AA",
+					"name": "Accent 500",
+					"slug": "color-accent-500"
+				},
+				{
+					"color": "#2B2BE3",
+					"name": "Accent 600",
+					"slug": "color-accent-600"
+				},
+				{
+					"color": "#6060EA",
+					"name": "Accent 700",
+					"slug": "color-accent-700"
+				},
+				{
+					"color": "#9595F1",
+					"name": "Accent 800",
+					"slug": "color-accent-800"
+				},
+				{
+					"color": "#CACAF8",
+					"name": "Accent 900",
+					"slug": "color-accent-900"
+				},
+				{
+					"color": "#1C1C1C",
+					"name": "Neutral 100",
+					"slug": "color-neutral-100"
+				},
+				{
+					"color": "#2B2B2B",
+					"name": "Neutral 200",
+					"slug": "color-neutral-200"
+				},
+				{
+					"color": "#3C3C3C",
+					"name": "Neutral 300",
+					"slug": "color-neutral-300"
+				},
+				{
+					"color": "#444444",
+					"name": "Neutral 400",
+					"slug": "color-neutral-400"
+				},
+				{
+					"color": "#666666",
+					"name": "Neutral 500",
+					"slug": "color-neutral-500"
+				},
+				{
+					"color": "#828282",
+					"name": "Neutral 600",
+					"slug": "color-neutral-600"
+				},
+				{
+					"color": "#AAAAAA",
+					"name": "Neutral 700",
+					"slug": "color-neutral-700"
+				},
+				{
+					"color": "#CCCCCC",
+					"name": "Neutral 800",
+					"slug": "color-neutral-800"
+				},
+				{
+					"color": "#EEEEEE",
+					"name": "Neutral 900",
+					"slug": "color-neutral-900"
+				},
+				{
+					"color": "#FFFFFF",
+					"name": "White",
+					"slug": "color-white"
+				},
+				{
+					"color": "#000000",
+					"name": "Black",
+					"slug": "color-black"
+				}
+			]
+		},
+		"spacing": {
+			"units": [
+				"%",
+				"px",
+				"em",
+				"rem",
+				"vh",
+				"vw"
+			]
+		},
+		"typography": {
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"fontFace": [
+						{
+							"fontFamily": "\"Plus Jakarta Sans\"",
+							"fontStyle": "normal",
+							"fontWeight": "200 800",
+							"src": [
+								"file:./assets/fonts/plus-jakarta-sans/PlusJakartaSans-VariableFont_wght.ttf"
+							]
+						},
+						{
+							"fontFamily": "\"Plus Jakarta Sans\"",
+							"fontStyle": "italic",
+							"fontWeight": "200 800",
+							"src": [
+								"file:./assets/fonts/plus-jakarta-sans/PlusJakartaSans-Italic-VariableFont_wght.ttf"
+							]
+						}
+					],
+					"fontFamily": "\"Plus Jakarta Sans\", sans-serif",
+					"name": "Plus Jakarta Sans",
+					"slug": "plus-jakarta-sans"
+				}
+			],
+			"fontSizes": [
+				{
+					"name": "S",
+					"size": "0.95rem",
+					"slug": "s"
+				},
+				{
+					"name": "M",
+					"size": "1.125rem",
+					"slug": "m"
+				},
+				{
+					"fluid": {
+						"max": "3rem",
+						"min": "1.5rem"
+					},
+					"name": "L",
+					"size": "1.5rem",
+					"slug": "l"
+				},
+				{
+					"name": "XL",
+					"size": "2.25rem",
+					"slug": "xl"
+				}
+			]
+		},
+		"useRootPaddingAwareAlignments": true
+	},
+	"styles": {
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--plus-jakarta-sans)",
+			"fontStyle": "normal",
+			"fontWeight": "400"
+		}
+	},
+	"templateParts": [
+		{
+			"area": "header",
+			"name": "header"
+		},
+		{
+			"area": "footer",
+			"name": "footer"
+		}
+	]
+}
