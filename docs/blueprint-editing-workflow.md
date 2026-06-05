@@ -73,7 +73,7 @@ Do not update `app/sql/starter.sql` just because the header, footer, templates, 
 2. Confirm WordPress is no longer carrying editor-only template customizations:
    - If the admin warning says template changes are still saved in the database, do not export `starter.sql` yet.
    - Go back to the Site Editor and make sure template/template-part changes have been saved to the theme files.
-   - Reset or clear database-only template customizations when they are no longer needed, so the starter database does not override the committed theme files.
+   - Reset or clear database-only template customizations when they are no longer needed. See the detailed steps below.
 3. Clean private or temporary state:
    - Remove license keys, API keys, and update tokens.
    - Remove temporary users.
@@ -83,6 +83,66 @@ Do not update `app/sql/starter.sql` just because the header, footer, templates, 
 4. Keep the starter login intentional:
    - The starter admin should remain `llummio-admin`.
    - Do not export personal or client credentials.
+
+### Clearing Database-Only Template Customizations
+
+When you edit a block theme template or template part in the Site Editor, WordPress saves a database copy. For this blueprint, that database copy is temporary. After using `Create Block Theme > Save Changes to Theme`, the committed theme files should become the source of truth again.
+
+If the database copy remains, WordPress may keep using it instead of the updated file in `parts/`, `templates/`, or `patterns/`. That is why the admin warning matters before exporting `starter.sql`.
+
+Use the WordPress UI first:
+
+1. Open WordPress admin.
+2. Go to `Appearance > Editor`.
+3. Open `Templates`.
+4. Look for templates marked as customized, modified, or changed.
+5. Open the three-dot menu for each customized template.
+6. Choose `Clear customizations` or `Reset`.
+7. Confirm the reset.
+8. Go back to the main Site Editor navigation.
+9. Open `Patterns`.
+10. Open `Template Parts`.
+11. Repeat the same reset/clear-customizations process for customized template parts such as `Header` and `Footer`.
+12. Refresh WordPress admin.
+13. Confirm the blueprint warning about database-saved template changes is gone.
+
+Only clear a template or template part after its latest version has already been saved to the theme files. Clearing customizations tells WordPress to stop using the database copy and return to the theme file version.
+
+If the UI does not show a clear reset option, use Adminer carefully:
+
+1. Export a backup of the current database first.
+2. Open Local's `Database` tab.
+3. Open `Adminer`.
+4. Select the WordPress database, usually `local`.
+5. Open the `wp_posts` table.
+6. Filter for these post types:
+
+```sql
+SELECT ID, post_type, post_name, post_title, post_status
+FROM wp_posts
+WHERE post_type IN ('wp_template', 'wp_template_part');
+```
+
+7. Review the rows. These are database-saved templates and template parts.
+8. If the rows are no longer needed because the changes were saved to theme files, delete those `wp_template` and `wp_template_part` rows.
+9. Do not delete `page`, `post`, `attachment`, or `wp_block` rows as part of this cleanup.
+10. Refresh WordPress admin.
+11. Confirm the blueprint warning is gone.
+12. Confirm the frontend still shows the committed header, footer, and templates correctly.
+
+For a full cleanup after a successful theme export, this SQL removes database-saved templates/template parts and their metadata:
+
+```sql
+DELETE pm
+FROM wp_postmeta pm
+INNER JOIN wp_posts p ON p.ID = pm.post_id
+WHERE p.post_type IN ('wp_template', 'wp_template_part');
+
+DELETE FROM wp_posts
+WHERE post_type IN ('wp_template', 'wp_template_part');
+```
+
+Use that SQL only on the blueprint site, only after exporting the latest template changes to theme files, and only after taking a database backup.
 
 ### Exporting With Local And Adminer
 
