@@ -567,7 +567,7 @@ INSERT INTO `wp_options` VALUES (30,'rewrite_rules','a:123:{s:11:\"^wp-json/?$\"
 INSERT INTO `wp_options` VALUES (31,'hack_file','0','on');
 INSERT INTO `wp_options` VALUES (32,'blog_charset','UTF-8','on');
 INSERT INTO `wp_options` VALUES (33,'moderation_keys','','off');
-INSERT INTO `wp_options` VALUES (34,'active_plugins','a:6:{i:0;s:30:\"advanced-custom-fields/acf.php\";i:1;s:41:\"create-block-theme/create-block-theme.php\";i:2;s:25:\"fluentform/fluentform.php\";i:3;s:29:\"generateblocks-pro/plugin.php\";i:4;s:25:\"generateblocks/plugin.php\";i:8;s:31:\"wp-svg-images/wp-svg-images.php\";}','on');
+INSERT INTO `wp_options` VALUES (34,'active_plugins','a:6:{i:0;s:30:\"advanced-custom-fields/acf.php\";i:1;s:41:\"create-block-theme/create-block-theme.php\";i:2;s:25:\"fluentform/fluentform.php\";i:3;s:29:\"generateblocks-pro/plugin.php\";i:4;s:25:\"generateblocks/plugin.php\";i:5;s:31:\"wp-svg-images/wp-svg-images.php\";}','on');
 INSERT INTO `wp_options` VALUES (35,'category_base','','on');
 INSERT INTO `wp_options` VALUES (36,'ping_sites','https://rpc.pingomatic.com/','on');
 INSERT INTO `wp_options` VALUES (37,'comment_max_links','2','on');
@@ -613,7 +613,6 @@ INSERT INTO `wp_options` VALUES (76,'sticky_posts','a:0:{}','on');
 INSERT INTO `wp_options` VALUES (77,'widget_categories','a:0:{}','on');
 INSERT INTO `wp_options` VALUES (78,'widget_text','a:0:{}','on');
 INSERT INTO `wp_options` VALUES (79,'widget_rss','a:0:{}','on');
-INSERT INTO `wp_options` VALUES (80,'uninstall_plugins','a:1:{s:27:\"wp-optimize/wp-optimize.php\";a:2:{i:0;s:13:\"WPO_Uninstall\";i:1;s:7:\"actions\";}}','off');
 INSERT INTO `wp_options` VALUES (81,'timezone_string','','on');
 INSERT INTO `wp_options` VALUES (82,'page_for_posts','0','on');
 INSERT INTO `wp_options` VALUES (83,'page_on_front','8','on');
@@ -656,7 +655,6 @@ INSERT INTO `wp_options` VALUES (119,'widget_tag_cloud','a:1:{s:12:\"_multiwidge
 INSERT INTO `wp_options` VALUES (120,'widget_nav_menu','a:1:{s:12:\"_multiwidget\";i:1;}','auto');
 INSERT INTO `wp_options` VALUES (121,'widget_custom_html','a:1:{s:12:\"_multiwidget\";i:1;}','auto');
 INSERT INTO `wp_options` VALUES (124,'WPLANG','','auto');
-INSERT INTO `wp_options` VALUES (150,'recently_activated','a:3:{s:27:\"wp-optimize/wp-optimize.php\";i:1780583482;s:31:\"search-filter/search-filter.php\";i:1780582077;s:31:\"generatecloud/generatecloud.php\";i:1780582067;}','off');
 INSERT INTO `wp_options` VALUES (157,'generateblocks_dynamic_css_posts','a:0:{}','on');
 INSERT INTO `wp_options` VALUES (158,'generateblocks_dynamic_css_time','1778744751','on');
 INSERT INTO `wp_options` VALUES (159,'default_term_gblocks_pattern_collections','2','auto');
@@ -666,28 +664,6 @@ INSERT INTO `wp_options` VALUES (163,'generateblocks','a:7:{s:15:\"container_wid
 INSERT INTO `wp_options` VALUES (175,'generateblocks_active_overlays','a:0:{}','auto');
 INSERT INTO `wp_options` VALUES (185,'acf_first_activated_version','6.8.1','on');
 INSERT INTO `wp_options` VALUES (187,'acf_version','6.8.3','auto');
-INSERT INTO `wp_options` VALUES (190,'wp-optimize-installed-for','1778745624','auto');
-INSERT INTO `wp_options` VALUES (191,'wp-optimize-newly-activated','1','auto');
-INSERT INTO `wp_options` VALUES (193,'wp-optimize-schedule','false','auto');
-INSERT INTO `wp_options` VALUES (194,'wp-optimize-last-optimized','Never','auto');
-INSERT INTO `wp_options` VALUES (195,'wp-optimize-schedule-type','wpo_weekly','auto');
-INSERT INTO `wp_options` VALUES (196,'wp-optimize-retention-enabled','false','auto');
-INSERT INTO `wp_options` VALUES (197,'wp-optimize-retention-period','2','auto');
-INSERT INTO `wp_options` VALUES (198,'wp-optimize-enable-admin-menu','false','auto');
-INSERT INTO `wp_options` VALUES (199,'wp-optimize-total-cleaned','0','auto');
-INSERT INTO `wp_options` VALUES (200,'wp-optimize-total-cleaned-current-month','0','auto');
-INSERT INTO `wp_options` VALUES (201,'wp-optimize-total-cleaned-previous-month','0','auto');
-INSERT INTO `wp_options` VALUES (202,'wp-optimize-auto','a:8:{s:6:\"drafts\";s:4:\"true\";s:8:\"optimize\";s:5:\"false\";s:9:\"revisions\";s:4:\"true\";s:5:\"spams\";s:4:\"true\";s:9:\"transient\";s:5:\"false\";s:5:\"trash\";s:4:\"true\";s:10:\"unapproved\";s:5:\"false\";s:8:\"usermeta\";s:5:\"false\";}','auto');
-INSERT INTO `wp_options` VALUES (203,'wp-optimize-settings','a:14:{s:11:\"user-drafts\";s:4:\"true\";s:16:\"user-commentmeta\";s:4:\"true\";s:13:\"user-optimize\";s:4:\"true\";s:15:\"user-orphandata\";s:4:\"true\";s:14:\"user-pingbacks\";s:4:\"true\";s:13:\"user-postmeta\";s:4:\"true\";s:14:\"user-revisions\";s:4:\"true\";s:10:\"user-spams\";s:4:\"true\";s:15:\"user-trackbacks\";s:4:\"true\";s:14:\"user-transient\";s:4:\"true\";s:10:\"user-trash\";s:4:\"true\";s:15:\"user-unapproved\";s:4:\"true\";s:13:\"user-usermeta\";s:4:\"true\";s:13:\"last_saved_in\";s:5:\"4.5.4\";}','auto');
-INSERT INTO `wp_options` VALUES (204,'wpo_minify_config','a:61:{s:5:\"debug\";b:0;s:19:\"enabled_css_preload\";b:0;s:18:\"enabled_js_preload\";b:0;s:11:\"hpreconnect\";s:0:\"\";s:8:\"hpreload\";s:0:\"\";s:7:\"loadcss\";b:0;s:10:\"remove_css\";b:0;s:17:\"critical_path_css\";s:0:\"\";s:31:\"critical_path_css_is_front_page\";s:0:\"\";s:30:\"preserve_settings_on_uninstall\";b:1;s:22:\"disable_when_logged_in\";b:0;s:16:\"default_protocol\";s:7:\"dynamic\";s:17:\"html_minification\";b:1;s:16:\"clean_header_one\";b:0;s:13:\"emoji_removal\";b:1;s:18:\"merge_google_fonts\";b:1;s:19:\"enable_display_swap\";b:1;s:18:\"remove_googlefonts\";b:0;s:23:\"host_local_google_fonts\";b:0;s:31:\"disable_google_fonts_processing\";b:0;s:13:\"gfonts_method\";s:7:\"inherit\";s:15:\"fawesome_method\";s:7:\"inherit\";s:10:\"enable_css\";b:1;s:23:\"enable_css_minification\";b:1;s:21:\"enable_merging_of_css\";b:0;s:23:\"remove_print_mediatypes\";b:0;s:10:\"inline_css\";b:0;s:9:\"enable_js\";b:1;s:22:\"enable_js_minification\";b:1;s:20:\"enable_merging_of_js\";b:0;s:15:\"enable_defer_js\";s:10:\"individual\";s:13:\"defer_js_type\";s:5:\"defer\";s:12:\"defer_jquery\";b:1;s:18:\"enable_js_trycatch\";b:0;s:19:\"exclude_defer_login\";b:1;s:7:\"cdn_url\";s:0:\"\";s:9:\"cdn_force\";b:0;s:15:\"enable_delay_js\";b:0;s:17:\"enable_preload_js\";b:0;s:16:\"exclude_delay_js\";s:0:\"\";s:9:\"async_css\";s:0:\"\";s:8:\"async_js\";s:0:\"\";s:24:\"disable_css_inline_merge\";b:1;s:6:\"ualist\";a:5:{i:0;s:9:\"Googlebot\";i:1;s:17:\"Chrome-Lighthouse\";i:2;s:8:\"GTmetrix\";i:3;s:14:\"HeadlessChrome\";i:4;s:7:\"Pingdom\";}s:32:\"exclude_js_from_page_speed_tools\";b:0;s:33:\"exclude_css_from_page_speed_tools\";b:0;s:9:\"blacklist\";a:0:{}s:11:\"ignore_list\";a:0:{}s:10:\"exclude_js\";s:0:\"\";s:11:\"exclude_css\";s:0:\"\";s:23:\"edit_default_exclutions\";b:0;s:18:\"merge_allowed_urls\";s:0:\"\";s:7:\"enabled\";b:1;s:17:\"last-cache-update\";i:1780582265;s:14:\"plugin_version\";s:5:\"0.0.0\";s:14:\"cache_lifespan\";i:30;s:25:\"merge_inline_extra_css_js\";b:1;s:16:\"enable_analytics\";b:0;s:16:\"analytics_method\";s:6:\"gtagv4\";s:11:\"tracking_id\";s:0:\"\";s:17:\"enable_unused_css\";b:0;}','auto');
-INSERT INTO `wp_options` VALUES (205,'updraft_task_manager_plugins','a:1:{i:0;s:27:\"wp-optimize/wp-optimize.php\";}','auto');
-INSERT INTO `wp_options` VALUES (206,'updraft_task_manager_dbversion','1.1','auto');
-INSERT INTO `wp_options` VALUES (207,'wpo_update_version','4.5.4','auto');
-INSERT INTO `wp_options` VALUES (208,'wp-optimize-compression_server','resmushit','auto');
-INSERT INTO `wp_options` VALUES (209,'wp-optimize-image_quality','92','auto');
-INSERT INTO `wp_options` VALUES (210,'wp-optimize-back_up_original','1','auto');
-INSERT INTO `wp_options` VALUES (211,'wp-optimize-back_up_delete_after','1','auto');
-INSERT INTO `wp_options` VALUES (212,'wp-optimize-back_up_delete_after_days','50','auto');
 INSERT INTO `wp_options` VALUES (219,'action_scheduler_hybrid_store_demarkation','12','auto');
 INSERT INTO `wp_options` VALUES (220,'schema-ActionScheduler_StoreSchema','8.0.1778745677','auto');
 INSERT INTO `wp_options` VALUES (221,'schema-ActionScheduler_LoggerSchema','3.0.1778745677','auto');
@@ -707,26 +683,11 @@ INSERT INTO `wp_options` VALUES (241,'theme_switched','','auto');
 INSERT INTO `wp_options` VALUES (248,'generateblocks_style_css','','auto');
 INSERT INTO `wp_options` VALUES (255,'nav_menu_options','a:2:{i:0;b:0;s:8:\"auto_add\";a:0:{}}','off');
 INSERT INTO `wp_options` VALUES (293,'generateblocks_global_styles','a:0:{}','on');
-INSERT INTO `wp_options` VALUES (295,'wp-optimize-install-or-update-notice-show-time','1780582082','auto');
-INSERT INTO `wp_options` VALUES (296,'wp-optimize-corrupted-tables-count','0','auto');
-INSERT INTO `wp_options` VALUES (299,'updraft_lock_load-url-task','0','no');
-INSERT INTO `wp_options` VALUES (300,'updraft_lock_wpo_page_cache_preloader_creating_tasks','0','no');
-INSERT INTO `wp_options` VALUES (301,'wp-optimize-is_gzip_compression_enabled','gzip','auto');
-INSERT INTO `wp_options` VALUES (302,'updraft_lock_wpo_minify_preloader_creating_tasks','0','no');
-INSERT INTO `wp_options` VALUES (307,'wp-optimize-autosmush','1','auto');
-INSERT INTO `wp_options` VALUES (308,'wp-optimize-htaccess_has_webp_rules','','auto');
-INSERT INTO `wp_options` VALUES (309,'wp-optimize-redirection_possible','false','auto');
-INSERT INTO `wp_options` VALUES (310,'wp-optimize-webp_conversion','1','auto');
-INSERT INTO `wp_options` VALUES (311,'wp-optimize-webp_conversion_test','1','auto');
-INSERT INTO `wp_options` VALUES (312,'wp-optimize-webp_converters','a:2:{i:0;s:7:\"imagick\";i:1;s:2:\"gd\";}','auto');
-INSERT INTO `wp_options` VALUES (314,'wp-optimize-enable-auto-backup','false','auto');
 INSERT INTO `wp_options` VALUES (318,'db_upgraded','','on');
 INSERT INTO `wp_options` VALUES (321,'can_compress_scripts','0','on');
 INSERT INTO `wp_options` VALUES (323,'as_has_wp_comment_logs','no','on');
 INSERT INTO `wp_options` VALUES (328,'recovery_keys','a:0:{}','off');
 INSERT INTO `wp_options` VALUES (330,'finished_updating_comment_type','1','auto');
-INSERT INTO `wp_options` VALUES (333,'updraft_lock_wpo_webp-convert-compressed-images-task','0','no');
-INSERT INTO `wp_options` VALUES (334,'wp-optimize-old_redirection_possible','false','auto');
 INSERT INTO `wp_options` VALUES (342,'generateblocks_pro_classic_menu_support','','auto');
 INSERT INTO `wp_options` VALUES (357,'action_scheduler_migration_status','complete','auto');
 INSERT INTO `wp_options` VALUES (426,'wpsvg_settings','a:3:{s:18:\"role_administrator\";i:2;s:11:\"role_editor\";i:1;s:11:\"role_author\";i:1;}','auto');
@@ -982,62 +943,8 @@ INSERT INTO `wp_terms` VALUES (8,'Sections','sections',0);
 UNLOCK TABLES;
 
 --
--- Table structure for table `wp_tm_taskmeta`
---
-
-DROP TABLE IF EXISTS `wp_tm_taskmeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_tm_taskmeta` (
-  `meta_id` bigint NOT NULL AUTO_INCREMENT,
-  `task_id` bigint NOT NULL DEFAULT '0',
-  `meta_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `meta_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  PRIMARY KEY (`meta_id`),
-  KEY `meta_key` (`meta_key`(191)),
-  KEY `task_id` (`task_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `wp_tm_taskmeta`
---
-
-LOCK TABLES `wp_tm_taskmeta` WRITE;
-/*!40000 ALTER TABLE `wp_tm_taskmeta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_tm_taskmeta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_tm_tasks`
---
-
-DROP TABLE IF EXISTS `wp_tm_tasks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_tm_tasks` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` bigint NOT NULL,
-  `type` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `class_identifier` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT '0',
-  `attempts` int DEFAULT '0',
-  `description` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `time_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `last_locked_at` bigint DEFAULT '0',
-  `status` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_tm_tasks`
---
-
-LOCK TABLES `wp_tm_tasks` WRITE;
-/*!40000 ALTER TABLE `wp_tm_tasks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_tm_tasks` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `wp_usermeta`
@@ -1082,7 +989,6 @@ INSERT INTO `wp_usermeta` VALUES (18,1,'wp_persisted_preferences','a:4:{s:4:\"co
 INSERT INTO `wp_usermeta` VALUES (19,1,'wpsvg_notice_dismissed','1');
 INSERT INTO `wp_usermeta` VALUES (20,1,'managenav-menuscolumnshidden','a:5:{i:0;s:11:\"link-target\";i:1;s:11:\"css-classes\";i:2;s:3:\"xfn\";i:3;s:11:\"description\";i:4;s:15:\"title-attribute\";}');
 INSERT INTO `wp_usermeta` VALUES (21,1,'metaboxhidden_nav-menus','a:1:{i:0;s:12:\"add-post_tag\";}');
-INSERT INTO `wp_usermeta` VALUES (22,1,'search_filter_v3_coming_soon_ignore','1');
 INSERT INTO `wp_usermeta` VALUES (23,1,'wp_user-settings','libraryContent=browse');
 INSERT INTO `wp_usermeta` VALUES (24,1,'wp_user-settings-time','1780587168');
 INSERT INTO `wp_usermeta` VALUES (25,1,'community-events-location','a:1:{s:2:\"ip\";s:9:\"127.0.0.0\";}');
@@ -1125,33 +1031,6 @@ INSERT INTO `wp_users` VALUES (1,'llummio-admin','264652fac17a35a11f60cd12145715
 UNLOCK TABLES;
 
 --
--- Table structure for table `wp_wpo_404_detector`
---
-
-DROP TABLE IF EXISTS `wp_wpo_404_detector`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_wpo_404_detector` (
-  `ID` int unsigned NOT NULL AUTO_INCREMENT,
-  `url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `request_timestamp` bigint unsigned NOT NULL,
-  `request_count` bigint unsigned NOT NULL,
-  `referrer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `url` (`url`(75),`request_timestamp`,`referrer`(75)),
-  KEY `url_timestamp_referrer` (`url`(75),`request_timestamp`,`referrer`(75)),
-  KEY `timestamp_count` (`request_timestamp`,`request_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_wpo_404_detector`
---
-
-LOCK TABLES `wp_wpo_404_detector` WRITE;
-/*!40000 ALTER TABLE `wp_wpo_404_detector` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_wpo_404_detector` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
