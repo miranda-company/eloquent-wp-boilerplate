@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 const LLUMMIO_SEO_FIELDS_TITLE_KEY       = '_llummio_seo_title';
 const LLUMMIO_SEO_FIELDS_DESCRIPTION_KEY = '_llummio_seo_description';
+const LLUMMIO_SEO_FIELDS_VERSION         = '0.1.0';
 
 /**
  * Register SEO metadata for public editable post types.
@@ -46,6 +47,40 @@ function llummio_seo_fields_register_meta() {
 add_action( 'init', 'llummio_seo_fields_register_meta' );
 
 /**
+ * Load the block editor sidebar controls.
+ */
+function llummio_seo_fields_enqueue_editor_assets() {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+	if ( ! $screen || 'post' !== $screen->base || ! in_array( $screen->post_type, llummio_seo_fields_post_types(), true ) ) {
+		return;
+	}
+
+	$script_path = plugin_dir_path( __FILE__ ) . 'assets/editor-sidebar.js';
+	$style_path  = plugin_dir_path( __FILE__ ) . 'assets/editor-sidebar.css';
+	$version     = file_exists( $script_path ) ? (string) filemtime( $script_path ) : LLUMMIO_SEO_FIELDS_VERSION;
+
+	wp_enqueue_script(
+		'llummio-seo-fields-editor-sidebar',
+		plugin_dir_url( __FILE__ ) . 'assets/editor-sidebar.js',
+		array( 'wp-components', 'wp-data', 'wp-edit-post', 'wp-editor', 'wp-element', 'wp-i18n', 'wp-plugins' ),
+		$version,
+		true
+	);
+
+	if ( file_exists( $style_path ) ) {
+		wp_enqueue_style(
+			'llummio-seo-fields-editor-sidebar',
+			plugin_dir_url( __FILE__ ) . 'assets/editor-sidebar.css',
+			array( 'wp-components' ),
+			(string) filemtime( $style_path )
+		);
+	}
+}
+
+add_action( 'enqueue_block_editor_assets', 'llummio_seo_fields_enqueue_editor_assets' );
+
+/**
  * Return the post types where SEO fields should appear.
  */
 function llummio_seo_fields_post_types() {
@@ -75,112 +110,27 @@ function llummio_seo_fields_can_edit_meta( $allowed, $meta_key, $post_id, $user_
 }
 
 /**
- * Add the SEO fields box to supported edit screens.
- */
-function llummio_seo_fields_add_meta_box() {
-	foreach ( llummio_seo_fields_post_types() as $post_type ) {
-		add_meta_box(
-			'llummio-seo-fields',
-			__( 'SEO', 'llummio-seo-fields' ),
-			'llummio_seo_fields_render_meta_box',
-			$post_type,
-			'normal',
-			'default'
-		);
-	}
-}
-
-add_action( 'add_meta_boxes', 'llummio_seo_fields_add_meta_box' );
-
-/**
- * Render the SEO fields box.
- *
- * @param WP_Post $post Current post.
- */
-function llummio_seo_fields_render_meta_box( $post ) {
-	$seo_title       = get_post_meta( $post->ID, LLUMMIO_SEO_FIELDS_TITLE_KEY, true );
-	$seo_description = get_post_meta( $post->ID, LLUMMIO_SEO_FIELDS_DESCRIPTION_KEY, true );
-
-	wp_nonce_field( 'llummio_seo_fields_save', 'llummio_seo_fields_nonce' );
-	?>
-	<p>
-		<label for="llummio-seo-title"><strong><?php esc_html_e( 'SEO Title', 'llummio-seo-fields' ); ?></strong></label>
-	</p>
-	<input
-		type="text"
-		id="llummio-seo-title"
-		name="llummio_seo_title"
-		value="<?php echo esc_attr( $seo_title ); ?>"
-		class="widefat"
-		maxlength="160"
-	/>
-	<p class="description">
-		<?php esc_html_e( 'Overrides the browser title and search result title for this content.', 'llummio-seo-fields' ); ?>
-	</p>
-
-	<p>
-		<label for="llummio-seo-description"><strong><?php esc_html_e( 'SEO Description', 'llummio-seo-fields' ); ?></strong></label>
-	</p>
-	<textarea
-		id="llummio-seo-description"
-		name="llummio_seo_description"
-		class="widefat"
-		rows="4"
-		maxlength="320"
-	><?php echo esc_textarea( $seo_description ); ?></textarea>
-	<p class="description">
-		<?php esc_html_e( 'Outputs a meta description tag for this content.', 'llummio-seo-fields' ); ?>
-	</p>
-	<?php
-}
-
-/**
- * Save SEO fields.
+ * Remove empty SEO values after the editor saves metadata.
  *
  * @param int $post_id Post ID.
  */
-function llummio_seo_fields_save_meta( $post_id ) {
-	if ( ! isset( $_POST['llummio_seo_fields_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['llummio_seo_fields_nonce'] ) ), 'llummio_seo_fields_save' ) ) {
-		return;
-	}
-
+function llummio_seo_fields_delete_empty_meta( $post_id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
 
-	if ( wp_is_post_revision( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
+	if ( wp_is_post_revision( $post_id ) || ! in_array( get_post_type( $post_id ), llummio_seo_fields_post_types(), true ) ) {
 		return;
 	}
 
-	if ( isset( $_POST['llummio_seo_title'] ) ) {
-		$title = sanitize_text_field( wp_unslash( $_POST['llummio_seo_title'] ) );
-		llummio_seo_fields_update_or_delete_meta( $post_id, LLUMMIO_SEO_FIELDS_TITLE_KEY, $title );
-	}
-
-	if ( isset( $_POST['llummio_seo_description'] ) ) {
-		$description = sanitize_textarea_field( wp_unslash( $_POST['llummio_seo_description'] ) );
-		$description = preg_replace( '/\s+/', ' ', $description );
-		llummio_seo_fields_update_or_delete_meta( $post_id, LLUMMIO_SEO_FIELDS_DESCRIPTION_KEY, trim( $description ) );
+	foreach ( array( LLUMMIO_SEO_FIELDS_TITLE_KEY, LLUMMIO_SEO_FIELDS_DESCRIPTION_KEY ) as $meta_key ) {
+		if ( '' === get_post_meta( $post_id, $meta_key, true ) ) {
+			delete_post_meta( $post_id, $meta_key );
+		}
 	}
 }
 
-add_action( 'save_post', 'llummio_seo_fields_save_meta' );
-
-/**
- * Update meta when it has a value, delete it when empty.
- *
- * @param int    $post_id  Post ID.
- * @param string $meta_key Meta key.
- * @param string $value    Meta value.
- */
-function llummio_seo_fields_update_or_delete_meta( $post_id, $meta_key, $value ) {
-	if ( '' === $value ) {
-		delete_post_meta( $post_id, $meta_key );
-		return;
-	}
-
-	update_post_meta( $post_id, $meta_key, $value );
-}
+add_action( 'save_post', 'llummio_seo_fields_delete_empty_meta', 20 );
 
 /**
  * Make sure themes can use WordPress-managed document titles.

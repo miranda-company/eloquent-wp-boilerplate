@@ -20,7 +20,8 @@ It does not try to replace a full SEO suite.
 
 ### What It Does
 
-- Adds an `SEO` panel to public editable content types.
+- Adds an `SEO` icon to the block editor toolbar for public editable content types.
+- Opens an `SEO` sidebar panel in the editor.
 - Stores a custom SEO title.
 - Stores a custom SEO description.
 - Overrides the frontend document title on singular content when an SEO title exists.
@@ -53,7 +54,7 @@ Empty fields are deleted from post meta instead of saved as empty strings.
 ### How To Use It
 
 1. Open a page in WordPress admin.
-2. Find the `SEO` panel in the editor.
+2. Click the `SEO` icon in the top-right editor toolbar, near the other editor plugin icons.
 3. Add an `SEO Title` when the browser/search title should be different from the page title.
 4. Add an `SEO Description` when the page needs a custom meta description.
 5. Update the page.
@@ -97,7 +98,10 @@ add_filter( 'llummio_seo_fields_skip_frontend_output', '__return_false' );
 The plugin depends on these WordPress APIs:
 
 - `register_post_meta`
-- `add_meta_box`
+- `enqueue_block_editor_assets`
+- `wp.plugins.registerPlugin`
+- `wp.editor.PluginSidebar`
+- `wp.editor.PluginSidebarMoreMenuItem`
 - `save_post`
 - `pre_get_document_title`
 - `wp_head`
@@ -109,14 +113,15 @@ These are stable WordPress extension points. Still, check the plugin when the bl
 
 When upgrading the blueprint to a new major WordPress version:
 
-1. Confirm the `SEO` panel appears on pages.
-2. Save an SEO title and SEO description.
-3. Confirm both values stay saved after reload.
-4. Confirm the frontend `<title>` uses the SEO title.
-5. Confirm the frontend has one meta description tag.
-6. Clear both fields and confirm the plugin stops outputting custom SEO data.
-7. Confirm no duplicate title/description output appears if RankMath is active.
-8. Confirm no PHP warnings appear in WordPress admin.
+1. Confirm the `SEO` sidebar opens on pages.
+2. Confirm the `SEO` icon appears in the top-right block editor toolbar.
+3. Open the sidebar and save an SEO title and SEO description.
+4. Confirm both values stay saved after reload.
+5. Confirm the frontend `<title>` uses the SEO title.
+6. Confirm the frontend has one meta description tag.
+7. Clear both fields and confirm the plugin stops outputting custom SEO data.
+8. Confirm no duplicate title/description output appears if RankMath is active.
+9. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 
