@@ -2,7 +2,7 @@
 
 Private company-owned WordPress blueprint for starting Llummio client websites.
 
-This repository is intended as internal build infrastructure. It includes the reusable Llummio block theme, the standard plugin stack, Local configuration, and a cleaned starter database export.
+Llummio designs and develops clean, lean, modern WordPress websites for service businesses. This repository is internal build infrastructure for that work. It includes the reusable Llummio block theme, the standard plugin stack, Local configuration, and a cleaned starter database export.
 
 ## Included
 
@@ -27,5 +27,15 @@ This repository is intended as internal build infrastructure. It includes the re
 5. Activate the plugins listed in `docs/plugin-stack.md`.
 6. Activate the `llummio-blueprint` theme.
 7. Add premium plugin license keys inside WordPress admin after setup.
+
+## Documentation
+
+- `docs/project-structure.md` explains what belongs in the blueprint and what stays out.
+- `docs/client-site-workflow.md` describes how to start and launch a client site.
+- `docs/editing-model.md` defines what clients should edit and what Llummio should manage.
+- `docs/maintenance.md` describes the ongoing care routine for client sites.
+- `docs/plugin-policy.md` defines how plugins are selected, added, and removed.
+- `docs/plugin-stack.md` lists the approved plugin stack.
+- `docs/setup.md` gives the quick setup checklist.
 
 Keep this repository private.

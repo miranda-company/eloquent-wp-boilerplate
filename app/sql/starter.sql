@@ -557,7 +557,7 @@ INSERT INTO `wp_options` VALUES (3,'home','http://2026-llummio-wp-website-bluepr
 INSERT INTO `wp_options` VALUES (4,'blogname','Blueprint','on');
 INSERT INTO `wp_options` VALUES (5,'blogdescription','','on');
 INSERT INTO `wp_options` VALUES (6,'users_can_register','0','on');
-INSERT INTO `wp_options` VALUES (7,'admin_email','dev-email@wpengine.local','on');
+INSERT INTO `wp_options` VALUES (7,'admin_email','info@llumm.io','on');
 INSERT INTO `wp_options` VALUES (8,'start_of_week','1','on');
 INSERT INTO `wp_options` VALUES (9,'use_balanceTags','0','on');
 INSERT INTO `wp_options` VALUES (10,'use_smilies','1','on');
@@ -745,10 +745,8 @@ INSERT INTO `wp_options` VALUES (328,'recovery_keys','a:0:{}','off');
 INSERT INTO `wp_options` VALUES (330,'finished_updating_comment_type','1','auto');
 INSERT INTO `wp_options` VALUES (333,'updraft_lock_wpo_webp-convert-compressed-images-task','0','no');
 INSERT INTO `wp_options` VALUES (334,'wp-optimize-old_redirection_possible','false','auto');
-INSERT INTO `wp_options` VALUES (341,'new_admin_email','dev-email@wpengine.local','auto');
 INSERT INTO `wp_options` VALUES (342,'generateblocks_pro_classic_menu_support','','auto');
 INSERT INTO `wp_options` VALUES (357,'action_scheduler_migration_status','complete','auto');
-INSERT INTO `wp_options` VALUES (361,'theme_mods_llummio-blueprint','a:4:{i:0;b:0;s:19:\"wp_classic_sidebars\";a:0:{}s:18:\"nav_menu_locations\";a:0:{}s:18:\"custom_css_post_id\";i:-1;}','on');
 INSERT INTO `wp_options` VALUES (426,'wpsvg_settings','a:3:{s:18:\"role_administrator\";i:2;s:11:\"role_editor\";i:1;s:11:\"role_author\";i:1;}','auto');
 /*!40000 ALTER TABLE `wp_options` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1185,7 +1183,7 @@ CREATE TABLE `wp_usermeta` (
 
 LOCK TABLES `wp_usermeta` WRITE;
 /*!40000 ALTER TABLE `wp_usermeta` DISABLE KEYS */;
-INSERT INTO `wp_usermeta` VALUES (1,1,'nickname','rodolfo');
+INSERT INTO `wp_usermeta` VALUES (1,1,'nickname','llummio-admin');
 INSERT INTO `wp_usermeta` VALUES (2,1,'first_name','');
 INSERT INTO `wp_usermeta` VALUES (3,1,'last_name','');
 INSERT INTO `wp_usermeta` VALUES (4,1,'description','');
@@ -1243,7 +1241,7 @@ CREATE TABLE `wp_users` (
 
 LOCK TABLES `wp_users` WRITE;
 /*!40000 ALTER TABLE `wp_users` DISABLE KEYS */;
-INSERT INTO `wp_users` VALUES (1,'rodolfo','$wp$2y$10$tROzuXKhPLqk6OYOPf7gyOJNjOfqbMXomS.0pWXTFgan5woToHHHC','rodolfo','dev-email@wpengine.local','http://2026-llummio-wp-website-blueprint-v01.test','2026-05-14 07:41:12','',0,'rodolfo');
+INSERT INTO `wp_users` VALUES (1,'llummio-admin','264652fac17a35a11f60cd12145715d6','llummio-admin','info@llumm.io','https://llumm.io','2026-05-14 07:41:12','',0,'Llummio Admin');
 /*!40000 ALTER TABLE `wp_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
