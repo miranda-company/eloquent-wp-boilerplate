@@ -26,6 +26,10 @@ Each client project should start from this foundation, then receive its own bran
 | `docs/` | Internal setup, workflow, policy, and maintenance documentation. |
 | `logs/` | Local runtime logs. Ignored by Git. |
 
+## Blueprint Editing
+
+When editing templates, template parts, or GenerateBlocks patterns in WordPress, the first save lands in the database. Use the workflow in `docs/blueprint-editing-workflow.md` to save those editor changes back into the theme files before committing.
+
 ## What Belongs In Git
 
 - Theme files.

@@ -2,6 +2,8 @@
 
 This workflow describes how Llummio should create a new client website from the blueprint.
 
+When improving the blueprint itself, use `docs/blueprint-editing-workflow.md` before committing changes made in the WordPress Site Editor.
+
 ## 1. Start From The Blueprint
 
 Use this process when creating a new client site from the Llummio blueprint.

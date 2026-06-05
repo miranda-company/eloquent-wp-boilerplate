@@ -15,4 +15,5 @@
 - Keep the repo private.
 - Do not commit uploads, logs, cache, or generated runtime files.
 - Do not commit plugin license keys or account-specific credentials.
+- When editing the blueprint in the Site Editor, use Create Block Theme to save changes back to theme files before committing.
 - Update `docs/plugin-stack.md` when plugin versions change.

@@ -31,6 +31,7 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 ## Documentation
 
 - `docs/project-structure.md` explains what belongs in the blueprint and what stays out.
+- `docs/blueprint-editing-workflow.md` explains how to save Site Editor and GenerateBlocks changes back to theme files before committing.
 - `docs/client-site-workflow.md` describes how to start and launch a client site.
 - `docs/editing-model.md` defines what clients should edit and what Llummio should manage.
 - `docs/maintenance.md` describes the ongoing care routine for client sites.
