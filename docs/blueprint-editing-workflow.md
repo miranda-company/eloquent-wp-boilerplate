@@ -48,6 +48,10 @@ Do not rely on `app/sql/starter.sql` as the only place where reusable header, fo
 
 ## Updating The Starter Database
 
+`app/sql/starter.sql` is the database that a new Local site imports when starting from the blueprint. Updating it means replacing the old committed SQL export with a fresh, clean export from your current blueprint site.
+
+This is separate from saving header, footer, template, or pattern changes to the theme. Those changes should live in the theme files first. The database export should only capture the WordPress starter state that cannot live cleanly in theme files.
+
 Only update `app/sql/starter.sql` when the blueprint database state should change. Examples:
 
 - Starter pages or posts changed.
@@ -57,7 +61,69 @@ Only update `app/sql/starter.sql` when the blueprint database state should chang
 - Starter users changed.
 - The exported theme files have been saved and the database should be cleaned of editor-only template customizations.
 
-Before exporting `app/sql/starter.sql`, remove private state such as license keys, sessions, cache rows, temporary users, and client-specific content.
+Do not update `app/sql/starter.sql` just because the header, footer, templates, or patterns changed. For those changes, use `Create Block Theme > Save Changes to Theme` and commit the changed theme files.
+
+### Before Exporting
+
+1. Save editor changes to the theme:
+   - Open the Site Editor.
+   - Open the Create Block Theme panel.
+   - Use `Save Changes to Theme`.
+   - Confirm the expected theme files changed in Git.
+2. Confirm WordPress is no longer carrying editor-only template customizations:
+   - If the admin warning says template changes are still saved in the database, do not export `starter.sql` yet.
+   - Go back to the Site Editor and make sure template/template-part changes have been saved to the theme files.
+   - Reset or clear database-only template customizations when they are no longer needed, so the starter database does not override the committed theme files.
+3. Clean private or temporary state:
+   - Remove license keys, API keys, and update tokens.
+   - Remove temporary users.
+   - Remove client-specific content.
+   - Empty trash, spam, drafts, and temporary test content.
+   - Clear plugin caches and transient/runtime data where possible.
+4. Keep the starter login intentional:
+   - The starter admin should remain `llummio-admin`.
+   - Do not export personal or client credentials.
+
+### Exporting With Local And Adminer
+
+Use this process when you are ready to replace `app/sql/starter.sql`.
+
+1. Start the blueprint site in Local.
+2. Open Local's `Database` tab.
+3. Open `Adminer`.
+4. Select the WordPress database, usually `local`.
+5. Open `Export`.
+6. Export all WordPress tables.
+7. Use SQL format.
+8. Include both table structure and table data.
+9. Include `DROP TABLE` statements, so imports can replace old tables cleanly.
+10. Save/download the export.
+11. Rename the downloaded SQL file to `starter.sql`.
+12. Replace the existing file at `app/sql/starter.sql`.
+13. Check Git and review the diff before committing.
+
+The exported file should be a full SQL dump, not a partial table export. It should include `CREATE TABLE` statements, `INSERT INTO` statements, and the starter WordPress options/content needed for a new site.
+
+### After Exporting
+
+Before committing, check the new `app/sql/starter.sql` for:
+
+- The expected starter pages, menus, forms, and plugin settings.
+- No license keys or private tokens.
+- No personal users or client users.
+- No client-specific posts, media, or URLs.
+- No database-only header/footer/template customizations that would override the committed theme files.
+
+Then test the export when the database change is important:
+
+1. Create or use a separate throwaway Local site.
+2. Import the new `app/sql/starter.sql`.
+3. Confirm WordPress loads.
+4. Confirm the starter admin works.
+5. Confirm the theme, header, footer, menus, forms, and settings look right.
+6. Confirm no unexpected admin warning appears about unsaved template customizations.
+
+If the exported database depends on theme file changes, commit `app/sql/starter.sql` and the changed theme files together.
 
 ## Commit Standard
 

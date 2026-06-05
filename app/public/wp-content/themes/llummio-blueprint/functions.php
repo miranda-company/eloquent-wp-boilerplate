@@ -96,6 +96,55 @@ function llummio_blueprint_count_custom_block_templates( $template_type ) {
 	return $count;
 }
 
+/**
+ * Render a committed blueprint logo until a site-specific logo is configured.
+ *
+ * The header and footer use the core Site Logo block so client projects can
+ * replace the logo from Appearance > Editor without editing theme files.
+ *
+ * @param string $block_content Rendered site-logo block markup.
+ * @param array  $block         Parsed block data.
+ */
+function llummio_blueprint_site_logo_fallback( $block_content, $block ) {
+	if ( ! empty( trim( $block_content ) ) || has_custom_logo() ) {
+		return $block_content;
+	}
+
+	$logo_path = get_theme_file_path( 'assets/images/logo-llummio.svg' );
+
+	if ( ! file_exists( $logo_path ) ) {
+		return $block_content;
+	}
+
+	$logo_url  = get_theme_file_uri( 'assets/images/logo-llummio.svg' );
+	$site_name = get_bloginfo( 'name' );
+	$width     = isset( $block['attrs']['width'] ) ? absint( $block['attrs']['width'] ) : 112;
+
+	if ( 0 === $width ) {
+		$width = 112;
+	}
+
+	$image = sprintf(
+		'<img class="custom-logo" src="%1$s" alt="%2$s" width="%3$d" style="height:auto;" decoding="async" />',
+		esc_url( $logo_url ),
+		esc_attr( sprintf( __( '%s logo', 'llummio-blueprint' ), $site_name ) ),
+		(int) $width
+	);
+
+	$link = sprintf(
+		'<a href="%1$s" class="custom-logo-link" rel="home">%2$s</a>',
+		esc_url( home_url( '/' ) ),
+		$image
+	);
+
+	return sprintf(
+		'<div class="wp-block-site-logo">%s</div>',
+		$link
+	);
+}
+
+add_filter( 'render_block_core/site-logo', 'llummio_blueprint_site_logo_fallback', 10, 2 );
+
 
 /**
  * Enqueue styles
