@@ -1,5 +1,6 @@
 # Local app runtime
 logs/
+local-site.json
 
 # WordPress core and generated/runtime files
 app/public/*
@@ -30,6 +31,10 @@ app/public/wp-content/wpo-cache/
 app/public/wp-content/upgrade/
 app/public/wp-content/upgrade-temp-backup/
 app/public/wp-content/uploads/
+
+# Local database exports. Keep app/sql/starter.sql as the committed clean seed.
+app/sql/local.sql
+app/sql/*-clean.sql
 
 # Old unused font files.
 app/public/wp-content/themes/llummio-blueprint/assets/fonts/Lexend*.ttf
