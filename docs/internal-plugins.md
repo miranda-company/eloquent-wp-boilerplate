@@ -4,6 +4,141 @@ This document describes plugins maintained inside the Llummio blueprint.
 
 Internal plugins should stay small, focused, and easy to remove. They are used when the blueprint needs a reusable behavior that should not live in the theme.
 
+## Llummio SEO Fields
+
+Folder: `app/public/wp-content/plugins/llummio-seo-fields/`
+
+Main file: `app/public/wp-content/plugins/llummio-seo-fields/llummio-seo-fields.php`
+
+Version: `0.1.0`
+
+### Purpose
+
+`Llummio SEO Fields` replaces the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles and custom SEO descriptions.
+
+It does not try to replace a full SEO suite.
+
+### What It Does
+
+- Adds an `SEO` panel to public editable content types.
+- Stores a custom SEO title.
+- Stores a custom SEO description.
+- Overrides the frontend document title on singular content when an SEO title exists.
+- Outputs one `<meta name="description">` tag on singular content when an SEO description exists.
+- Registers the fields with the WordPress REST API for future editor integrations.
+
+### What It Does Not Do
+
+- XML sitemaps.
+- Schema markup.
+- Open Graph or social images.
+- Redirects.
+- Breadcrumbs.
+- Robots meta controls.
+- Canonical URL controls.
+- Keyword analysis.
+- Search Console integrations.
+
+If a project needs those features, use a full SEO plugin such as RankMath.
+
+### Fields
+
+The plugin stores data in post meta:
+
+- `_llummio_seo_title`
+- `_llummio_seo_description`
+
+Empty fields are deleted from post meta instead of saved as empty strings.
+
+### How To Use It
+
+1. Open a page in WordPress admin.
+2. Find the `SEO` panel in the editor.
+3. Add an `SEO Title` when the browser/search title should be different from the page title.
+4. Add an `SEO Description` when the page needs a custom meta description.
+5. Update the page.
+6. View the page on the frontend and check the browser title and page source.
+
+Leave either field empty when the page should use WordPress or theme defaults.
+
+### Supported Content
+
+By default, fields appear on public editable post types, excluding attachments.
+
+To change the supported post types:
+
+```php
+add_filter(
+	'llummio_seo_fields_post_types',
+	function() {
+		return array( 'page', 'post' );
+	}
+);
+```
+
+### Compatibility With Full SEO Plugins
+
+The plugin avoids frontend title and description output when common full SEO plugins are active:
+
+- RankMath
+- Yoast SEO
+- All in One SEO
+
+The fields can still exist in the editor, but frontend output is skipped to avoid duplicate SEO tags.
+
+To force output anyway:
+
+```php
+add_filter( 'llummio_seo_fields_skip_frontend_output', '__return_false' );
+```
+
+### WordPress APIs Used
+
+The plugin depends on these WordPress APIs:
+
+- `register_post_meta`
+- `add_meta_box`
+- `save_post`
+- `pre_get_document_title`
+- `wp_head`
+- `add_theme_support( 'title-tag' )`
+
+These are stable WordPress extension points. Still, check the plugin when the blueprint target WordPress version changes.
+
+### Upgrade Checklist
+
+When upgrading the blueprint to a new major WordPress version:
+
+1. Confirm the `SEO` panel appears on pages.
+2. Save an SEO title and SEO description.
+3. Confirm both values stay saved after reload.
+4. Confirm the frontend `<title>` uses the SEO title.
+5. Confirm the frontend has one meta description tag.
+6. Clear both fields and confirm the plugin stops outputting custom SEO data.
+7. Confirm no duplicate title/description output appears if RankMath is active.
+8. Confirm no PHP warnings appear in WordPress admin.
+
+### When To Replace It
+
+Replace this plugin with RankMath or another full SEO plugin when a project needs:
+
+- sitemap control;
+- schema markup;
+- Open Graph/social metadata;
+- redirect management;
+- robots/canonical controls;
+- SEO scoring or content analysis;
+- integrations with external SEO tools.
+
+### Commit Notes
+
+If this plugin changes:
+
+- Update the version in the plugin header.
+- Update `docs/plugin-stack.md` if the version changes.
+- Update this document if behavior or compatibility assumptions change.
+- Confirm `app/sql/starter.sql` still activates `llummio-seo-fields/llummio-seo-fields.php`.
+
 ## Llummio SVG Uploads
 
 Folder: `app/public/wp-content/plugins/llummio-svg-uploads/`
