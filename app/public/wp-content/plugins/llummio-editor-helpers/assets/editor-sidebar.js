@@ -38,6 +38,8 @@
 	var SIDEBAR_TITLE = 'Llummio Editor Helpers';
 	var TITLE_KEY = '_llummio_seo_title';
 	var DESCRIPTION_KEY = '_llummio_seo_description';
+	var NOINDEX_KEY = '_llummio_seo_noindex';
+	var NOFOLLOW_KEY = '_llummio_seo_nofollow';
 	var TITLE_SUFFIX = ' %sep% %sitename%';
 	var TITLE_RECOMMENDED_LENGTH = 60;
 	var DESCRIPTION_RECOMMENDED_LENGTH = 160;
@@ -220,6 +222,8 @@
 		var meta = editorData.meta;
 		var seoTitle = meta[ TITLE_KEY ] || '';
 		var seoDescription = meta[ DESCRIPTION_KEY ] || '';
+		var noindex = !! meta[ NOINDEX_KEY ];
+		var nofollow = !! meta[ NOFOLLOW_KEY ];
 		var displayedSeoTitle = seoTitle || getDefaultSeoTitle( editorData.title );
 
 		function updateMeta( key, value ) {
@@ -301,6 +305,37 @@
 							className: 'llummio-editor-helpers__notice',
 						},
 						__( 'The title supports %sep% and %sitename%. Leave a field empty to use the default page value.', 'llummio-editor-helpers' )
+					),
+					el(
+						'div',
+						{
+							className: 'llummio-editor-helpers__robots-controls',
+						},
+						el(
+							'p',
+							{
+								className: 'llummio-editor-helpers__robots-label',
+							},
+							__( 'Robots Controls', 'llummio-editor-helpers' )
+						),
+						el( CheckboxControl, {
+							className: 'llummio-editor-helpers__robots-control',
+							label: __( 'No index', 'llummio-editor-helpers' ),
+							help: __( 'Ask search engines not to show this page in search results.', 'llummio-editor-helpers' ),
+							checked: noindex,
+							onChange: function( isChecked ) {
+								updateMeta( NOINDEX_KEY, isChecked );
+							},
+						} ),
+						el( CheckboxControl, {
+							className: 'llummio-editor-helpers__robots-control',
+							label: __( 'No follow', 'llummio-editor-helpers' ),
+							help: __( 'Ask search engines not to follow links on this page.', 'llummio-editor-helpers' ),
+							checked: nofollow,
+							onChange: function( isChecked ) {
+								updateMeta( NOFOLLOW_KEY, isChecked );
+							},
+						} )
 					)
 				),
 				el(

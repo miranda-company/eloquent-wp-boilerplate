@@ -26,8 +26,10 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Opens a `Llummio Editor Helpers` sidebar panel in the editor.
 - Stores a custom SEO title.
 - Stores a custom SEO description.
+- Stores page-level robots controls for `noindex` and `nofollow`.
 - Overrides the frontend document title on singular content when an SEO title exists.
 - Outputs one `<meta name="description">` tag on singular content when an SEO description exists.
+- Outputs one `<meta name="robots">` tag on singular content when robots controls are enabled.
 - Registers the fields with the WordPress REST API for future editor integrations.
 - Adds an editor-only wireframe toggle for the theme `.wire` helper class.
 
@@ -38,7 +40,6 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Open Graph or social images.
 - Redirects.
 - Breadcrumbs.
-- Robots meta controls.
 - Canonical URL controls.
 - Keyword analysis.
 - Search Console integrations.
@@ -51,8 +52,11 @@ The plugin stores data in post meta:
 
 - `_llummio_seo_title`
 - `_llummio_seo_description`
+- `_llummio_seo_noindex`
+- `_llummio_seo_nofollow`
 
 Empty fields are deleted from post meta instead of saved as empty strings.
+Disabled robots controls are deleted from post meta instead of saved as false values.
 
 ### How To Use It
 
@@ -78,6 +82,24 @@ SEO titles support two RankMath-style tokens:
 - `%sitename%` is replaced with the site name.
 
 When the SEO title field is empty in the editor, it displays a default title pattern using the current page title plus `%sep% %sitename%`. Editors can keep, change, or remove those tokens before saving.
+
+### Robots Controls
+
+The `SEO Tools` section includes two page-level robots checkboxes:
+
+- `No index`
+- `No follow`
+
+When either option is enabled, the plugin outputs a single `<meta name="robots">` tag on the frontend for that page.
+
+Examples:
+
+```html
+<meta name="robots" content="noindex" />
+<meta name="robots" content="noindex, nofollow" />
+```
+
+Leave both options unchecked for normal indexable pages.
 
 ### Wireframe Toggle
 
@@ -149,10 +171,12 @@ When upgrading the blueprint to a new major WordPress version:
 4. Confirm both values stay saved after reload.
 5. Confirm the frontend `<title>` uses the SEO title.
 6. Confirm the frontend has one meta description tag.
-7. Clear both fields and confirm the plugin stops outputting custom SEO data.
-8. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
-9. Confirm no duplicate title/description output appears if RankMath is active.
-10. Confirm no PHP warnings appear in WordPress admin.
+7. Enable `No index` and confirm the frontend has one robots meta tag.
+8. Enable `No follow` and confirm the robots meta tag includes both selected rules.
+9. Clear both fields and controls, then confirm the plugin stops outputting custom SEO data.
+10. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
+11. Confirm no duplicate title/description/robots output appears if RankMath is active.
+12. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 

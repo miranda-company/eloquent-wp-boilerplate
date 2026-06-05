@@ -14,6 +14,21 @@
 	margin-bottom: 20px;
 }
 
+.llummio-editor-helpers__robots-controls {
+	margin-top: 20px;
+}
+
+.llummio-editor-helpers__robots-label {
+	font-size: 11px;
+	font-weight: 500;
+	margin: 0 0 8px;
+	text-transform: uppercase;
+}
+
+.llummio-editor-helpers__robots-control + .llummio-editor-helpers__robots-control {
+	margin-top: 12px;
+}
+
 .llummio-editor-helpers-sidebar .interface-complementary-area-header__title {
 	font-weight: 700;
 }

@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
 
 const LLUMMIO_EDITOR_HELPERS_TITLE_KEY       = '_llummio_seo_title';
 const LLUMMIO_EDITOR_HELPERS_DESCRIPTION_KEY = '_llummio_seo_description';
+const LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY     = '_llummio_seo_noindex';
+const LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY    = '_llummio_seo_nofollow';
 const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.1.0';
 
 /**
@@ -41,6 +43,20 @@ function llummio_editor_helpers_register_meta() {
 				'auth_callback'     => 'llummio_editor_helpers_can_edit_meta',
 			)
 		);
+
+		foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY ) as $meta_key ) {
+			register_post_meta(
+				$post_type,
+				$meta_key,
+				array(
+					'type'              => 'boolean',
+					'single'            => true,
+					'show_in_rest'      => true,
+					'sanitize_callback' => 'rest_sanitize_boolean',
+					'auth_callback'     => 'llummio_editor_helpers_can_edit_meta',
+				)
+			);
+		}
 	}
 }
 
@@ -128,6 +144,12 @@ function llummio_editor_helpers_delete_empty_meta( $post_id ) {
 			delete_post_meta( $post_id, $meta_key );
 		}
 	}
+
+	foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY ) as $meta_key ) {
+		if ( ! llummio_editor_helpers_get_boolean_meta( $post_id, $meta_key ) ) {
+			delete_post_meta( $post_id, $meta_key );
+		}
+	}
 }
 
 add_action( 'save_post', 'llummio_editor_helpers_delete_empty_meta', 20 );
@@ -199,6 +221,37 @@ function llummio_editor_helpers_meta_description() {
 add_action( 'wp_head', 'llummio_editor_helpers_meta_description', 1 );
 
 /**
+ * Output page-level robots controls for singular content.
+ */
+function llummio_editor_helpers_robots_meta() {
+	if ( llummio_editor_helpers_should_skip_frontend_output() || ! is_singular() ) {
+		return;
+	}
+
+	$post_id = get_queried_object_id();
+	$rules   = array();
+
+	if ( llummio_editor_helpers_get_boolean_meta( $post_id, LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY ) ) {
+		$rules[] = 'noindex';
+	}
+
+	if ( llummio_editor_helpers_get_boolean_meta( $post_id, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY ) ) {
+		$rules[] = 'nofollow';
+	}
+
+	if ( empty( $rules ) ) {
+		return;
+	}
+
+	printf(
+		'<meta name="robots" content="%s" />' . "\n",
+		esc_attr( implode( ', ', $rules ) )
+	);
+}
+
+add_action( 'wp_head', 'llummio_editor_helpers_robots_meta', 1 );
+
+/**
  * Return a trimmed SEO field value.
  *
  * @param int    $post_id  Post ID.
@@ -210,6 +263,20 @@ function llummio_editor_helpers_get_meta( $post_id, $meta_key ) {
 	}
 
 	return trim( (string) get_post_meta( $post_id, $meta_key, true ) );
+}
+
+/**
+ * Return a boolean SEO field value.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $meta_key Meta key.
+ */
+function llummio_editor_helpers_get_boolean_meta( $post_id, $meta_key ) {
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	return (bool) get_post_meta( $post_id, $meta_key, true );
 }
 
 /**
