@@ -6,4 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.documentElement.classList.add("llummio-gsap-ready");
+
+    if (window.ScrollTrigger) {
+        window.gsap.registerPlugin(window.ScrollTrigger);
+        document.documentElement.classList.add("llummio-scrolltrigger-ready");
+    }
 });

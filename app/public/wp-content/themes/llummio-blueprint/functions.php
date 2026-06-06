@@ -285,10 +285,28 @@ function llummio_blueprint_enqueue_page_scripts() {
 		true
 	);
 
+	$animation_dependencies = array( 'gsap-js' );
+
+	if ( llummio_blueprint_page_needs_scrolltrigger() ) {
+		$scrolltrigger_path = get_theme_file_path( 'assets/vendor/gsap/ScrollTrigger.min.js' );
+
+		if ( file_exists( $scrolltrigger_path ) ) {
+			wp_enqueue_script(
+				'gsap-scrolltrigger',
+				get_theme_file_uri( 'assets/vendor/gsap/ScrollTrigger.min.js' ),
+				array( 'gsap-js' ),
+				filemtime( $scrolltrigger_path ),
+				true
+			);
+
+			$animation_dependencies[] = 'gsap-scrolltrigger';
+		}
+	}
+
 	wp_enqueue_script(
 		'llummio-blueprint-animations',
 		get_theme_file_uri( 'assets/js/animations.js' ),
-		array( 'gsap-js' ),
+		$animation_dependencies,
 		filemtime( get_theme_file_path( 'assets/js/animations.js' ) ),
 		true
 	);
@@ -315,6 +333,29 @@ function llummio_blueprint_page_needs_gsap() {
 	return (bool) apply_filters(
 		'llummio_blueprint_page_needs_gsap',
 		$needs_gsap,
+		$post
+	);
+}
+
+/**
+ * Check whether the current page opted into GSAP ScrollTrigger.
+ */
+function llummio_blueprint_page_needs_scrolltrigger() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_queried_object();
+
+	if ( ! $post instanceof WP_Post ) {
+		return false;
+	}
+
+	$needs_scrolltrigger = '1' === get_post_meta( $post->ID, '_llummio_load_scrolltrigger', true );
+
+	return (bool) apply_filters(
+		'llummio_blueprint_page_needs_scrolltrigger',
+		$needs_scrolltrigger,
 		$post
 	);
 }

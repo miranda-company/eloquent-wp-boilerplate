@@ -50,6 +50,7 @@
 	var SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_area';
 	var SCHEMA_FAQ_KEY = '_llummio_schema_faq_items';
 	var LOAD_GSAP_KEY = '_llummio_load_gsap';
+	var LOAD_SCROLLTRIGGER_KEY = '_llummio_load_scrolltrigger';
 	var TITLE_SUFFIX = ' %sep% %sitename%';
 	var TITLE_RECOMMENDED_LENGTH = 60;
 	var DESCRIPTION_RECOMMENDED_LENGTH = 160;
@@ -290,11 +291,17 @@
 		var schemaServiceArea = meta[ SCHEMA_SERVICE_AREA_KEY ] || '';
 		var faqItems = parseFaqItems( meta[ SCHEMA_FAQ_KEY ] );
 		var loadGsap = !! meta[ LOAD_GSAP_KEY ];
+		var loadScrollTrigger = !! meta[ LOAD_SCROLLTRIGGER_KEY ];
 		var displayedSeoTitle = seoTitle || getDefaultSeoTitle( editorData.title );
 
 		function updateMeta( key, value ) {
 			var nextMeta = Object.assign( {}, meta );
 			nextMeta[ key ] = value;
+			editPost( { meta: nextMeta } );
+		}
+
+		function updateMetaValues( values ) {
+			var nextMeta = Object.assign( {}, meta, values );
 			editPost( { meta: nextMeta } );
 		}
 
@@ -576,7 +583,21 @@
 						help: __( 'Use only when this page has custom GSAP animations.', 'llummio-editor-helpers' ),
 						checked: loadGsap,
 						onChange: function( isChecked ) {
-							updateMeta( LOAD_GSAP_KEY, isChecked );
+							var values = {};
+							values[ LOAD_GSAP_KEY ] = isChecked;
+							values[ LOAD_SCROLLTRIGGER_KEY ] = isChecked ? loadScrollTrigger : false;
+							updateMetaValues( values );
+						},
+					} ),
+					el( CheckboxControl, {
+						label: __( 'Load ScrollTrigger on this page', 'llummio-editor-helpers' ),
+						help: __( 'Use only when this page needs scroll-based GSAP animations.', 'llummio-editor-helpers' ),
+						checked: loadScrollTrigger,
+						onChange: function( isChecked ) {
+							var values = {};
+							values[ LOAD_GSAP_KEY ] = isChecked ? true : loadGsap;
+							values[ LOAD_SCROLLTRIGGER_KEY ] = isChecked;
+							updateMetaValues( values );
 						},
 					} )
 				),

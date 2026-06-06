@@ -16,6 +16,7 @@ The theme provides reusable spacing tokens, GenerateBlocks-friendly section patt
 
 * `assets/js/generic.js` loads across the site for small JavaScript behavior that does not need GSAP.
 * `assets/js/animations.js` loads only on pages that enable the GSAP option in Llummio Editor Helpers.
+* `assets/vendor/gsap/ScrollTrigger.min.js` loads only on pages that enable the ScrollTrigger option in Llummio Editor Helpers.
 
 The blueprint disables WordPress comments by default. Comments and pingbacks are closed on saved content, the Comments admin screen is hidden, and starter database defaults are set to closed.
 

@@ -10,13 +10,13 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.6.3`
+Version: `0.6.4`
 
 ### Purpose
 
 `Llummio Editor Helpers` collects small editing tools used in Llummio blueprint sites.
 
-It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, a page-level GSAP loading toggle, and an editor-only wireframe preview toggle.
+It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, page-level GSAP and ScrollTrigger loading toggles, and an editor-only wireframe preview toggle.
 
 The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
 
@@ -35,7 +35,7 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Adds a top-level `Global Schema` admin menu item below `Llummio Forms`, using the Llummio SVG icon.
 - Adds automatic `Organization` or `LocalBusiness`, `WebSite`, `WebPage`, and `BlogPosting` schema.
 - Adds page-level schema controls for `Service`, `Article`, `FAQPage`, and disabled schema.
-- Adds a page-level performance control for loading GSAP only on pages that need custom animations.
+- Adds page-level performance controls for loading GSAP and ScrollTrigger only on pages that need them.
 - Registers the fields with the WordPress REST API for future editor integrations.
 - Adds an editor-only wireframe toggle for the theme `.wire` helper class.
 
@@ -67,6 +67,7 @@ The plugin stores data in post meta:
 - `_llummio_schema_service_area`
 - `_llummio_schema_faq_items`
 - `_llummio_load_gsap`
+- `_llummio_load_scrolltrigger`
 
 The plugin also stores global business schema settings in the `llummio_editor_helpers_settings` option.
 
@@ -174,13 +175,21 @@ The plugin skips schema output when:
 
 ### Performance Tools
 
-The sidebar includes a `Performance Tools` section with a `Load GSAP on this page` checkbox.
+The sidebar includes a `Performance Tools` section with these page-level checkboxes:
 
-GSAP is disabled by default. Enable this option only on pages that have custom GSAP animations. The theme reads the saved `_llummio_load_gsap` meta value and loads `gsap.min.js` plus `assets/js/animations.js` only for that page.
+- `Load GSAP on this page`
+- `Load ScrollTrigger on this page`
+
+GSAP is disabled by default. Enable it only on pages that have custom GSAP animations. The theme reads the saved `_llummio_load_gsap` meta value and loads `gsap.min.js` plus `assets/js/animations.js` only for that page.
+
+ScrollTrigger is also disabled by default. Enable it only on pages that need scroll-based GSAP animations. ScrollTrigger depends on GSAP, so turning ScrollTrigger on also turns GSAP on. The theme only enqueues `assets/vendor/gsap/ScrollTrigger.min.js` when the page has `_llummio_load_scrolltrigger` enabled and the vendor file exists.
 
 General site JavaScript belongs in the theme's `assets/js/generic.js` file and loads independently of GSAP.
 
-The theme also exposes the `llummio_blueprint_page_needs_gsap` filter for developer-only overrides.
+The theme also exposes these filters for developer-only overrides:
+
+- `llummio_blueprint_page_needs_gsap`
+- `llummio_blueprint_page_needs_scrolltrigger`
 
 ### Wireframe Toggle
 
@@ -271,20 +280,23 @@ When upgrading the blueprint to a new major WordPress version:
 11. Confirm `Load GSAP on this page` saves and reloads correctly.
 12. Confirm pages with the GSAP option disabled do not load `gsap.min.js`.
 13. Confirm pages with the GSAP option enabled load `gsap.min.js` and `animations.js`.
-14. Confirm a singular page outputs one canonical tag.
-15. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-16. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
-17. Save `Organization` settings and confirm the saved values stay after reload.
-18. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
-19. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
-20. Confirm a post outputs `BlogPosting`.
-21. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
-22. Set a page to `Article` and confirm the page node changes to `Article`.
-23. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
-24. Set schema to `None` and confirm schema output stops on that page.
-25. Enable `No index` and confirm schema output stops on that page.
-26. Confirm no duplicate schema output appears if a full SEO plugin is active.
-27. Confirm no PHP warnings appear in WordPress admin.
+14. Confirm `Load ScrollTrigger on this page` saves and reloads correctly.
+15. Confirm pages with ScrollTrigger disabled do not load `ScrollTrigger.min.js`.
+16. Confirm pages with ScrollTrigger enabled load `ScrollTrigger.min.js` when the vendor file exists.
+17. Confirm a singular page outputs one canonical tag.
+18. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
+19. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
+20. Save `Organization` settings and confirm the saved values stay after reload.
+21. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
+22. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
+23. Confirm a post outputs `BlogPosting`.
+24. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
+25. Set a page to `Article` and confirm the page node changes to `Article`.
+26. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
+27. Set schema to `None` and confirm schema output stops on that page.
+28. Enable `No index` and confirm schema output stops on that page.
+29. Confirm no duplicate schema output appears if a full SEO plugin is active.
+30. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 

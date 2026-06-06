@@ -8,7 +8,7 @@ This blueprint includes the standard Llummio plugin stack.
 | Create Block Theme | `create-block-theme` | 2.9.0 |
 | GenerateBlocks | `generateblocks` | 2.2.1 |
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
-| Llummio Editor Helpers | `llummio-editor-helpers` | 0.6.3 |
+| Llummio Editor Helpers | `llummio-editor-helpers` | 0.6.4 |
 | Llummio Forms | `llummio-forms` | 0.3.3 |
 | Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
