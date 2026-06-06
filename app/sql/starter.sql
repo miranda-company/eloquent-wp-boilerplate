@@ -204,278 +204,6 @@ LOCK TABLES `wp_comments` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `wp_ff_scheduled_actions`
---
-
-DROP TABLE IF EXISTS `wp_ff_scheduled_actions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_ff_scheduled_actions` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `action` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `form_id` bigint unsigned DEFAULT NULL,
-  `origin_id` bigint unsigned DEFAULT NULL,
-  `feed_id` bigint unsigned DEFAULT NULL,
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT 'submission_action',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `note` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `retry_count` int unsigned DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_ff_scheduled_actions`
---
-
-LOCK TABLES `wp_ff_scheduled_actions` WRITE;
-/*!40000 ALTER TABLE `wp_ff_scheduled_actions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_ff_scheduled_actions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_entry_details`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_entry_details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_entry_details` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `form_id` bigint unsigned DEFAULT NULL,
-  `submission_id` bigint unsigned DEFAULT NULL,
-  `field_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `sub_field_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `field_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_entry_details`
---
-
-LOCK TABLES `wp_fluentform_entry_details` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_entry_details` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_fluentform_entry_details` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_form_analytics`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_form_analytics`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_form_analytics` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `form_id` int unsigned DEFAULT NULL,
-  `user_id` int unsigned DEFAULT NULL,
-  `source_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `platform` char(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `browser` char(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `city` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `country` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `ip` char(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `count` int DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `form_id_ip` (`form_id`,`ip`),
-  KEY `created_at` (`created_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_form_analytics`
---
-
-LOCK TABLES `wp_fluentform_form_analytics` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_form_analytics` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_fluentform_form_analytics` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_form_meta`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_form_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_form_meta` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `form_id` int unsigned DEFAULT NULL,
-  `meta_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  PRIMARY KEY (`id`),
-  KEY `form_id_meta_key` (`form_id`,`meta_key`(191)),
-  KEY `meta_key` (`meta_key`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_form_meta`
---
-
-LOCK TABLES `wp_fluentform_form_meta` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_form_meta` DISABLE KEYS */;
-INSERT INTO `wp_fluentform_form_meta` VALUES (1,1,'template_name','basic_contact_form');
-INSERT INTO `wp_fluentform_form_meta` VALUES (2,1,'formSettings','{\"confirmation\":{\"redirectTo\":\"samePage\",\"messageToShow\":\"Thank you for your message. We will get in touch with you shortly\",\"customPage\":null,\"samePageFormBehavior\":\"hide_form\",\"customUrl\":null},\"restrictions\":{\"limitNumberOfEntries\":{\"enabled\":false,\"numberOfEntries\":null,\"period\":\"total\",\"limitReachedMsg\":\"Maximum number of entries exceeded.\"},\"scheduleForm\":{\"enabled\":false,\"start\":null,\"end\":null,\"selectedDays\":[\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\",\"Saturday\",\"Sunday\"],\"pendingMsg\":\"Form submission is not started yet.\",\"expiredMsg\":\"Form submission is now closed.\"},\"requireLogin\":{\"enabled\":false,\"requireLoginMsg\":\"You must be logged in to submit the form.\"},\"denyEmptySubmission\":{\"enabled\":false,\"message\":\"Sorry, you cannot submit an empty form. Let\'s hear what you wanna say.\"}},\"layout\":{\"labelPlacement\":\"top\",\"helpMessagePlacement\":\"with_label\",\"errorMessagePlacement\":\"inline\",\"cssClassName\":\"\",\"asteriskPlacement\":\"asterisk-right\"},\"delete_entry_on_submission\":\"no\",\"appendSurveyResult\":{\"enabled\":false,\"showLabel\":false,\"showCount\":false}}');
-INSERT INTO `wp_fluentform_form_meta` VALUES (3,1,'advancedValidationSettings','{\"status\":false,\"type\":\"all\",\"conditions\":[{\"field\":\"\",\"operator\":\"=\",\"value\":\"\"}],\"error_message\":\"\",\"validation_type\":\"fail_on_condition_met\"}');
-INSERT INTO `wp_fluentform_form_meta` VALUES (4,1,'double_optin_settings','{\"status\":\"no\",\"confirmation_message\":\"Please check your email inbox to confirm this submission\",\"email_body_type\":\"global\",\"email_subject\":\"Please confirm your form submission\",\"email_body\":\"<h2>Please Confirm Your Submission</h2><p>&nbsp;</p><p style=\"text-align: center;\"><a style=\"color: #ffffff; background-color: #454545; font-size: 16px; border-radius: 5px; text-decoration: none; font-weight: normal; font-style: normal; padding: 0.8rem 1rem; border-color: #0072ff;\" href=\"#confirmation_url#\">Confirm Submission</a></p><p>&nbsp;</p><p>If you received this email by mistake, simply delete it. Your form submission won\'t proceed if you don\'t click the confirmation link above.</p>\",\"email_field\":\"\",\"skip_if_logged_in\":\"yes\",\"skip_if_fc_subscribed\":\"no\"}');
-INSERT INTO `wp_fluentform_form_meta` VALUES (5,2,'template_name','inline_subscription');
-INSERT INTO `wp_fluentform_form_meta` VALUES (6,2,'formSettings','{\"confirmation\":{\"redirectTo\":\"samePage\",\"messageToShow\":\"Thank you for your message. We will get in touch with you shortly\",\"customPage\":null,\"samePageFormBehavior\":\"hide_form\",\"customUrl\":null},\"restrictions\":{\"limitNumberOfEntries\":{\"enabled\":false,\"numberOfEntries\":null,\"period\":\"total\",\"limitReachedMsg\":\"Maximum number of entries exceeded.\"},\"scheduleForm\":{\"enabled\":false,\"start\":null,\"end\":null,\"pendingMsg\":\"Form submission is not started yet.\",\"expiredMsg\":\"Form submission is now closed.\"},\"requireLogin\":{\"enabled\":false,\"requireLoginMsg\":\"You must be logged in to submit the form.\"},\"denyEmptySubmission\":{\"enabled\":false,\"message\":\"Sorry, you cannot submit an empty form. Let\'s hear what you wanna say.\"}},\"layout\":{\"labelPlacement\":\"top\",\"helpMessagePlacement\":\"with_label\",\"errorMessagePlacement\":\"inline\",\"asteriskPlacement\":\"asterisk-right\"}}');
-INSERT INTO `wp_fluentform_form_meta` VALUES (7,2,'notifications','{\"name\":\"Admin Notification Email\",\"sendTo\":{\"type\":\"email\",\"email\":\"{wp.admin_email}\",\"field\":\"email\",\"routing\":[{\"email\":null,\"field\":null,\"operator\":\"=\",\"value\":null}]},\"fromName\":\"\",\"fromEmail\":\"\",\"replyTo\":\"\",\"bcc\":\"\",\"subject\":\"[{inputs.names}] New Form Submission\",\"message\":\"<p>{all_data}<\\/p> <p>This form submitted at: {embed_post.permalink}<\\/p>\",\"conditionals\":{\"status\":false,\"type\":\"all\",\"conditions\":[{\"field\":null,\"operator\":\"=\",\"value\":null}]},\"enabled\":false,\"email_template\":\"\"}');
-INSERT INTO `wp_fluentform_form_meta` VALUES (8,2,'step_data_persistency_status','no');
-INSERT INTO `wp_fluentform_form_meta` VALUES (9,2,'_primary_email_field','email');
-/*!40000 ALTER TABLE `wp_fluentform_form_meta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_forms`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_forms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_forms` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `status` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT 'Draft',
-  `appearance_settings` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `form_fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `has_payment` tinyint(1) NOT NULL DEFAULT '0',
-  `type` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `conditions` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `created_by` int DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_forms`
---
-
-LOCK TABLES `wp_fluentform_forms` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_forms` DISABLE KEYS */;
-INSERT INTO `wp_fluentform_forms` VALUES (1,'Contact Form Demo','published',NULL,'{\"fields\":[{\"index\":0,\"element\":\"input_name\",\"attributes\":{\"name\":\"names\",\"data-type\":\"name-element\"},\"settings\":{\"container_class\":\"\",\"admin_field_label\":\"Name\",\"conditional_logics\":[]},\"fields\":{\"first_name\":{\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"first_name\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"First Name\"},\"settings\":{\"container_class\":\"\",\"label\":\"First Name\",\"help_message\":\"\",\"visible\":true,\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":[]},\"editor_options\":{\"template\":\"inputText\"}},\"middle_name\":{\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"middle_name\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"\",\"required\":false},\"settings\":{\"container_class\":\"\",\"label\":\"Middle Name\",\"help_message\":\"\",\"error_message\":\"\",\"visible\":false,\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":[]},\"editor_options\":{\"template\":\"inputText\"}},\"last_name\":{\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"last_name\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Last Name\",\"required\":false},\"settings\":{\"container_class\":\"\",\"label\":\"Last Name\",\"help_message\":\"\",\"error_message\":\"\",\"visible\":true,\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":[]},\"editor_options\":{\"template\":\"inputText\"}}},\"editor_options\":{\"title\":\"Name Fields\",\"element\":\"name-fields\",\"icon_class\":\"ff-edit-name\",\"template\":\"nameFields\"},\"uniqElKey\":\"el_1570866006692\"},{\"index\":1,\"element\":\"input_email\",\"attributes\":{\"type\":\"email\",\"name\":\"email\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Email Address\"},\"settings\":{\"container_class\":\"\",\"label\":\"Email\",\"label_placement\":\"\",\"help_message\":\"\",\"admin_field_label\":\"\",\"validation_rules\":{\"required\":{\"value\":true,\"message\":\"This field is required\"},\"email\":{\"value\":true,\"message\":\"This field must contain a valid email\"}},\"conditional_logics\":[]},\"editor_options\":{\"title\":\"Email Address\",\"icon_class\":\"ff-edit-email\",\"template\":\"inputText\"},\"uniqElKey\":\"el_1570866012914\"},{\"index\":2,\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"subject\",\"value\":\"\",\"class\":\"\",\"placeholder\":\"Subject\"},\"settings\":{\"container_class\":\"\",\"label\":\"Subject\",\"label_placement\":\"\",\"admin_field_label\":\"Subject\",\"help_message\":\"\",\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"editor_options\":{\"title\":\"Simple Text\",\"icon_class\":\"ff-edit-text\",\"template\":\"inputText\"},\"uniqElKey\":\"el_1570878958648\"},{\"index\":3,\"element\":\"textarea\",\"attributes\":{\"name\":\"message\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Your Message\",\"rows\":4,\"cols\":2},\"settings\":{\"container_class\":\"\",\"label\":\"Your Message\",\"admin_field_label\":\"\",\"label_placement\":\"\",\"help_message\":\"\",\"validation_rules\":{\"required\":{\"value\":true,\"message\":\"This field is required\"}},\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"editor_options\":{\"title\":\"Text Area\",\"icon_class\":\"ff-edit-textarea\",\"template\":\"inputTextarea\"},\"uniqElKey\":\"el_1570879001207\"}],\"submitButton\":{\"uniqElKey\":\"el_1524065200616\",\"element\":\"button\",\"attributes\":{\"type\":\"submit\",\"class\":\"\"},\"settings\":{\"align\":\"left\",\"button_style\":\"default\",\"container_class\":\"\",\"help_message\":\"\",\"background_color\":\"#1a7efb\",\"button_size\":\"md\",\"color\":\"#ffffff\",\"button_ui\":{\"type\":\"default\",\"text\":\"Submit Form\",\"img_url\":\"\"}},\"editor_options\":{\"title\":\"Submit Button\"}}}',0,'',NULL,1,'2026-05-14 06:01:17','2026-05-14 06:01:17');
-INSERT INTO `wp_fluentform_forms` VALUES (2,'Subscription Form','published',NULL,'{\"fields\":[{\"index\":1,\"element\":\"container\",\"attributes\":[],\"settings\":{\"container_class\":\"\",\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"columns\":[{\"fields\":[{\"index\":1,\"element\":\"input_email\",\"attributes\":{\"type\":\"email\",\"name\":\"email\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Your Email Address\"},\"settings\":{\"container_class\":\"\",\"label\":\"\",\"label_placement\":\"\",\"help_message\":\"\",\"admin_field_label\":\"Email\",\"validation_rules\":{\"required\":{\"value\":true,\"message\":\"This field is required\"},\"email\":{\"value\":true,\"message\":\"This field must contain a valid email\"}},\"conditional_logics\":[],\"is_unique\":\"no\",\"unique_validation_message\":\"Email address need to be unique.\"},\"editor_options\":{\"title\":\"Email Address\",\"icon_class\":\"ff-edit-email\",\"template\":\"inputText\"},\"uniqElKey\":\"el_16231279686950.8779857923682932\"}]},{\"fields\":[{\"index\":15,\"element\":\"custom_submit_button\",\"attributes\":{\"class\":\"\",\"type\":\"submit\"},\"settings\":{\"button_style\":\"\",\"button_size\":\"md\",\"align\":\"left\",\"container_class\":\"\",\"current_state\":\"normal_styles\",\"background_color\":\"\",\"color\":\"\",\"hover_styles\":{\"backgroundColor\":\"#ffffff\",\"borderColor\":\"#1a7efb\",\"color\":\"#1a7efb\",\"borderRadius\":\"\",\"minWidth\":\"100%\"},\"normal_styles\":{\"backgroundColor\":\"#1a7efb\",\"borderColor\":\"#1a7efb\",\"color\":\"#ffffff\",\"borderRadius\":\"\",\"minWidth\":\"100%\"},\"button_ui\":{\"text\":\"Subscribe\",\"type\":\"default\",\"img_url\":\"\"},\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"editor_options\":{\"title\":\"Custom Submit Button\",\"icon_class\":\"dashicons dashicons-arrow-right-alt\",\"template\":\"customButton\"},\"uniqElKey\":\"el_16231279798380.5947400167493171\"}]}],\"editor_options\":{\"title\":\"Two Column Container\",\"icon_class\":\"ff-edit-column-2\"},\"uniqElKey\":\"el_16231279284710.40955091024524304\"}],\"submitButton\":{\"uniqElKey\":\"el_1524065200616\",\"element\":\"button\",\"attributes\":{\"type\":\"submit\",\"class\":\"\"},\"settings\":{\"align\":\"left\",\"button_style\":\"default\",\"container_class\":\"\",\"help_message\":\"\",\"background_color\":\"#1a7efb\",\"button_size\":\"md\",\"color\":\"#ffffff\",\"button_ui\":{\"type\":\"default\",\"text\":\"Subscribe\",\"img_url\":\"\"}},\"editor_options\":{\"title\":\"Submit Button\"}}}',0,'form',NULL,1,'2026-05-14 06:01:17','2026-05-14 06:01:17');
-/*!40000 ALTER TABLE `wp_fluentform_forms` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_logs`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_logs` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `parent_source_id` int unsigned DEFAULT NULL,
-  `source_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `source_id` int unsigned DEFAULT NULL,
-  `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `status` char(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `created_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_logs`
---
-
-LOCK TABLES `wp_fluentform_logs` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_fluentform_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_submission_meta`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_submission_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_submission_meta` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `response_id` bigint unsigned DEFAULT NULL,
-  `form_id` int unsigned DEFAULT NULL,
-  `meta_key` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `status` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `user_id` int unsigned DEFAULT NULL,
-  `name` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `response_id_meta_key` (`response_id`,`meta_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_submission_meta`
---
-
-LOCK TABLES `wp_fluentform_submission_meta` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_submission_meta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_fluentform_submission_meta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wp_fluentform_submissions`
---
-
-DROP TABLE IF EXISTS `wp_fluentform_submissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wp_fluentform_submissions` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `form_id` int unsigned DEFAULT NULL,
-  `serial_number` int unsigned DEFAULT NULL,
-  `response` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `source_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `user_id` int unsigned DEFAULT NULL,
-  `status` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT 'unread' COMMENT 'possible values: read, unread, trashed',
-  `is_favourite` tinyint(1) NOT NULL DEFAULT '0',
-  `browser` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `device` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `ip` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `city` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `country` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `payment_status` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `payment_method` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `payment_type` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `currency` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `payment_total` float DEFAULT NULL,
-  `total_paid` float DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `form_id_status` (`form_id`,`status`),
-  KEY `form_id_created_at` (`form_id`,`created_at`),
-  KEY `user_id` (`user_id`),
-  KEY `serial_number` (`serial_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wp_fluentform_submissions`
---
-
-LOCK TABLES `wp_fluentform_submissions` WRITE;
-/*!40000 ALTER TABLE `wp_fluentform_submissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wp_fluentform_submissions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `wp_links`
 --
 
@@ -534,7 +262,7 @@ CREATE TABLE `wp_options` (
 
 LOCK TABLES `wp_options` WRITE;
 /*!40000 ALTER TABLE `wp_options` DISABLE KEYS */;
-INSERT INTO `wp_options` VALUES (1,'cron','a:13:{i:1780604657;a:1:{s:26:\"action_scheduler_run_queue\";a:1:{s:32:\"0d04ed39571b55704c122d726248bbac\";a:3:{s:8:\"schedule\";s:12:\"every_minute\";s:4:\"args\";a:1:{i:0;s:7:\"WP Cron\";}s:8:\"interval\";i:60;}}}i:1780604777;a:1:{s:29:\"fluentform_do_scheduled_tasks\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:21:\"ff_every_five_minutes\";s:4:\"args\";a:0:{}s:8:\"interval\";i:300;}}}i:1780605672;a:1:{s:16:\"wp_version_check\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1780605673;a:1:{s:34:\"wp_privacy_delete_old_export_files\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"hourly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:3600;}}}i:1780607472;a:1:{s:17:\"wp_update_plugins\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1780609272;a:1:{s:16:\"wp_update_themes\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1780645273;a:2:{s:32:\"recovery_mode_clean_expired_keys\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}s:30:\"wp_site_health_scheduled_check\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"weekly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:604800;}}}i:1780645398;a:3:{s:19:\"wp_scheduled_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}s:25:\"delete_expired_transients\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}s:21:\"wp_update_user_counts\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1780645400;a:1:{s:30:\"wp_scheduled_auto_draft_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1780646374;a:1:{s:27:\"acf_update_site_health_data\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1780646477;a:1:{s:42:\"fluentform_do_email_report_scheduled_tasks\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1781163909;a:1:{s:30:\"wp_delete_temp_updater_backups\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"weekly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:604800;}}}s:7:\"version\";i:2;}','on');
+INSERT INTO `wp_options` VALUES (1,'cron','a:0:{}','on');
 INSERT INTO `wp_options` VALUES (2,'siteurl','http://llummio-wp-blueprint-workspace.local','on');
 INSERT INTO `wp_options` VALUES (3,'home','http://llummio-wp-blueprint-workspace.local','on');
 INSERT INTO `wp_options` VALUES (4,'blogname','Blueprint','on');
@@ -567,7 +295,7 @@ INSERT INTO `wp_options` VALUES (30,'rewrite_rules','a:123:{s:11:\"^wp-json/?$\"
 INSERT INTO `wp_options` VALUES (31,'hack_file','0','on');
 INSERT INTO `wp_options` VALUES (32,'blog_charset','UTF-8','on');
 INSERT INTO `wp_options` VALUES (33,'moderation_keys','','off');
-INSERT INTO `wp_options` VALUES (34,'active_plugins','a:7:{i:0;s:30:\"advanced-custom-fields/acf.php\";i:1;s:41:\"create-block-theme/create-block-theme.php\";i:2;s:25:\"fluentform/fluentform.php\";i:3;s:29:\"generateblocks-pro/plugin.php\";i:4;s:25:\"generateblocks/plugin.php\";i:5;s:49:\"llummio-editor-helpers/llummio-editor-helpers.php\";i:6;s:43:\"llummio-svg-uploads/llummio-svg-uploads.php\";}','on');
+INSERT INTO `wp_options` VALUES (34,'active_plugins','a:7:{i:0;s:30:\"advanced-custom-fields/acf.php\";i:1;s:41:\"create-block-theme/create-block-theme.php\";i:2;s:29:\"generateblocks-pro/plugin.php\";i:3;s:25:\"generateblocks/plugin.php\";i:4;s:49:\"llummio-editor-helpers/llummio-editor-helpers.php\";i:5;s:31:\"llummio-forms/llummio-forms.php\";i:6;s:43:\"llummio-svg-uploads/llummio-svg-uploads.php\";}','on');
 INSERT INTO `wp_options` VALUES (35,'category_base','','on');
 INSERT INTO `wp_options` VALUES (36,'ping_sites','https://rpc.pingomatic.com/','on');
 INSERT INTO `wp_options` VALUES (37,'comment_max_links','2','on');
@@ -635,7 +363,7 @@ INSERT INTO `wp_options` VALUES (99,'wp_force_deactivated_plugins','a:0:{}','on'
 INSERT INTO `wp_options` VALUES (100,'wp_attachment_pages_enabled','0','on');
 INSERT INTO `wp_options` VALUES (101,'wp_notes_notify','1','on');
 INSERT INTO `wp_options` VALUES (102,'initial_db_version','60717','on');
-INSERT INTO `wp_options` VALUES (103,'wp_user_roles','a:5:{s:13:\"administrator\";a:2:{s:4:\"name\";s:13:\"Administrator\";s:12:\"capabilities\";a:69:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;s:27:\"fluentform_dashboard_access\";b:1;s:24:\"fluentform_forms_manager\";b:1;s:25:\"fluentform_entries_viewer\";b:1;s:25:\"fluentform_manage_entries\";b:1;s:24:\"fluentform_view_payments\";b:1;s:26:\"fluentform_manage_payments\";b:1;s:27:\"fluentform_settings_manager\";b:1;s:22:\"fluentform_full_access\";b:1;}}s:6:\"editor\";a:2:{s:4:\"name\";s:6:\"Editor\";s:12:\"capabilities\";a:34:{s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;}}s:6:\"author\";a:2:{s:4:\"name\";s:6:\"Author\";s:12:\"capabilities\";a:10:{s:12:\"upload_files\";b:1;s:10:\"edit_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:4:\"read\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:12:\"delete_posts\";b:1;s:22:\"delete_published_posts\";b:1;}}s:11:\"contributor\";a:2:{s:4:\"name\";s:11:\"Contributor\";s:12:\"capabilities\";a:5:{s:10:\"edit_posts\";b:1;s:4:\"read\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:12:\"delete_posts\";b:1;}}s:10:\"subscriber\";a:2:{s:4:\"name\";s:10:\"Subscriber\";s:12:\"capabilities\";a:2:{s:4:\"read\";b:1;s:7:\"level_0\";b:1;}}}','on');
+INSERT INTO `wp_options` VALUES (103,'wp_user_roles','a:5:{s:13:\"administrator\";a:2:{s:4:\"name\";s:13:\"Administrator\";s:12:\"capabilities\";a:61:{s:13:\"switch_themes\";b:1;s:11:\"edit_themes\";b:1;s:16:\"activate_plugins\";b:1;s:12:\"edit_plugins\";b:1;s:10:\"edit_users\";b:1;s:10:\"edit_files\";b:1;s:14:\"manage_options\";b:1;s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:6:\"import\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:8:\"level_10\";b:1;s:7:\"level_9\";b:1;s:7:\"level_8\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;s:12:\"delete_users\";b:1;s:12:\"create_users\";b:1;s:17:\"unfiltered_upload\";b:1;s:14:\"edit_dashboard\";b:1;s:14:\"update_plugins\";b:1;s:14:\"delete_plugins\";b:1;s:15:\"install_plugins\";b:1;s:13:\"update_themes\";b:1;s:14:\"install_themes\";b:1;s:11:\"update_core\";b:1;s:10:\"list_users\";b:1;s:12:\"remove_users\";b:1;s:13:\"promote_users\";b:1;s:18:\"edit_theme_options\";b:1;s:13:\"delete_themes\";b:1;s:6:\"export\";b:1;}}s:6:\"editor\";a:2:{s:4:\"name\";s:6:\"Editor\";s:12:\"capabilities\";a:34:{s:17:\"moderate_comments\";b:1;s:17:\"manage_categories\";b:1;s:12:\"manage_links\";b:1;s:12:\"upload_files\";b:1;s:15:\"unfiltered_html\";b:1;s:10:\"edit_posts\";b:1;s:17:\"edit_others_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:10:\"edit_pages\";b:1;s:4:\"read\";b:1;s:7:\"level_7\";b:1;s:7:\"level_6\";b:1;s:7:\"level_5\";b:1;s:7:\"level_4\";b:1;s:7:\"level_3\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:17:\"edit_others_pages\";b:1;s:20:\"edit_published_pages\";b:1;s:13:\"publish_pages\";b:1;s:12:\"delete_pages\";b:1;s:19:\"delete_others_pages\";b:1;s:22:\"delete_published_pages\";b:1;s:12:\"delete_posts\";b:1;s:19:\"delete_others_posts\";b:1;s:22:\"delete_published_posts\";b:1;s:20:\"delete_private_posts\";b:1;s:18:\"edit_private_posts\";b:1;s:18:\"read_private_posts\";b:1;s:20:\"delete_private_pages\";b:1;s:18:\"edit_private_pages\";b:1;s:18:\"read_private_pages\";b:1;}}s:6:\"author\";a:2:{s:4:\"name\";s:6:\"Author\";s:12:\"capabilities\";a:10:{s:12:\"upload_files\";b:1;s:10:\"edit_posts\";b:1;s:20:\"edit_published_posts\";b:1;s:13:\"publish_posts\";b:1;s:4:\"read\";b:1;s:7:\"level_2\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:12:\"delete_posts\";b:1;s:22:\"delete_published_posts\";b:1;}}s:11:\"contributor\";a:2:{s:4:\"name\";s:11:\"Contributor\";s:12:\"capabilities\";a:5:{s:10:\"edit_posts\";b:1;s:4:\"read\";b:1;s:7:\"level_1\";b:1;s:7:\"level_0\";b:1;s:12:\"delete_posts\";b:1;}}s:10:\"subscriber\";a:2:{s:4:\"name\";s:10:\"Subscriber\";s:12:\"capabilities\";a:2:{s:4:\"read\";b:1;s:7:\"level_0\";b:1;}}}','on');
 INSERT INTO `wp_options` VALUES (104,'fresh_site','0','off');
 INSERT INTO `wp_options` VALUES (105,'user_count','1','off');
 INSERT INTO `wp_options` VALUES (106,'widget_block','a:6:{i:2;a:1:{s:7:\"content\";s:19:\"<!-- wp:search /-->\";}i:3;a:1:{s:7:\"content\";s:154:\"<!-- wp:group --><div class=\"wp-block-group\"><!-- wp:heading --><h2>Recent Posts</h2><!-- /wp:heading --><!-- wp:latest-posts /--></div><!-- /wp:group -->\";}i:4;a:1:{s:7:\"content\";s:227:\"<!-- wp:group --><div class=\"wp-block-group\"><!-- wp:heading --><h2>Recent Comments</h2><!-- /wp:heading --><!-- wp:latest-comments {\"displayAvatar\":false,\"displayDate\":false,\"displayExcerpt\":false} /--></div><!-- /wp:group -->\";}i:5;a:1:{s:7:\"content\";s:146:\"<!-- wp:group --><div class=\"wp-block-group\"><!-- wp:heading --><h2>Archives</h2><!-- /wp:heading --><!-- wp:archives /--></div><!-- /wp:group -->\";}i:6;a:1:{s:7:\"content\";s:150:\"<!-- wp:group --><div class=\"wp-block-group\"><!-- wp:heading --><h2>Categories</h2><!-- /wp:heading --><!-- wp:categories /--></div><!-- /wp:group -->\";}s:12:\"_multiwidget\";i:1;}','auto');
@@ -667,16 +395,7 @@ INSERT INTO `wp_options` VALUES (187,'acf_version','6.8.3','auto');
 INSERT INTO `wp_options` VALUES (219,'action_scheduler_hybrid_store_demarkation','12','auto');
 INSERT INTO `wp_options` VALUES (220,'schema-ActionScheduler_StoreSchema','8.0.1778745677','auto');
 INSERT INTO `wp_options` VALUES (221,'schema-ActionScheduler_LoggerSchema','3.0.1778745677','auto');
-INSERT INTO `wp_options` VALUES (222,'fluentform_entry_details_migrated','yes','off');
-INSERT INTO `wp_options` VALUES (223,'fluentform_db_fluentform_logs_added','1','off');
-INSERT INTO `wp_options` VALUES (224,'fluentform_scheduled_actions_migrated','yes','off');
-INSERT INTO `wp_options` VALUES (225,'_fluentform_global_form_settings','a:2:{s:6:\"layout\";a:5:{s:14:\"labelPlacement\";s:3:\"top\";s:17:\"asteriskPlacement\";s:14:\"asterisk-right\";s:20:\"helpMessagePlacement\";s:10:\"with_label\";s:21:\"errorMessagePlacement\";s:6:\"inline\";s:12:\"cssClassName\";s:0:\"\";}s:4:\"misc\";a:5:{s:18:\"isIpLogingDisabled\";b:0;s:19:\"isAnalyticsDisabled\";b:1;s:21:\"file_upload_locations\";s:0:\"\";s:20:\"admin_top_nav_status\";s:3:\"yes\";s:23:\"default_admin_date_time\";s:9:\"time_diff\";}}','off');
-INSERT INTO `wp_options` VALUES (226,'_fluentform_installed_version','6.2.2','off');
-INSERT INTO `wp_options` VALUES (227,'fluentform_global_modules_status','a:9:{s:9:\"mailchimp\";s:2:\"no\";s:14:\"activecampaign\";s:2:\"no\";s:16:\"campaign_monitor\";s:2:\"no\";s:17:\"constatantcontact\";s:2:\"no\";s:11:\"getresponse\";s:2:\"no\";s:8:\"icontact\";s:2:\"no\";s:7:\"webhook\";s:2:\"no\";s:6:\"zapier\";s:2:\"no\";s:5:\"slack\";s:2:\"no\";}','off');
 INSERT INTO `wp_options` VALUES (228,'action_scheduler_lock_async-request-runner','6a21decbde2fb8.65407985|1780604679','no');
-INSERT INTO `wp_options` VALUES (229,'widget_fluentform_widget','a:1:{s:12:\"_multiwidget\";i:1;}','auto');
-INSERT INTO `wp_options` VALUES (232,'fluentform_empty_manager_scopes_normalized','6.2.2','off');
-INSERT INTO `wp_options` VALUES (237,'searchandfilter_version','1.2.17','auto');
 INSERT INTO `wp_options` VALUES (239,'current_theme','llummio theme','auto');
 INSERT INTO `wp_options` VALUES (240,'theme_mods_llummio-blueprint','a:4:{s:19:\"wp_classic_sidebars\";a:0:{}s:18:\"nav_menu_locations\";a:0:{}s:18:\"custom_css_post_id\";i:-1;s:16:\"sidebars_widgets\";a:2:{s:4:\"time\";i:1780583642;s:4:\"data\";a:1:{s:19:\"wp_inactive_widgets\";a:5:{i:0;s:7:\"block-2\";i:1;s:7:\"block-3\";i:2;s:7:\"block-4\";i:3;s:7:\"block-5\";i:4;s:7:\"block-6\";}}}}','off');
 INSERT INTO `wp_options` VALUES (241,'theme_switched','','auto');

@@ -292,6 +292,151 @@ If this plugin changes:
 - Update this document if behavior or compatibility assumptions change.
 - Confirm `app/sql/starter.sql` still activates `llummio-editor-helpers/llummio-editor-helpers.php`.
 
+## Llummio Forms
+
+Folder: `app/public/wp-content/plugins/llummio-forms/`
+
+Main file: `app/public/wp-content/plugins/llummio-forms/llummio-forms.php`
+
+Version: `0.1.0`
+
+### Purpose
+
+`Llummio Forms` provides a lightweight default lead form for Llummio service-business websites.
+
+It replaces the need to ship a full form-builder plugin in the blueprint when the project only needs a standard contact or lead form.
+
+### What It Does
+
+- Adds a `Settings > Llummio Forms` settings page.
+- Adds the `[llummio_form]` shortcode.
+- Renders a fixed, configurable lead form.
+- Supports these common fields:
+  - name;
+  - second name;
+  - last name;
+  - phone number;
+  - email address;
+  - address;
+  - country;
+  - comments.
+- Lets administrators choose which fields are shown and required.
+- Keeps email address and privacy consent required.
+- Uses WordPress nonce validation.
+- Adds a honeypot field.
+- Adds a minimum time check before submission.
+- Adds basic rate limiting by visitor IP.
+- Optionally verifies Google reCAPTCHA v2 checkbox.
+- Validates email addresses server-side.
+- Validates Spanish-style phone numbers, including optional `+34`.
+- Sends an admin notification email.
+- Sends an optional user confirmation email.
+- Shows a confirmation message or redirects to a thank-you URL.
+- Supports terms and privacy policy URLs for the required consent checkbox.
+- Inherits the website font.
+- Provides simple color settings for fields and the submit button.
+
+### What It Does Not Do
+
+- Drag-and-drop form building.
+- Conditional logic.
+- Multi-step forms.
+- File uploads.
+- Payment forms.
+- Entry storage.
+- CSV exports.
+- CRM or marketing integrations.
+- SMTP delivery.
+
+The plugin sends mail through WordPress' normal `wp_mail()` function. Configure SMTP at the server level or with a dedicated SMTP plugin when a project needs authenticated mail delivery.
+
+Use a full form plugin when a project needs advanced form behavior.
+
+### How To Use It
+
+1. Go to `Settings > Llummio Forms`.
+2. Choose which fields should appear.
+3. Set confirmation behavior.
+4. Set admin and user email notification text.
+5. Add terms and privacy policy URLs.
+6. Add reCAPTCHA keys when the project needs reCAPTCHA.
+7. Add the `[llummio_form]` shortcode to a page or pattern.
+
+### Security Model
+
+The plugin is designed for simple lead capture on trusted Llummio-managed sites.
+
+It does not store submissions in the database. This keeps the blueprint lighter and reduces the amount of personal data stored by default.
+
+Every submission is checked with:
+
+- a WordPress nonce;
+- a hidden honeypot field;
+- a minimum time-to-submit check;
+- basic rate limiting;
+- server-side required field validation;
+- server-side email validation;
+- optional reCAPTCHA verification.
+
+### WordPress APIs Used
+
+The plugin depends on these WordPress APIs:
+
+- `register_setting`
+- `add_options_page`
+- `add_shortcode`
+- `wp_nonce_field`
+- `wp_verify_nonce`
+- `wp_mail`
+- `wp_remote_post`
+- `set_transient`
+- `get_transient`
+- `wp_enqueue_style`
+
+These are stable WordPress extension points. Still, check the plugin when the blueprint target WordPress version changes.
+
+### Upgrade Checklist
+
+When upgrading the blueprint to a new major WordPress version:
+
+1. Confirm `Settings > Llummio Forms` opens.
+2. Confirm field visibility and required settings save.
+3. Confirm `[llummio_form]` renders on a page.
+4. Submit a valid form and confirm the success message appears.
+5. Switch confirmation to redirect and confirm the thank-you URL works.
+6. Confirm the admin notification email is sent.
+7. Confirm the user confirmation email is sent.
+8. Submit with an invalid email and confirm it is rejected.
+9. Submit with an invalid phone number and confirm it is rejected.
+10. Submit without privacy consent and confirm it is rejected.
+11. Enable reCAPTCHA with valid keys and confirm submission still works.
+12. Confirm no submissions are stored in the database.
+13. Confirm no PHP warnings appear in WordPress admin.
+
+### When To Replace It
+
+Replace this plugin with a full form plugin when a project needs:
+
+- complex custom forms;
+- conditional logic;
+- multi-step forms;
+- file uploads;
+- payments;
+- stored entries;
+- CSV exports;
+- CRM integrations;
+- advanced email routing;
+- visual form building by the client.
+
+### Commit Notes
+
+If this plugin changes:
+
+- Update the version in the plugin header.
+- Update `docs/plugin-stack.md` if the version changes.
+- Update this document if behavior or compatibility assumptions change.
+- Confirm `app/sql/starter.sql` still activates `llummio-forms/llummio-forms.php`.
+
 ## Llummio SVG Uploads
 
 Folder: `app/public/wp-content/plugins/llummio-svg-uploads/`

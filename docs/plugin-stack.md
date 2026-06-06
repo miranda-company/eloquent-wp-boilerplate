@@ -6,10 +6,10 @@ This blueprint includes the standard Llummio plugin stack.
 | --- | --- | --- |
 | Advanced Custom Fields | `advanced-custom-fields` | 6.8.3 |
 | Create Block Theme | `create-block-theme` | 2.9.0 |
-| Fluent Forms | `fluentform` | 6.2.4 |
 | GenerateBlocks | `generateblocks` | 2.2.1 |
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
 | Llummio Editor Helpers | `llummio-editor-helpers` | 0.6.0 |
+| Llummio Forms | `llummio-forms` | 0.1.0 |
 | Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
 Internal Llummio plugins are documented in `docs/internal-plugins.md`.

@@ -13,10 +13,10 @@ app/public/wp-content/*
 app/public/wp-content/plugins/*
 !app/public/wp-content/plugins/advanced-custom-fields/
 !app/public/wp-content/plugins/create-block-theme/
-!app/public/wp-content/plugins/fluentform/
 !app/public/wp-content/plugins/generateblocks/
 !app/public/wp-content/plugins/generateblocks-pro/
 !app/public/wp-content/plugins/llummio-editor-helpers/
+!app/public/wp-content/plugins/llummio-forms/
 !app/public/wp-content/plugins/llummio-svg-uploads/
 
 # Keep the blueprint theme only.

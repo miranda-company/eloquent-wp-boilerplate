@@ -1,0 +1,103 @@
+.llummio-form {
+	display: grid;
+	gap: 1rem;
+	font-family: inherit;
+}
+
+.llummio-form__field {
+	display: grid;
+	gap: 0.4rem;
+}
+
+.llummio-form__label {
+	font: inherit;
+	font-weight: 600;
+}
+
+.llummio-form input,
+.llummio-form textarea {
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid var(--llummio-form-field-border, #d4d4d4);
+	background: var(--llummio-form-field-background, #ffffff);
+	color: var(--llummio-form-field-text, #111111);
+	font: inherit;
+	line-height: 1.4;
+	padding: 0.75rem 0.85rem;
+}
+
+.llummio-form textarea {
+	resize: vertical;
+}
+
+.llummio-form input:focus,
+.llummio-form textarea:focus {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.llummio-form__field--checkbox label {
+	align-items: flex-start;
+	display: flex;
+	gap: 0.65rem;
+}
+
+.llummio-form__field--checkbox input {
+	flex: 0 0 auto;
+	margin-top: 0.25rem;
+	width: auto;
+}
+
+.llummio-form__submit {
+	align-self: start;
+	border: 0;
+	background: var(--llummio-form-button-background, #111111);
+	color: var(--llummio-form-button-text, #ffffff);
+	cursor: pointer;
+	font: inherit;
+	font-weight: 700;
+	line-height: 1.2;
+	padding: 0.85rem 1.15rem;
+}
+
+.llummio-form__submit:focus,
+.llummio-form__submit:hover {
+	filter: brightness(0.94);
+}
+
+.llummio-form__message {
+	border-left: 4px solid currentColor;
+	padding: 0.75rem 1rem;
+}
+
+.llummio-form__message--success {
+	background: #eef8f0;
+	color: #126b2e;
+}
+
+.llummio-form__message--error,
+.llummio-form__error {
+	color: #b42318;
+}
+
+.llummio-form__message--error {
+	background: #fff1f0;
+}
+
+.llummio-form__error {
+	font-size: 0.9em;
+	margin: 0;
+}
+
+.llummio-form .is-error input,
+.llummio-form .is-error textarea {
+	border-color: #b42318;
+}
+
+.llummio-form__hidden {
+	height: 0;
+	left: -9999px;
+	overflow: hidden;
+	position: absolute;
+	width: 0;
+}
