@@ -11,23 +11,12 @@ Version: 0.1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: llummio-blueprint
-Tags: 
 */
 
-/* Global Variables: defines custom properties for padding and border radius */
+/* Theme tokens */
 :root {
-
-    /*----------------------------*/
-    /* Spacing & Sizing Variables */
-
-    /* Container Widths */
-    --container-large: 1440px;
-    --container-medium: 1024px;
-    --container-contained: 820px;
-
-    /* Desktop Section Paddings */
+    /* Desktop section spacing */
     --padding-section-lateral-default: 40px;
-
     --padding-section-unit: 8px;
     --padding-section-xxs: 16px;
     --padding-section-xs: 24px;
@@ -37,9 +26,8 @@ Tags:
     --padding-section-xl: 144px;
     --padding-section-xxl: 200px;
 
-    /* Mobile Section Paddings */
+    /* Mobile section spacing */
     --padding-section-lateral-default-mobile: 16px;
-
     --padding-section-unit-mobile: 8px;
     --padding-section-xxs-mobile: 12px;
     --padding-section-xs-mobile: 16px;
@@ -49,43 +37,29 @@ Tags:
     --padding-section-xl-mobile: 112px;
     --padding-section-xxl-mobile: 144px;
 
-    /*----------------------------*/
-    /* UI Styles */
-
-    /* Radius */
-    --border-radius-xs: 8px;
-    --border-radius-s: 16px;
-    --border-radius-m: 32px;
-    --border-radius-xl: 40px;
-
-    /* Stroke */
-    --border-width: 1px;
-
-
-    /*----------------------------*/
-    /* Texts */
-    --text-s: clamp(0.8rem, 0.8rem + 0.25vw, 1rem) !important;
-    --text-l: clamp(1.15rem, 1.15rem + 0.25vw, 1rem) !important;
+    /* Text helpers */
+    --text-s: clamp(0.8rem, 0.75rem + 0.25vw, 1rem);
 }
 
-/* Wireframe: disabled by default; the editor toggle can show the blue borders. */
+/* Wireframe helper. The editor toggle turns this border on while editing. */
 .wire {
     border: 0 solid rgb(17, 0, 255);
 }
 
-/* --------------------------------------------------------- */
-
-/* Global Resets */
-* {
+/* Base */
+*,
+*::before,
+*::after {
     box-sizing: border-box;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-font-smoothing: antialiased !important;
-    text-rendering: optimizelegibility !important;
-    letter-spacing: .01em;
 }
 
-/* Anchor styles / resets */
+body {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    letter-spacing: 0.01em;
+}
+
 a {
     text-decoration: none;
 }
@@ -94,39 +68,37 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Heading styles / resets */
 h1,
 h2,
 h3,
 h4,
 h5,
-h6,
-p {
+h6 {
     margin: 0;
 }
 
-/* Heading styles / resets */
 p {
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin: 4px 0;
 }
 
-/* --------------------------------------------------------- */
+/* Layout */
+:where(.wp-site-blocks) > * {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
 
-/* Sticky Header */
+:root :where(.is-layout-flow) > * {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+/* Header */
 header {
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-/*Control background color and blur on header*/
-.llummio-site-header {
-    background: rgba(255, 255, 255, 0.4) !important;
-    backdrop-filter: blur(12px);
-}
-
-/*Offset header if user is loggedin and the admin bar is shown*/
 .admin-bar header {
     top: 32px;
 }
@@ -137,42 +109,19 @@ header {
     }
 }
 
-/* --------------------------------------------------------- */
-
-/* Submenu: adds a border to the bottom of the submenu items */
-.gb-sub-menu>li {
+/* Navigation */
+.gb-sub-menu > li {
     border-right: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
     border-bottom: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
     border-left: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
-}
-
-/* Site Blocks: removes the default margin from all direct child blocks of the site blocks container */
-:where(.wp-site-blocks)>* {
-    margin-block-start: 0;
-    margin-block-end: 0;
 }
 
 .sub-menu li a {
     line-height: 22px;
 }
 
-/* Layout Flow: removes the default margin from the first and last element of the layout flow */
-/* In practice, it means:
-	•	paragraphs
-	•	headings
-	•	images
-	•	lists
-	•	any other direct child blocks
-*/
-:root :where(.is-layout-flow)>* {
-    margin-block-start: 0px;
-    margin-block-end: 0;
-}
-
-/* --------------------------------------------------------- */
-
-/* Video Background */
-.video-bg>video {
+/* Utilities */
+.video-bg > video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -185,10 +134,6 @@ header {
     opacity: 0.64;
 }
 
-
-/* --------------------------------------------------------- */
-
-/* Shadows */
 .shadow-1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
 }
@@ -208,5 +153,3 @@ header {
 .shadow-5 {
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.08);
 }
-
-/* --------------------------------------------------------- */
