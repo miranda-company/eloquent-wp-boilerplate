@@ -47,27 +47,8 @@
 	var SCHEMA_DESCRIPTION_KEY = '_llummio_schema_description';
 	var SCHEMA_URL_KEY = '_llummio_schema_url';
 	var SCHEMA_IMAGE_URL_KEY = '_llummio_schema_image_url';
-	var SCHEMA_TELEPHONE_KEY = '_llummio_schema_telephone';
-	var SCHEMA_EMAIL_KEY = '_llummio_schema_email';
-	var SCHEMA_STREET_KEY = '_llummio_schema_street';
-	var SCHEMA_LOCALITY_KEY = '_llummio_schema_locality';
-	var SCHEMA_REGION_KEY = '_llummio_schema_region';
-	var SCHEMA_POSTAL_CODE_KEY = '_llummio_schema_postal_code';
-	var SCHEMA_COUNTRY_KEY = '_llummio_schema_country';
-	var SCHEMA_PRICE_RANGE_KEY = '_llummio_schema_price_range';
 	var SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_area';
-	var SCHEMA_PRODUCT_SKU_KEY = '_llummio_schema_product_sku';
-	var SCHEMA_PRODUCT_BRAND_KEY = '_llummio_schema_product_brand';
-	var SCHEMA_PRODUCT_PRICE_KEY = '_llummio_schema_product_price';
-	var SCHEMA_PRODUCT_CURRENCY_KEY = '_llummio_schema_product_currency';
-	var SCHEMA_PRODUCT_AVAILABILITY_KEY = '_llummio_schema_product_availability';
 	var SCHEMA_FAQ_KEY = '_llummio_schema_faq_items';
-	var SCHEMA_BREADCRUMB_KEY = '_llummio_schema_breadcrumb_items';
-	var REVIEW_ITEM_NAME_KEY = '_llummio_schema_review_item_name';
-	var REVIEW_ITEM_TYPE_KEY = '_llummio_schema_review_item_type';
-	var REVIEW_RATING_KEY = '_llummio_schema_review_rating';
-	var REVIEW_AUTHOR_KEY = '_llummio_schema_review_author';
-	var REVIEW_BODY_KEY = '_llummio_schema_review_body';
 	var TITLE_SUFFIX = ' %sep% %sitename%';
 	var TITLE_RECOMMENDED_LENGTH = 60;
 	var DESCRIPTION_RECOMMENDED_LENGTH = 160;
@@ -99,22 +80,6 @@
 			value: 'none',
 		},
 		{
-			label: __( 'Organization', 'llummio-editor-helpers' ),
-			value: 'organization',
-		},
-		{
-			label: __( 'Local Business', 'llummio-editor-helpers' ),
-			value: 'localbusiness',
-		},
-		{
-			label: __( 'Professional Service', 'llummio-editor-helpers' ),
-			value: 'professionalservice',
-		},
-		{
-			label: __( 'Person', 'llummio-editor-helpers' ),
-			value: 'person',
-		},
-		{
 			label: __( 'Service', 'llummio-editor-helpers' ),
 			value: 'service',
 		},
@@ -126,93 +91,8 @@
 			label: __( 'FAQ Page', 'llummio-editor-helpers' ),
 			value: 'faq',
 		},
-		{
-			label: __( 'Breadcrumb List', 'llummio-editor-helpers' ),
-			value: 'breadcrumb',
-		},
-		{
-			label: __( 'Review', 'llummio-editor-helpers' ),
-			value: 'review',
-		},
-		{
-			label: __( 'Product', 'llummio-editor-helpers' ),
-			value: 'product',
-		},
 	];
-	var REVIEW_ITEM_TYPE_OPTIONS = [
-		{
-			label: __( 'Product', 'llummio-editor-helpers' ),
-			value: 'Product',
-		},
-		{
-			label: __( 'Book', 'llummio-editor-helpers' ),
-			value: 'Book',
-		},
-		{
-			label: __( 'Course', 'llummio-editor-helpers' ),
-			value: 'Course',
-		},
-		{
-			label: __( 'Event', 'llummio-editor-helpers' ),
-			value: 'Event',
-		},
-		{
-			label: __( 'Movie', 'llummio-editor-helpers' ),
-			value: 'Movie',
-		},
-		{
-			label: __( 'Recipe', 'llummio-editor-helpers' ),
-			value: 'Recipe',
-		},
-		{
-			label: __( 'Software App', 'llummio-editor-helpers' ),
-			value: 'SoftwareApplication',
-		},
-		{
-			label: __( 'Local Business', 'llummio-editor-helpers' ),
-			value: 'LocalBusiness',
-		},
-		{
-			label: __( 'Professional Service', 'llummio-editor-helpers' ),
-			value: 'ProfessionalService',
-		},
-		{
-			label: __( 'Organization', 'llummio-editor-helpers' ),
-			value: 'Organization',
-		},
-		{
-			label: __( 'Person', 'llummio-editor-helpers' ),
-			value: 'Person',
-		},
-		{
-			label: __( 'Service', 'llummio-editor-helpers' ),
-			value: 'Service',
-		},
-	];
-	var PRODUCT_AVAILABILITY_OPTIONS = [
-		{
-			label: __( 'Not set', 'llummio-editor-helpers' ),
-			value: '',
-		},
-		{
-			label: __( 'In stock', 'llummio-editor-helpers' ),
-			value: 'instock',
-		},
-		{
-			label: __( 'Out of stock', 'llummio-editor-helpers' ),
-			value: 'outofstock',
-		},
-		{
-			label: __( 'Pre-order', 'llummio-editor-helpers' ),
-			value: 'preorder',
-		},
-		{
-			label: __( 'Back-order', 'llummio-editor-helpers' ),
-			value: 'backorder',
-		},
-	];
-	var ENTITY_SCHEMA_TYPES = [ 'organization', 'localbusiness', 'professionalservice', 'person', 'service', 'product' ];
-	var BUSINESS_SCHEMA_TYPES = [ 'localbusiness', 'professionalservice' ];
+	var ENTITY_SCHEMA_TYPES = [ 'service' ];
 
 	function getCounter( value, recommendedLength ) {
 		return String( value || '' ).length + '/' + recommendedLength;
@@ -261,33 +141,8 @@
 		);
 	}
 
-	function parseBreadcrumbItems( value ) {
-		try {
-			var items = JSON.parse( value || '[]' );
-
-			return Array.isArray( items ) ? items : [];
-		} catch ( error ) {
-			return [];
-		}
-	}
-
-	function stringifyBreadcrumbItems( items ) {
-		return JSON.stringify(
-			items.map( function( item ) {
-				return {
-					name: item.name || '',
-					url: item.url || '',
-				};
-			} )
-		);
-	}
-
 	function isEntitySchemaType( schemaType ) {
 		return ENTITY_SCHEMA_TYPES.indexOf( schemaType ) !== -1;
-	}
-
-	function isBusinessSchemaType( schemaType ) {
-		return BUSINESS_SCHEMA_TYPES.indexOf( schemaType ) !== -1;
 	}
 
 	function SeoIcon() {
@@ -431,27 +286,8 @@
 		var schemaDescription = meta[ SCHEMA_DESCRIPTION_KEY ] || '';
 		var schemaUrl = meta[ SCHEMA_URL_KEY ] || '';
 		var schemaImageUrl = meta[ SCHEMA_IMAGE_URL_KEY ] || '';
-		var schemaTelephone = meta[ SCHEMA_TELEPHONE_KEY ] || '';
-		var schemaEmail = meta[ SCHEMA_EMAIL_KEY ] || '';
-		var schemaStreet = meta[ SCHEMA_STREET_KEY ] || '';
-		var schemaLocality = meta[ SCHEMA_LOCALITY_KEY ] || '';
-		var schemaRegion = meta[ SCHEMA_REGION_KEY ] || '';
-		var schemaPostalCode = meta[ SCHEMA_POSTAL_CODE_KEY ] || '';
-		var schemaCountry = meta[ SCHEMA_COUNTRY_KEY ] || '';
-		var schemaPriceRange = meta[ SCHEMA_PRICE_RANGE_KEY ] || '';
 		var schemaServiceArea = meta[ SCHEMA_SERVICE_AREA_KEY ] || '';
-		var schemaProductSku = meta[ SCHEMA_PRODUCT_SKU_KEY ] || '';
-		var schemaProductBrand = meta[ SCHEMA_PRODUCT_BRAND_KEY ] || '';
-		var schemaProductPrice = meta[ SCHEMA_PRODUCT_PRICE_KEY ] || '';
-		var schemaProductCurrency = meta[ SCHEMA_PRODUCT_CURRENCY_KEY ] || '';
-		var schemaProductAvailability = meta[ SCHEMA_PRODUCT_AVAILABILITY_KEY ] || '';
 		var faqItems = parseFaqItems( meta[ SCHEMA_FAQ_KEY ] );
-		var breadcrumbItems = parseBreadcrumbItems( meta[ SCHEMA_BREADCRUMB_KEY ] );
-		var reviewItemName = meta[ REVIEW_ITEM_NAME_KEY ] || '';
-		var reviewItemType = meta[ REVIEW_ITEM_TYPE_KEY ] || 'Product';
-		var reviewRating = meta[ REVIEW_RATING_KEY ] || '';
-		var reviewAuthor = meta[ REVIEW_AUTHOR_KEY ] || '';
-		var reviewBody = meta[ REVIEW_BODY_KEY ] || '';
 		var displayedSeoTitle = seoTitle || getDefaultSeoTitle( editorData.title );
 
 		function updateMeta( key, value ) {
@@ -485,36 +321,6 @@
 		function removeFaqItem( index ) {
 			updateFaqItems(
 				faqItems.filter( function( item, itemIndex ) {
-					return itemIndex !== index;
-				} )
-			);
-		}
-
-		function updateBreadcrumbItems( items ) {
-			updateMeta( SCHEMA_BREADCRUMB_KEY, stringifyBreadcrumbItems( items ) );
-		}
-
-		function updateBreadcrumbItem( index, key, value ) {
-			var nextItems = breadcrumbItems.slice();
-			nextItems[ index ] = Object.assign( {}, nextItems[ index ] );
-			nextItems[ index ][ key ] = value;
-			updateBreadcrumbItems( nextItems );
-		}
-
-		function addBreadcrumbItem() {
-			updateBreadcrumbItems(
-				breadcrumbItems.concat( [
-					{
-						name: '',
-						url: '',
-					},
-				] )
-			);
-		}
-
-		function removeBreadcrumbItem( index ) {
-			updateBreadcrumbItems(
-				breadcrumbItems.filter( function( item, itemIndex ) {
 					return itemIndex !== index;
 				} )
 			);
@@ -685,78 +491,6 @@
 								},
 							} )
 						),
-					isBusinessSchemaType( schemaType ) &&
-						el(
-							Fragment,
-							null,
-							el( TextControl, {
-								label: __( 'Telephone', 'llummio-editor-helpers' ),
-								value: schemaTelephone,
-								type: 'tel',
-								onChange: function( value ) {
-									updateMeta( SCHEMA_TELEPHONE_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Email', 'llummio-editor-helpers' ),
-								value: schemaEmail,
-								type: 'email',
-								onChange: function( value ) {
-									updateMeta( SCHEMA_EMAIL_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Street Address', 'llummio-editor-helpers' ),
-								value: schemaStreet,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_STREET_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'City', 'llummio-editor-helpers' ),
-								value: schemaLocality,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_LOCALITY_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Region', 'llummio-editor-helpers' ),
-								value: schemaRegion,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_REGION_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Postal Code', 'llummio-editor-helpers' ),
-								value: schemaPostalCode,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_POSTAL_CODE_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Country', 'llummio-editor-helpers' ),
-								value: schemaCountry,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_COUNTRY_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Price Range', 'llummio-editor-helpers' ),
-								value: schemaPriceRange,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_PRICE_RANGE_KEY, value );
-								},
-							} )
-						),
-					schemaType === 'person' &&
-						el( TextControl, {
-							label: __( 'Email', 'llummio-editor-helpers' ),
-							value: schemaEmail,
-							type: 'email',
-							onChange: function( value ) {
-								updateMeta( SCHEMA_EMAIL_KEY, value );
-							},
-						} ),
 					schemaType === 'service' &&
 						el( TextControl, {
 							label: __( 'Area Served', 'llummio-editor-helpers' ),
@@ -765,123 +499,6 @@
 								updateMeta( SCHEMA_SERVICE_AREA_KEY, value );
 							},
 						} ),
-					schemaType === 'product' &&
-						el(
-							Fragment,
-							null,
-							el(
-								Notice,
-								{
-									status: 'warning',
-									isDismissible: false,
-									className: 'llummio-editor-helpers__notice',
-								},
-								__( 'Product rich results usually need a visible offer, review, or rating.', 'llummio-editor-helpers' )
-							),
-							el( TextControl, {
-								label: __( 'SKU', 'llummio-editor-helpers' ),
-								value: schemaProductSku,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_PRODUCT_SKU_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Brand', 'llummio-editor-helpers' ),
-								value: schemaProductBrand,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_PRODUCT_BRAND_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Price', 'llummio-editor-helpers' ),
-								value: schemaProductPrice,
-								type: 'number',
-								min: 0,
-								step: 0.01,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_PRODUCT_PRICE_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Currency', 'llummio-editor-helpers' ),
-								value: schemaProductCurrency,
-								help: __( 'Use a 3-letter code, for example EUR or USD.', 'llummio-editor-helpers' ),
-								onChange: function( value ) {
-									updateMeta( SCHEMA_PRODUCT_CURRENCY_KEY, value );
-								},
-							} ),
-							el( SelectControl, {
-								label: __( 'Availability', 'llummio-editor-helpers' ),
-								value: schemaProductAvailability,
-								options: PRODUCT_AVAILABILITY_OPTIONS,
-								onChange: function( value ) {
-									updateMeta( SCHEMA_PRODUCT_AVAILABILITY_KEY, value );
-								},
-							} )
-						),
-					schemaType === 'breadcrumb' &&
-						el(
-							Fragment,
-							null,
-							el(
-								Notice,
-								{
-									status: 'info',
-									isDismissible: false,
-									className: 'llummio-editor-helpers__notice',
-								},
-								__( 'Leave this empty to use the page hierarchy as the breadcrumb trail.', 'llummio-editor-helpers' )
-							),
-							el(
-								'div',
-								{
-									className: 'llummio-editor-helpers__repeatable-items',
-								},
-								breadcrumbItems.map( function( item, index ) {
-									return el(
-										'div',
-										{
-											key: index,
-											className: 'llummio-editor-helpers__repeatable-item',
-										},
-										el( TextControl, {
-											label: __( 'Breadcrumb Name', 'llummio-editor-helpers' ),
-											value: item.name || '',
-											onChange: function( value ) {
-												updateBreadcrumbItem( index, 'name', value );
-											},
-										} ),
-										el( TextControl, {
-											label: __( 'Breadcrumb URL', 'llummio-editor-helpers' ),
-											value: item.url || '',
-											type: 'url',
-											onChange: function( value ) {
-												updateBreadcrumbItem( index, 'url', value );
-											},
-										} ),
-										el(
-											Button,
-											{
-												variant: 'secondary',
-												isDestructive: true,
-												onClick: function() {
-													removeBreadcrumbItem( index );
-												},
-											},
-											__( 'Remove Breadcrumb', 'llummio-editor-helpers' )
-										)
-									);
-								} )
-							),
-							el(
-								Button,
-								{
-									variant: 'primary',
-									onClick: addBreadcrumbItem,
-								},
-								__( 'Add Breadcrumb', 'llummio-editor-helpers' )
-							)
-						),
 					schemaType === 'faq' &&
 						el(
 							Fragment,
@@ -944,62 +561,6 @@
 								},
 								__( 'Add FAQ', 'llummio-editor-helpers' )
 							)
-						),
-					schemaType === 'review' &&
-						el(
-							Fragment,
-							null,
-							el(
-								Notice,
-								{
-									status: 'warning',
-									isDismissible: false,
-									className: 'llummio-editor-helpers__notice',
-								},
-								__( 'Only use review schema when the review, author, item, and rating are visible on this page. Avoid self-serving business reviews.', 'llummio-editor-helpers' )
-							),
-							el( TextControl, {
-								label: __( 'Reviewed Item Name', 'llummio-editor-helpers' ),
-								value: reviewItemName,
-								onChange: function( value ) {
-									updateMeta( REVIEW_ITEM_NAME_KEY, value );
-								},
-							} ),
-							el( SelectControl, {
-								label: __( 'Reviewed Item Type', 'llummio-editor-helpers' ),
-								value: reviewItemType,
-								options: REVIEW_ITEM_TYPE_OPTIONS,
-								onChange: function( value ) {
-									updateMeta( REVIEW_ITEM_TYPE_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Rating', 'llummio-editor-helpers' ),
-								value: reviewRating,
-								type: 'number',
-								min: 1,
-								max: 5,
-								step: 0.1,
-								help: __( 'Use a number from 1 to 5.', 'llummio-editor-helpers' ),
-								onChange: function( value ) {
-									updateMeta( REVIEW_RATING_KEY, value );
-								},
-							} ),
-							el( TextControl, {
-								label: __( 'Review Author', 'llummio-editor-helpers' ),
-								value: reviewAuthor,
-								onChange: function( value ) {
-									updateMeta( REVIEW_AUTHOR_KEY, value );
-								},
-							} ),
-							el( TextareaControl, {
-								label: __( 'Review Text', 'llummio-editor-helpers' ),
-								value: reviewBody,
-								rows: 5,
-								onChange: function( value ) {
-									updateMeta( REVIEW_BODY_KEY, value );
-								},
-							} )
 						)
 				),
 				el(

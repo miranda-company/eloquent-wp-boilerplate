@@ -10,13 +10,13 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.4.0`
+Version: `0.6.0`
 
 ### Purpose
 
 `Llummio Editor Helpers` collects small editing tools used in Llummio blueprint sites.
 
-It currently includes lightweight SEO fields, page-level schema tools, and an editor-only wireframe preview toggle.
+It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, and an editor-only wireframe preview toggle.
 
 The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
 
@@ -32,8 +32,9 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Outputs one `<meta name="robots">` tag on singular content when robots controls are enabled.
 - Outputs one canonical `<link rel="canonical">` tag on singular content.
 - Outputs JSON-LD structured data for singular content when schema output is enabled.
-- Adds automatic `Organization`, `WebSite`, `WebPage`, and `BlogPosting` schema.
-- Adds page-level schema controls for `Organization`, `LocalBusiness`, `ProfessionalService`, `Person`, `Service`, `Article`, `FAQPage`, `BreadcrumbList`, `Review`, `Product`, and disabled schema.
+- Adds a global settings page at `Settings > Llummio Editor Helpers`.
+- Adds automatic `Organization` or `LocalBusiness`, `WebSite`, `WebPage`, and `BlogPosting` schema.
+- Adds page-level schema controls for `Service`, `Article`, `FAQPage`, and disabled schema.
 - Registers the fields with the WordPress REST API for future editor integrations.
 - Adds an editor-only wireframe toggle for the theme `.wire` helper class.
 
@@ -62,27 +63,10 @@ The plugin stores data in post meta:
 - `_llummio_schema_description`
 - `_llummio_schema_url`
 - `_llummio_schema_image_url`
-- `_llummio_schema_telephone`
-- `_llummio_schema_email`
-- `_llummio_schema_street`
-- `_llummio_schema_locality`
-- `_llummio_schema_region`
-- `_llummio_schema_postal_code`
-- `_llummio_schema_country`
-- `_llummio_schema_price_range`
 - `_llummio_schema_service_area`
-- `_llummio_schema_product_sku`
-- `_llummio_schema_product_brand`
-- `_llummio_schema_product_price`
-- `_llummio_schema_product_currency`
-- `_llummio_schema_product_availability`
 - `_llummio_schema_faq_items`
-- `_llummio_schema_breadcrumb_items`
-- `_llummio_schema_review_item_name`
-- `_llummio_schema_review_item_type`
-- `_llummio_schema_review_rating`
-- `_llummio_schema_review_author`
-- `_llummio_schema_review_body`
+
+The plugin also stores global business schema settings in the `llummio_editor_helpers_settings` option.
 
 Empty fields are deleted from post meta instead of saved as empty strings.
 Disabled robots controls are deleted from post meta instead of saved as false values.
@@ -146,39 +130,38 @@ There is no canonical override field in the editor. If a project needs custom ca
 
 ### Schema Tools
 
-The `Schema Tools` section controls lightweight JSON-LD structured data.
+Schema is split between global business settings and page-level controls.
+
+Global business schema is managed in WordPress admin at `Settings > Llummio Editor Helpers`. Use that screen to set:
+
+- business schema type: `Organization` or `Local Business`;
+- business name;
+- logo URL;
+- website URL;
+- telephone;
+- email;
+- address;
+- service area;
+- price range.
 
 By default, the plugin outputs:
 
-- `Organization` using the WordPress site name, homepage URL, and custom logo when one is set.
+- `Organization` or `LocalBusiness` using the global settings.
 - `WebSite` using the WordPress site name and homepage URL.
 - `WebPage` for pages and public custom post types.
 - `BlogPosting` for standard posts.
 
-Editors can change the page schema type:
+The page editor sidebar only controls what the current page is:
 
 - `Default` keeps the automatic behavior.
 - `None` disables schema output for that page.
-- `Organization` adds a page-level `Organization` node.
-- `Local Business` adds a `LocalBusiness` node with optional contact, address, and price range fields.
-- `Professional Service` adds a `ProfessionalService` node with optional contact, address, and price range fields.
-- `Person` adds a `Person` node.
-- `Service` adds a `Service` node with optional area served.
+- `Service` adds a page-level `Service` node with optional name, description, URL, image URL, and area served fields.
 - `Article` turns the page node into `Article`.
 - `FAQ Page` adds editable FAQ questions and answers.
-- `Breadcrumb List` adds a `BreadcrumbList` node.
-- `Review` adds editable review fields.
-- `Product` adds a `Product` node with optional SKU, brand, price, currency, and availability fields.
 
-For `Organization`, `Local Business`, `Professional Service`, `Person`, `Service`, and `Product`, the plugin uses the custom schema name, description, URL, and image when they are filled in. Otherwise, it falls back to the page title, SEO description or excerpt, page permalink, featured image, or site logo.
+Service schema should only be used for real service pages. FAQ schema should only be used when the same questions and answers are visible on the page. The plugin stores up to 10 complete FAQ items and ignores incomplete items on save.
 
-FAQ schema should only be used when the same questions and answers are visible on the page. The plugin stores up to 10 complete FAQ items and ignores incomplete items on save.
-
-Breadcrumb schema can use the page hierarchy automatically. Editors can add custom breadcrumb items when the visible breadcrumb trail is different from the WordPress page hierarchy. A valid breadcrumb trail needs at least two items.
-
-Review schema should only be used when the reviewed item, review author, rating, and review text are visible on the page. Use it for specific reviews of a specific item, such as a product, book, course, event, movie, recipe, or software app. Be careful with `LocalBusiness` and `Organization` reviews: Google treats self-serving business reviews as ineligible for review stars.
-
-Product schema should only be used when the product details are visible on the page. For Google product rich results, a product usually needs a visible offer, review, or rating. The plugin can add a simple `Offer` when price and currency are filled in.
+Product, review, person, professional service, and breadcrumb schema are intentionally excluded to keep the plugin focused on service-business websites. Use a full SEO plugin when a project needs those schema types.
 
 The plugin skips schema output when:
 
@@ -246,6 +229,9 @@ The plugin depends on these WordPress APIs:
 - `enqueue_block_editor_assets`
 - `wp.plugins.registerPlugin`
 - `wp.editor.PluginSidebar`
+- `register_setting`
+- `add_options_page`
+- `get_option`
 - `save_post`
 - `pre_get_document_title`
 - `wp_head`
@@ -271,19 +257,18 @@ When upgrading the blueprint to a new major WordPress version:
 10. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
 11. Confirm a singular page outputs one canonical tag.
 12. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-13. Confirm a normal page outputs one JSON-LD block with `Organization`, `WebSite`, and `WebPage`.
-14. Confirm a post outputs `BlogPosting`.
-15. Set a page to `Organization` and confirm a page-level `Organization` node appears.
-16. Set a page to `Local Business` or `Professional Service`, add visible contact/address details, and confirm the business node appears.
-17. Set a page to `Person`, `Service`, or `Product`, add visible details, and confirm the selected node appears.
-18. Set a page to `Article` and confirm the page node changes to `Article`.
-19. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
-20. Set a page to `Breadcrumb List` and confirm `BreadcrumbList` output appears.
-21. Set a page to `Review`, add a visible review, and confirm `Review` output appears.
-22. Set schema to `None` and confirm schema output stops on that page.
-23. Enable `No index` and confirm schema output stops on that page.
-24. Confirm no duplicate schema output appears if a full SEO plugin is active.
-25. Confirm no PHP warnings appear in WordPress admin.
+13. Open `Settings > Llummio Editor Helpers` and confirm the global schema settings page loads.
+14. Save `Organization` settings and confirm the saved values stay after reload.
+15. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
+16. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
+17. Confirm a post outputs `BlogPosting`.
+18. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
+19. Set a page to `Article` and confirm the page node changes to `Article`.
+20. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
+21. Set schema to `None` and confirm schema output stops on that page.
+22. Enable `No index` and confirm schema output stops on that page.
+23. Confirm no duplicate schema output appears if a full SEO plugin is active.
+24. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 
