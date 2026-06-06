@@ -43,5 +43,6 @@ Thumbs.db
 *.log
 
 # Local packaging helpers
+.tools/
 .blueprint-package-*/
 llummio-wp-blueprint-prepared-*.zip
