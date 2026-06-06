@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Llummio Editor Helpers
  * Description: Lightweight editor helpers for Llummio blueprint sites, including SEO fields, canonical tags, schema tools, and wireframe preview controls.
- * Version: 0.6.2
+ * Version: 0.6.3
  * Author: Llummio
  * Text Domain: llummio-editor-helpers
  */
@@ -20,9 +20,10 @@ const LLUMMIO_EDITOR_HELPERS_SCHEMA_URL_KEY  = '_llummio_schema_url';
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_IMAGE_URL_KEY = '_llummio_schema_image_url';
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_area';
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_FAQ_KEY  = '_llummio_schema_faq_items';
+const LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY   = '_llummio_load_gsap';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION = 'llummio_editor_helpers_settings';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP  = 'llummio_editor_helpers_settings_group';
-const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.2';
+const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.3';
 
 /**
  * Register SEO metadata for public editable post types.
@@ -53,7 +54,7 @@ function llummio_editor_helpers_register_meta() {
 			)
 		);
 
-		foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY ) as $meta_key ) {
+		foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY, LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY ) as $meta_key ) {
 			register_post_meta(
 				$post_type,
 				$meta_key,
@@ -427,7 +428,7 @@ function llummio_editor_helpers_delete_empty_meta( $post_id ) {
 		delete_post_meta( $post_id, LLUMMIO_EDITOR_HELPERS_SCHEMA_TYPE_KEY );
 	}
 
-	foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY ) as $meta_key ) {
+	foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY, LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY ) as $meta_key ) {
 		if ( ! llummio_editor_helpers_get_boolean_meta( $post_id, $meta_key ) ) {
 			delete_post_meta( $post_id, $meta_key );
 		}

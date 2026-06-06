@@ -10,13 +10,13 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.6.2`
+Version: `0.6.3`
 
 ### Purpose
 
 `Llummio Editor Helpers` collects small editing tools used in Llummio blueprint sites.
 
-It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, and an editor-only wireframe preview toggle.
+It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, a page-level GSAP loading toggle, and an editor-only wireframe preview toggle.
 
 The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
 
@@ -35,6 +35,7 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Adds a top-level `Global Schema` admin menu item below `Llummio Forms`, using the Llummio SVG icon.
 - Adds automatic `Organization` or `LocalBusiness`, `WebSite`, `WebPage`, and `BlogPosting` schema.
 - Adds page-level schema controls for `Service`, `Article`, `FAQPage`, and disabled schema.
+- Adds a page-level performance control for loading GSAP only on pages that need custom animations.
 - Registers the fields with the WordPress REST API for future editor integrations.
 - Adds an editor-only wireframe toggle for the theme `.wire` helper class.
 
@@ -65,11 +66,13 @@ The plugin stores data in post meta:
 - `_llummio_schema_image_url`
 - `_llummio_schema_service_area`
 - `_llummio_schema_faq_items`
+- `_llummio_load_gsap`
 
 The plugin also stores global business schema settings in the `llummio_editor_helpers_settings` option.
 
 Empty fields are deleted from post meta instead of saved as empty strings.
 Disabled robots controls are deleted from post meta instead of saved as false values.
+Disabled performance controls are deleted from post meta instead of saved as false values.
 
 ### How To Use It
 
@@ -169,6 +172,14 @@ The plugin skips schema output when:
 - the page schema type is set to `None`;
 - the page has `No index` enabled.
 
+### Performance Tools
+
+The sidebar includes a `Performance Tools` section with a `Load GSAP on this page` checkbox.
+
+GSAP is disabled by default. Enable this option only on pages that have custom GSAP animations. The theme reads the saved `_llummio_load_gsap` meta value and loads the GSAP files only for that page.
+
+The theme also exposes the `llummio_blueprint_page_needs_gsap` filter for developer-only overrides.
+
 ### Wireframe Toggle
 
 The sidebar includes a `Wireframe Tools` section with a `Show wire borders` checkbox.
@@ -255,20 +266,23 @@ When upgrading the blueprint to a new major WordPress version:
 8. Enable `No follow` and confirm the robots meta tag includes both selected rules.
 9. Clear both fields and controls, then confirm the plugin stops outputting custom SEO data.
 10. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
-11. Confirm a singular page outputs one canonical tag.
-12. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-13. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
-14. Save `Organization` settings and confirm the saved values stay after reload.
-15. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
-16. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
-17. Confirm a post outputs `BlogPosting`.
-18. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
-19. Set a page to `Article` and confirm the page node changes to `Article`.
-20. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
-21. Set schema to `None` and confirm schema output stops on that page.
-22. Enable `No index` and confirm schema output stops on that page.
-23. Confirm no duplicate schema output appears if a full SEO plugin is active.
-24. Confirm no PHP warnings appear in WordPress admin.
+11. Confirm `Load GSAP on this page` saves and reloads correctly.
+12. Confirm pages with the GSAP option disabled do not load `gsap.min.js`.
+13. Confirm pages with the GSAP option enabled load `gsap.min.js` and `generic.js`.
+14. Confirm a singular page outputs one canonical tag.
+15. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
+16. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
+17. Save `Organization` settings and confirm the saved values stay after reload.
+18. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
+19. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
+20. Confirm a post outputs `BlogPosting`.
+21. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
+22. Set a page to `Article` and confirm the page node changes to `Article`.
+23. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
+24. Set schema to `None` and confirm schema output stops on that page.
+25. Enable `No index` and confirm schema output stops on that page.
+26. Confirm no duplicate schema output appears if a full SEO plugin is active.
+27. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 

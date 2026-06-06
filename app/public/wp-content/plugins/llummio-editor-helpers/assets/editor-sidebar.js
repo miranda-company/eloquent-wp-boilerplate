@@ -49,6 +49,7 @@
 	var SCHEMA_IMAGE_URL_KEY = '_llummio_schema_image_url';
 	var SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_area';
 	var SCHEMA_FAQ_KEY = '_llummio_schema_faq_items';
+	var LOAD_GSAP_KEY = '_llummio_load_gsap';
 	var TITLE_SUFFIX = ' %sep% %sitename%';
 	var TITLE_RECOMMENDED_LENGTH = 60;
 	var DESCRIPTION_RECOMMENDED_LENGTH = 160;
@@ -288,6 +289,7 @@
 		var schemaImageUrl = meta[ SCHEMA_IMAGE_URL_KEY ] || '';
 		var schemaServiceArea = meta[ SCHEMA_SERVICE_AREA_KEY ] || '';
 		var faqItems = parseFaqItems( meta[ SCHEMA_FAQ_KEY ] );
+		var loadGsap = !! meta[ LOAD_GSAP_KEY ];
 		var displayedSeoTitle = seoTitle || getDefaultSeoTitle( editorData.title );
 
 		function updateMeta( key, value ) {
@@ -562,6 +564,21 @@
 								__( 'Add FAQ', 'llummio-editor-helpers' )
 							)
 						)
+				),
+				el(
+					PanelBody,
+					{
+						title: __( 'Performance Tools', 'llummio-editor-helpers' ),
+						initialOpen: false,
+					},
+					el( CheckboxControl, {
+						label: __( 'Load GSAP on this page', 'llummio-editor-helpers' ),
+						help: __( 'Use only when this page has custom GSAP animations.', 'llummio-editor-helpers' ),
+						checked: loadGsap,
+						onChange: function( isChecked ) {
+							updateMeta( LOAD_GSAP_KEY, isChecked );
+						},
+					} )
 				),
 				el(
 					PanelBody,

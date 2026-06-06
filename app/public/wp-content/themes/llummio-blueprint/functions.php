@@ -262,12 +262,21 @@ function llummio_blueprint_add_editor_style() {
 add_action( 'after_setup_theme', 'llummio_blueprint_add_editor_style' );
 
 /**
- * Add animation files (js)
+ * Add theme scripts.
  */
 function llummio_blueprint_enqueue_page_scripts() {
-	$version = wp_get_theme()->get( 'Version' );
+	wp_enqueue_script(
+		'llummio-blueprint-generic',
+		get_theme_file_uri( 'assets/js/generic.js' ),
+		array(),
+		filemtime( get_theme_file_path( 'assets/js/generic.js' ) ),
+		true
+	);
 
-	// GSAP core
+	if ( ! llummio_blueprint_page_needs_gsap() ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		'gsap-js',
 		get_theme_file_uri( 'assets/vendor/gsap/gsap.min.js' ),
@@ -276,37 +285,39 @@ function llummio_blueprint_enqueue_page_scripts() {
 		true
 	);
 
-	// GSAP ScrollTrigger
 	wp_enqueue_script(
-		'gsap-scrolltrigger',
-		get_theme_file_uri( 'assets/vendor/gsap/ScrollTrigger.min.js' ),
+		'llummio-blueprint-animations',
+		get_theme_file_uri( 'assets/js/animations.js' ),
 		array( 'gsap-js' ),
-		filemtime( get_theme_file_path( 'assets/vendor/gsap/ScrollTrigger.min.js' ) ),
+		filemtime( get_theme_file_path( 'assets/js/animations.js' ) ),
 		true
 	);
-
-	// Generic animations
-	wp_enqueue_script(
-		'llummio-blueprint-generic',
-		get_theme_file_uri( 'assets/js/generic.js' ),
-		array( 'gsap-js', 'gsap-scrolltrigger' ),
-		filemtime( get_theme_file_path( 'assets/js/generic.js' ) ),
-		true
-	);
-
-	// Homepage-specific animations
-	if ( is_front_page() ) {
-		wp_enqueue_script(
-			'llummio-blueprint-homepage',
-			get_theme_file_uri( 'assets/js/homepage.js' ),
-			array( 'gsap-js', 'gsap-scrolltrigger', 'llummio-blueprint-generic' ),
-			filemtime( get_theme_file_path( 'assets/js/homepage.js' ) ),
-			true
-		);
-	}
 }
 
 add_action( 'wp_enqueue_scripts', 'llummio_blueprint_enqueue_page_scripts' );
+
+/**
+ * Check whether the current page opted into GSAP animations.
+ */
+function llummio_blueprint_page_needs_gsap() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_queried_object();
+
+	if ( ! $post instanceof WP_Post ) {
+		return false;
+	}
+
+	$needs_gsap = '1' === get_post_meta( $post->ID, '_llummio_load_gsap', true );
+
+	return (bool) apply_filters(
+		'llummio_blueprint_page_needs_gsap',
+		$needs_gsap,
+		$post
+	);
+}
 
 /**
  * Add classic navigation menu support to the theme (GenerateBlocks can be used to create the header and footer, but this allows users to use the built-in menu system if they prefer).
