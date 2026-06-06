@@ -2,14 +2,14 @@
 /**
  * Plugin Name: Llummio Forms
  * Description: Lightweight secure lead forms for Llummio blueprint sites.
- * Version: 0.1.0
+ * Version: 0.2.2
  * Author: Llummio
  * Text Domain: llummio-forms
  */
 
 defined( 'ABSPATH' ) || exit;
 
-const LLUMMIO_FORMS_VERSION        = '0.1.0';
+const LLUMMIO_FORMS_VERSION        = '0.2.2';
 const LLUMMIO_FORMS_SETTINGS       = 'llummio_forms_settings';
 const LLUMMIO_FORMS_SETTINGS_GROUP = 'llummio_forms_settings_group';
 const LLUMMIO_FORMS_NONCE_ACTION   = 'llummio_forms_submit';
@@ -116,19 +116,29 @@ function llummio_forms_render_settings_page() {
 			<?php settings_fields( LLUMMIO_FORMS_SETTINGS_GROUP ); ?>
 
 			<h2><?php esc_html_e( 'Fields', 'llummio-forms' ); ?></h2>
-			<p><?php esc_html_e( 'Choose which fields appear in the default lead form. Email and privacy consent stay required for security and compliance.', 'llummio-forms' ); ?></p>
-			<table class="widefat striped" style="max-width: 720px;">
+			<p><?php esc_html_e( 'Choose which fields appear in the default lead form, edit their labels, and choose their desktop width. Email and privacy consent stay required for security and compliance.', 'llummio-forms' ); ?></p>
+			<table class="widefat striped" style="max-width: 960px;">
 				<thead>
 					<tr>
 						<th><?php esc_html_e( 'Field', 'llummio-forms' ); ?></th>
+						<th><?php esc_html_e( 'Label', 'llummio-forms' ); ?></th>
 						<th><?php esc_html_e( 'Show', 'llummio-forms' ); ?></th>
 						<th><?php esc_html_e( 'Required', 'llummio-forms' ); ?></th>
+						<th><?php esc_html_e( 'Width', 'llummio-forms' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ( llummio_forms_fields() as $key => $field ) : ?>
 						<tr>
 							<td><?php echo esc_html( $field['label'] ); ?></td>
+							<td>
+								<input
+									class="regular-text"
+									type="text"
+									name="<?php echo esc_attr( $option . '[fields][' . $key . '][label]' ); ?>"
+									value="<?php echo esc_attr( $settings['fields'][ $key ]['label'] ); ?>"
+								/>
+							</td>
 							<td>
 								<input
 									type="checkbox"
@@ -153,9 +163,26 @@ function llummio_forms_render_settings_page() {
 									<input type="hidden" name="<?php echo esc_attr( $option . '[fields][' . $key . '][required]' ); ?>" value="1" />
 								<?php endif; ?>
 							</td>
+							<td>
+								<select name="<?php echo esc_attr( $option . '[fields][' . $key . '][width]' ); ?>">
+									<option value="full" <?php selected( $settings['fields'][ $key ]['width'], 'full' ); ?>><?php esc_html_e( 'Full', 'llummio-forms' ); ?></option>
+									<option value="half" <?php selected( $settings['fields'][ $key ]['width'], 'half' ); ?>><?php esc_html_e( 'Half', 'llummio-forms' ); ?></option>
+									<option value="third" <?php selected( $settings['fields'][ $key ]['width'], 'third' ); ?>><?php esc_html_e( 'Third', 'llummio-forms' ); ?></option>
+								</select>
+							</td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
+			</table>
+
+			<h2><?php esc_html_e( 'Text Labels', 'llummio-forms' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<?php
+				llummio_forms_render_text_setting( 'submit_label', __( 'Button label', 'llummio-forms' ), $settings );
+				llummio_forms_render_text_setting( 'privacy_label', __( 'Privacy checkbox label', 'llummio-forms' ), $settings );
+				llummio_forms_render_text_setting( 'terms_link_label', __( 'Terms link label', 'llummio-forms' ), $settings );
+				llummio_forms_render_text_setting( 'privacy_link_label', __( 'Privacy link label', 'llummio-forms' ), $settings );
+				?>
 			</table>
 
 			<h2><?php esc_html_e( 'Confirmation', 'llummio-forms' ); ?></h2>
@@ -230,7 +257,7 @@ function llummio_forms_render_shortcode() {
 
 	ob_start();
 	?>
-	<form class="llummio-form" method="post" action="<?php echo esc_url( llummio_forms_get_current_url() ); ?>" novalidate>
+	<form class="llummio-form" style="<?php echo esc_attr( llummio_forms_get_form_style_attribute( $settings ) ); ?>" method="post" action="<?php echo esc_url( llummio_forms_get_current_url() ); ?>" novalidate>
 		<?php if ( 'success' === $status ) : ?>
 			<div class="llummio-form__message llummio-form__message--success">
 				<?php echo esc_html( $settings['confirmation_message'] ); ?>
@@ -267,7 +294,7 @@ function llummio_forms_render_shortcode() {
 			<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 		<?php endif; ?>
 
-		<button class="llummio-form__submit" type="submit"><?php esc_html_e( 'Send', 'llummio-forms' ); ?></button>
+		<button class="llummio-form__submit" style="<?php echo esc_attr( llummio_forms_get_button_style_attribute( $settings ) ); ?>" type="submit"><?php echo esc_html( $settings['submit_label'] ); ?></button>
 	</form>
 	<?php
 	return ob_get_clean();
@@ -369,20 +396,24 @@ function llummio_forms_send_notifications( $data ) {
 function llummio_forms_default_settings() {
 	return array(
 		'fields'               => array(
-			'first_name'  => array( 'enabled' => true, 'required' => true ),
-			'second_name' => array( 'enabled' => true, 'required' => false ),
-			'last_name'   => array( 'enabled' => true, 'required' => true ),
-			'phone'       => array( 'enabled' => true, 'required' => false ),
-			'email'       => array( 'enabled' => true, 'required' => true ),
-			'address'     => array( 'enabled' => true, 'required' => false ),
-			'country'     => array( 'enabled' => true, 'required' => false ),
-			'comments'    => array( 'enabled' => true, 'required' => false ),
+			'first_name'  => array( 'enabled' => true, 'required' => true, 'label' => __( 'Nombre', 'llummio-forms' ), 'width' => 'half' ),
+			'second_name' => array( 'enabled' => true, 'required' => false, 'label' => __( 'Segundo nombre', 'llummio-forms' ), 'width' => 'half' ),
+			'last_name'   => array( 'enabled' => true, 'required' => true, 'label' => __( 'Apellidos', 'llummio-forms' ), 'width' => 'half' ),
+			'phone'       => array( 'enabled' => true, 'required' => false, 'label' => __( 'Teléfono', 'llummio-forms' ), 'width' => 'half' ),
+			'email'       => array( 'enabled' => true, 'required' => true, 'label' => __( 'Correo electrónico', 'llummio-forms' ), 'width' => 'half' ),
+			'address'     => array( 'enabled' => true, 'required' => false, 'label' => __( 'Dirección', 'llummio-forms' ), 'width' => 'full' ),
+			'country'     => array( 'enabled' => true, 'required' => false, 'label' => __( 'País', 'llummio-forms' ), 'width' => 'half' ),
+			'comments'    => array( 'enabled' => true, 'required' => false, 'label' => __( 'Comentarios', 'llummio-forms' ), 'width' => 'full' ),
 		),
 		'confirmation_type'    => 'message',
-		'confirmation_message' => __( 'Thank you. We have received your message.', 'llummio-forms' ),
+		'confirmation_message' => __( 'Gracias. Hemos recibido tu mensaje.', 'llummio-forms' ),
 		'redirect_url'         => '',
 		'terms_url'            => '',
 		'privacy_url'          => function_exists( 'get_privacy_policy_url' ) ? get_privacy_policy_url() : '',
+		'submit_label'         => __( 'Enviar', 'llummio-forms' ),
+		'privacy_label'        => __( 'Acepto los términos y la política de privacidad.', 'llummio-forms' ),
+		'terms_link_label'     => __( 'Términos', 'llummio-forms' ),
+		'privacy_link_label'   => __( 'Política de privacidad', 'llummio-forms' ),
 		'send_admin_email'     => true,
 		'admin_email'          => get_option( 'admin_email' ),
 		'admin_subject'        => __( 'New website form submission', 'llummio-forms' ),
@@ -406,9 +437,19 @@ function llummio_forms_default_settings() {
 function llummio_forms_get_settings() {
 	$settings = get_option( LLUMMIO_FORMS_SETTINGS, array() );
 	$settings = is_array( $settings ) ? $settings : array();
-	$settings = wp_parse_args( $settings, llummio_forms_default_settings() );
+	$defaults = llummio_forms_default_settings();
+	$settings = wp_parse_args( $settings, $defaults );
 
-	$settings['fields'] = wp_parse_args( $settings['fields'], llummio_forms_default_settings()['fields'] );
+	if ( ! isset( $settings['fields'] ) || ! is_array( $settings['fields'] ) ) {
+		$settings['fields'] = array();
+	}
+
+	foreach ( llummio_forms_fields() as $key => $field ) {
+		$settings['fields'][ $key ] = wp_parse_args(
+			isset( $settings['fields'][ $key ] ) && is_array( $settings['fields'][ $key ] ) ? $settings['fields'][ $key ] : array(),
+			$defaults['fields'][ $key ]
+		);
+	}
 
 	return $settings;
 }
@@ -423,18 +464,29 @@ function llummio_forms_sanitize_settings( $settings ) {
 	$defaults = llummio_forms_default_settings();
 	$clean    = $defaults;
 
+	$field_settings = isset( $settings['fields'] ) && is_array( $settings['fields'] ) ? $settings['fields'] : array();
+
 	foreach ( llummio_forms_fields() as $key => $field ) {
-		$enabled = ! empty( $settings['fields'][ $key ]['enabled'] );
-		$required = ! empty( $settings['fields'][ $key ]['required'] );
+		$field_setting = isset( $field_settings[ $key ] ) && is_array( $field_settings[ $key ] ) ? $field_settings[ $key ] : array();
+		$enabled = ! empty( $field_setting['enabled'] );
+		$required = ! empty( $field_setting['required'] );
+		$label = isset( $field_setting['label'] ) ? sanitize_text_field( $field_setting['label'] ) : '';
+		$width = isset( $field_setting['width'] ) ? sanitize_key( $field_setting['width'] ) : $defaults['fields'][ $key ]['width'];
 
 		if ( 'email' === $key ) {
 			$enabled  = true;
 			$required = true;
 		}
 
+		if ( ! in_array( $width, array( 'full', 'half', 'third' ), true ) ) {
+			$width = $defaults['fields'][ $key ]['width'];
+		}
+
 		$clean['fields'][ $key ] = array(
 			'enabled'  => $enabled,
 			'required' => $enabled && $required,
+			'label'    => '' !== $label ? $label : $defaults['fields'][ $key ]['label'],
+			'width'    => $width,
 		);
 	}
 
@@ -443,6 +495,10 @@ function llummio_forms_sanitize_settings( $settings ) {
 	$clean['redirect_url']         = isset( $settings['redirect_url'] ) ? esc_url_raw( $settings['redirect_url'] ) : '';
 	$clean['terms_url']            = isset( $settings['terms_url'] ) ? esc_url_raw( $settings['terms_url'] ) : '';
 	$clean['privacy_url']          = isset( $settings['privacy_url'] ) ? esc_url_raw( $settings['privacy_url'] ) : '';
+	$clean['submit_label']         = isset( $settings['submit_label'] ) && '' !== sanitize_text_field( $settings['submit_label'] ) ? sanitize_text_field( $settings['submit_label'] ) : $defaults['submit_label'];
+	$clean['privacy_label']        = isset( $settings['privacy_label'] ) && '' !== sanitize_text_field( $settings['privacy_label'] ) ? sanitize_text_field( $settings['privacy_label'] ) : $defaults['privacy_label'];
+	$clean['terms_link_label']     = isset( $settings['terms_link_label'] ) && '' !== sanitize_text_field( $settings['terms_link_label'] ) ? sanitize_text_field( $settings['terms_link_label'] ) : $defaults['terms_link_label'];
+	$clean['privacy_link_label']   = isset( $settings['privacy_link_label'] ) && '' !== sanitize_text_field( $settings['privacy_link_label'] ) ? sanitize_text_field( $settings['privacy_link_label'] ) : $defaults['privacy_link_label'];
 	$clean['send_admin_email']     = ! empty( $settings['send_admin_email'] );
 	$clean['admin_email']          = isset( $settings['admin_email'] ) ? sanitize_email( $settings['admin_email'] ) : get_option( 'admin_email' );
 	$clean['admin_subject']        = isset( $settings['admin_subject'] ) ? sanitize_text_field( $settings['admin_subject'] ) : $defaults['admin_subject'];
@@ -466,14 +522,14 @@ function llummio_forms_sanitize_settings( $settings ) {
  */
 function llummio_forms_fields() {
 	return array(
-		'first_name'  => array( 'label' => __( 'Name', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'given-name' ),
-		'second_name' => array( 'label' => __( 'Second name', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'additional-name' ),
-		'last_name'   => array( 'label' => __( 'Last name', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'family-name' ),
-		'phone'       => array( 'label' => __( 'Phone number', 'llummio-forms' ), 'type' => 'tel', 'autocomplete' => 'tel' ),
-		'email'       => array( 'label' => __( 'Email address', 'llummio-forms' ), 'type' => 'email', 'autocomplete' => 'email' ),
-		'address'     => array( 'label' => __( 'Address', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'street-address' ),
-		'country'     => array( 'label' => __( 'Country', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'country-name' ),
-		'comments'    => array( 'label' => __( 'Comments', 'llummio-forms' ), 'type' => 'textarea', 'autocomplete' => '' ),
+		'first_name'  => array( 'label' => __( 'Nombre', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'given-name' ),
+		'second_name' => array( 'label' => __( 'Segundo nombre', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'additional-name' ),
+		'last_name'   => array( 'label' => __( 'Apellidos', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'family-name' ),
+		'phone'       => array( 'label' => __( 'Teléfono', 'llummio-forms' ), 'type' => 'tel', 'autocomplete' => 'tel' ),
+		'email'       => array( 'label' => __( 'Correo electrónico', 'llummio-forms' ), 'type' => 'email', 'autocomplete' => 'email' ),
+		'address'     => array( 'label' => __( 'Dirección', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'street-address' ),
+		'country'     => array( 'label' => __( 'País', 'llummio-forms' ), 'type' => 'text', 'autocomplete' => 'country-name' ),
+		'comments'    => array( 'label' => __( 'Comentarios', 'llummio-forms' ), 'type' => 'textarea', 'autocomplete' => '' ),
 	);
 }
 
@@ -481,19 +537,22 @@ function llummio_forms_fields() {
  * Render a frontend field.
  */
 function llummio_forms_render_form_field( $key, $field, $settings, $values, $errors ) {
-	$value    = isset( $values[ $key ] ) ? $values[ $key ] : ( 'country' === $key ? __( 'Spain', 'llummio-forms' ) : '' );
+	$value    = isset( $values[ $key ] ) ? $values[ $key ] : ( 'country' === $key ? __( 'España', 'llummio-forms' ) : '' );
 	$required = ! empty( $settings['fields'][ $key ]['required'] );
 	$field_id = 'llummio-form-' . $key;
+	$label    = isset( $settings['fields'][ $key ]['label'] ) ? $settings['fields'][ $key ]['label'] : $field['label'];
+	$width    = isset( $settings['fields'][ $key ]['width'] ) ? $settings['fields'][ $key ]['width'] : 'full';
+	$width    = in_array( $width, array( 'full', 'half', 'third' ), true ) ? $width : 'full';
 	?>
-	<div class="llummio-form__field <?php echo isset( $errors[ $key ] ) ? 'is-error' : ''; ?>">
+	<div class="llummio-form__field llummio-form__field--<?php echo esc_attr( $width ); ?> <?php echo isset( $errors[ $key ] ) ? 'is-error' : ''; ?>">
 		<label class="llummio-form__label" for="<?php echo esc_attr( $field_id ); ?>">
-			<?php echo esc_html( $field['label'] ); ?>
+			<?php echo esc_html( $label ); ?>
 			<?php if ( $required ) : ?>
 				<span aria-hidden="true">*</span>
 			<?php endif; ?>
 		</label>
 		<?php if ( 'textarea' === $field['type'] ) : ?>
-			<textarea id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>" rows="5" <?php echo $required ? 'required' : ''; ?>><?php echo esc_textarea( $value ); ?></textarea>
+			<textarea id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>" rows="5" style="<?php echo esc_attr( llummio_forms_get_field_style_attribute( $settings ) ); ?>" <?php echo $required ? 'required' : ''; ?>><?php echo esc_textarea( $value ); ?></textarea>
 		<?php else : ?>
 			<input
 				id="<?php echo esc_attr( $field_id ); ?>"
@@ -501,6 +560,7 @@ function llummio_forms_render_form_field( $key, $field, $settings, $values, $err
 				name="<?php echo esc_attr( $key ); ?>"
 				value="<?php echo esc_attr( $value ); ?>"
 				autocomplete="<?php echo esc_attr( $field['autocomplete'] ); ?>"
+				style="<?php echo esc_attr( llummio_forms_get_field_style_attribute( $settings ) ); ?>"
 				<?php echo $required ? 'required' : ''; ?>
 			/>
 		<?php endif; ?>
@@ -520,12 +580,12 @@ function llummio_forms_render_privacy_field( $settings, $errors ) {
 		<label>
 			<input type="checkbox" name="llummio_privacy" value="1" required />
 			<span>
-				<?php esc_html_e( 'I agree to the terms and privacy policy.', 'llummio-forms' ); ?>
+				<?php echo esc_html( $settings['privacy_label'] ); ?>
 				<?php if ( '' !== $settings['terms_url'] ) : ?>
-					<a href="<?php echo esc_url( $settings['terms_url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Terms', 'llummio-forms' ); ?></a>
+					<a href="<?php echo esc_url( $settings['terms_url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $settings['terms_link_label'] ); ?></a>
 				<?php endif; ?>
 				<?php if ( '' !== $settings['privacy_url'] ) : ?>
-					<a href="<?php echo esc_url( $settings['privacy_url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Read policy', 'llummio-forms' ); ?></a>
+					<a href="<?php echo esc_url( $settings['privacy_url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $settings['privacy_link_label'] ); ?></a>
 				<?php endif; ?>
 			</span>
 		</label>
@@ -678,6 +738,49 @@ function llummio_forms_get_inline_css( $settings ) {
 		esc_html( $settings['field_border'] ),
 		esc_html( $settings['button_background'] ),
 		esc_html( $settings['button_text'] )
+	);
+}
+
+/**
+ * Return frontend form style variables.
+ *
+ * @param array $settings Plugin settings.
+ */
+function llummio_forms_get_form_style_attribute( $settings ) {
+	return sprintf(
+		'--llummio-form-field-background:%1$s;--llummio-form-field-text:%2$s;--llummio-form-field-border:%3$s;--llummio-form-button-background:%4$s;--llummio-form-button-text:%5$s;',
+		esc_attr( $settings['field_background'] ),
+		esc_attr( $settings['field_text'] ),
+		esc_attr( $settings['field_border'] ),
+		esc_attr( $settings['button_background'] ),
+		esc_attr( $settings['button_text'] )
+	);
+}
+
+/**
+ * Return direct input and textarea styles.
+ *
+ * @param array $settings Plugin settings.
+ */
+function llummio_forms_get_field_style_attribute( $settings ) {
+	return sprintf(
+		'background-color:%1$s;color:%2$s;border-color:%3$s;',
+		esc_attr( $settings['field_background'] ),
+		esc_attr( $settings['field_text'] ),
+		esc_attr( $settings['field_border'] )
+	);
+}
+
+/**
+ * Return direct submit button styles.
+ *
+ * @param array $settings Plugin settings.
+ */
+function llummio_forms_get_button_style_attribute( $settings ) {
+	return sprintf(
+		'background-color:%1$s;color:%2$s;',
+		esc_attr( $settings['button_background'] ),
+		esc_attr( $settings['button_text'] )
 	);
 }
 

@@ -9,7 +9,7 @@ This blueprint includes the standard Llummio plugin stack.
 | GenerateBlocks | `generateblocks` | 2.2.1 |
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
 | Llummio Editor Helpers | `llummio-editor-helpers` | 0.6.0 |
-| Llummio Forms | `llummio-forms` | 0.1.0 |
+| Llummio Forms | `llummio-forms` | 0.2.2 |
 | Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
 Internal Llummio plugins are documented in `docs/internal-plugins.md`.

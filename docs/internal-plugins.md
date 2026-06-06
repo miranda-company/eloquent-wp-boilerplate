@@ -298,7 +298,7 @@ Folder: `app/public/wp-content/plugins/llummio-forms/`
 
 Main file: `app/public/wp-content/plugins/llummio-forms/llummio-forms.php`
 
-Version: `0.1.0`
+Version: `0.2.2`
 
 ### Purpose
 
@@ -321,6 +321,8 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
   - country;
   - comments.
 - Lets administrators choose which fields are shown and required.
+- Lets administrators edit field labels, the submit button label, and privacy/terms link text.
+- Provides simple desktop layout widths per field: full, half, or third.
 - Keeps email address and privacy consent required.
 - Uses WordPress nonce validation.
 - Adds a honeypot field.
@@ -356,11 +358,24 @@ Use a full form plugin when a project needs advanced form behavior.
 
 1. Go to `Settings > Llummio Forms`.
 2. Choose which fields should appear.
-3. Set confirmation behavior.
-4. Set admin and user email notification text.
-5. Add terms and privacy policy URLs.
-6. Add reCAPTCHA keys when the project needs reCAPTCHA.
-7. Add the `[llummio_form]` shortcode to a page or pattern.
+3. Edit labels when the default Spanish text is not right for the project.
+4. Choose a desktop width for each field: full, half, or third.
+5. Set the submit button label and privacy/terms text.
+6. Set confirmation behavior.
+7. Set admin and user email notification text.
+8. Add terms and privacy policy URLs.
+9. Add reCAPTCHA keys when the project needs reCAPTCHA.
+10. Add the `[llummio_form]` shortcode to a page or pattern.
+
+### Layout Control
+
+The plugin intentionally avoids a drag-and-drop builder. Layout is controlled from the field table with simple desktop widths:
+
+- `Full`: the field takes the full form width.
+- `Half`: the field takes half of the form width on desktop.
+- `Third`: the field takes one third of the form width on desktop.
+
+All fields stack to one column on smaller screens. This keeps the form responsive and predictable while still allowing common layouts such as two-column name/contact rows.
 
 ### Security Model
 
@@ -401,17 +416,20 @@ When upgrading the blueprint to a new major WordPress version:
 
 1. Confirm `Settings > Llummio Forms` opens.
 2. Confirm field visibility and required settings save.
-3. Confirm `[llummio_form]` renders on a page.
-4. Submit a valid form and confirm the success message appears.
-5. Switch confirmation to redirect and confirm the thank-you URL works.
-6. Confirm the admin notification email is sent.
-7. Confirm the user confirmation email is sent.
-8. Submit with an invalid email and confirm it is rejected.
-9. Submit with an invalid phone number and confirm it is rejected.
-10. Submit without privacy consent and confirm it is rejected.
-11. Enable reCAPTCHA with valid keys and confirm submission still works.
-12. Confirm no submissions are stored in the database.
-13. Confirm no PHP warnings appear in WordPress admin.
+3. Confirm field label edits save and render on the frontend.
+4. Confirm the submit button label edit saves and renders on the frontend.
+5. Confirm full, half, and third field widths render correctly on desktop and stack on mobile.
+6. Confirm `[llummio_form]` renders on a page.
+7. Submit a valid form and confirm the success message appears.
+8. Switch confirmation to redirect and confirm the thank-you URL works.
+9. Confirm the admin notification email is sent.
+10. Confirm the user confirmation email is sent.
+11. Submit with an invalid email and confirm it is rejected.
+12. Submit with an invalid phone number and confirm it is rejected.
+13. Submit without privacy consent and confirm it is rejected.
+14. Enable reCAPTCHA with valid keys and confirm submission still works.
+15. Confirm no submissions are stored in the database.
+16. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 
