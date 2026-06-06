@@ -26,6 +26,17 @@ Each client project should start from this foundation, then receive its own bran
 | `docs/` | Internal setup, workflow, policy, and maintenance documentation. |
 | `logs/` | Local runtime logs. Ignored by Git. |
 
+## Theme Conventions
+
+The theme stylesheet should stay small and readable. Keep reusable tokens, base resets, layout helpers, navigation adjustments, and page-building utilities in `style.css`. Avoid moving one-off client styling into the reusable blueprint unless it will be useful across future service-business sites.
+
+Theme JavaScript is split by purpose:
+
+- `assets/js/generic.js` loads across the site for small behavior that does not require GSAP.
+- `assets/js/animations.js` loads only on pages that opt in to GSAP from the Llummio Editor Helpers sidebar.
+
+Create extra page-specific JavaScript files only when a page has a large or unusual interaction that would make `animations.js` harder to maintain.
+
 ## Blueprint Editing
 
 When editing templates, template parts, or GenerateBlocks patterns in WordPress, the first save lands in the database. Use the workflow in `docs/blueprint-editing-workflow.md` to save those editor changes back into the theme files before committing.

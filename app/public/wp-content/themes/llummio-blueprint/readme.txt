@@ -10,9 +10,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Theme Name: Llummio Blueprint Theme Slug: llummio-blueprint Author: Llummio Description: A reusable WordPress block theme foundation for custom websites. Version: 0.1.0
+Llummio Blueprint is a reusable WordPress block theme foundation for lean service-business websites.
 
-The blueprint disables WordPress comments by default for lean service-business sites. Comments and pingbacks are closed on saved content, the Comments admin screen is hidden, and starter database defaults are set to closed.
+The theme provides reusable spacing tokens, GenerateBlocks-friendly section patterns, a committed logo fallback, a lightweight global stylesheet, and a small script structure:
+
+* `assets/js/generic.js` loads across the site for small JavaScript behavior that does not need GSAP.
+* `assets/js/animations.js` loads only on pages that enable the GSAP option in Llummio Editor Helpers.
+
+The blueprint disables WordPress comments by default. Comments and pingbacks are closed on saved content, the Comments admin screen is hidden, and starter database defaults are set to closed.
 
 
 == Changelog ==

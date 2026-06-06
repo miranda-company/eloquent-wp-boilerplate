@@ -176,7 +176,9 @@ The plugin skips schema output when:
 
 The sidebar includes a `Performance Tools` section with a `Load GSAP on this page` checkbox.
 
-GSAP is disabled by default. Enable this option only on pages that have custom GSAP animations. The theme reads the saved `_llummio_load_gsap` meta value and loads the GSAP files only for that page.
+GSAP is disabled by default. Enable this option only on pages that have custom GSAP animations. The theme reads the saved `_llummio_load_gsap` meta value and loads `gsap.min.js` plus `assets/js/animations.js` only for that page.
+
+General site JavaScript belongs in the theme's `assets/js/generic.js` file and loads independently of GSAP.
 
 The theme also exposes the `llummio_blueprint_page_needs_gsap` filter for developer-only overrides.
 
@@ -268,7 +270,7 @@ When upgrading the blueprint to a new major WordPress version:
 10. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
 11. Confirm `Load GSAP on this page` saves and reloads correctly.
 12. Confirm pages with the GSAP option disabled do not load `gsap.min.js`.
-13. Confirm pages with the GSAP option enabled load `gsap.min.js` and `generic.js`.
+13. Confirm pages with the GSAP option enabled load `gsap.min.js` and `animations.js`.
 14. Confirm a singular page outputs one canonical tag.
 15. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
 16. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
