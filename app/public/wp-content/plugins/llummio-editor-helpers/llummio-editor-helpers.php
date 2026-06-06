@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Llummio Editor Helpers
  * Description: Lightweight editor helpers for Llummio blueprint sites, including SEO fields, canonical tags, schema tools, and wireframe preview controls.
- * Version: 0.6.0
+ * Version: 0.6.2
  * Author: Llummio
  * Text Domain: llummio-editor-helpers
  */
@@ -22,7 +22,7 @@ const LLUMMIO_EDITOR_HELPERS_SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_FAQ_KEY  = '_llummio_schema_faq_items';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION = 'llummio_editor_helpers_settings';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP  = 'llummio_editor_helpers_settings_group';
-const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.0';
+const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.2';
 
 /**
  * Register SEO metadata for public editable post types.
@@ -127,19 +127,56 @@ function llummio_editor_helpers_register_settings() {
 add_action( 'admin_init', 'llummio_editor_helpers_register_settings' );
 
 /**
- * Add the Llummio Editor Helpers settings page.
+ * Add the Global Schema admin page.
  */
 function llummio_editor_helpers_add_settings_page() {
-	add_options_page(
-		__( 'Llummio Editor Helpers', 'llummio-editor-helpers' ),
-		__( 'Llummio Editor Helpers', 'llummio-editor-helpers' ),
+	add_menu_page(
+		__( 'Global Schema', 'llummio-editor-helpers' ),
+		__( 'Global Schema', 'llummio-editor-helpers' ),
 		'manage_options',
 		'llummio-editor-helpers',
-		'llummio_editor_helpers_render_settings_page'
+		'llummio_editor_helpers_render_settings_page',
+		llummio_editor_helpers_admin_menu_icon(),
+		59
 	);
 }
 
 add_action( 'admin_menu', 'llummio_editor_helpers_add_settings_page' );
+
+/**
+ * Return the Llummio SVG icon for the admin menu.
+ */
+function llummio_editor_helpers_admin_menu_icon() {
+	$icon_paths = array(
+		plugin_dir_path( __FILE__ ) . 'assets/llummio-editor-helpers-icon.svg',
+		get_theme_file_path( 'assets/images/logo-llummio.svg' ),
+	);
+
+	foreach ( $icon_paths as $icon_path ) {
+		if ( file_exists( $icon_path ) ) {
+			$svg = file_get_contents( $icon_path );
+
+			if ( false !== $svg ) {
+				return 'data:image/svg+xml;base64,' . base64_encode( llummio_editor_helpers_prepare_admin_menu_icon_svg( $svg ) );
+			}
+		}
+	}
+
+	return 'dashicons-admin-site-alt3';
+}
+
+/**
+ * Prepare a local SVG so it matches native WordPress admin menu icons.
+ *
+ * @param string $svg Raw SVG markup.
+ */
+function llummio_editor_helpers_prepare_admin_menu_icon_svg( $svg ) {
+	$svg = preg_replace( '/<\?xml.*?\?>\s*/', '', $svg );
+	$svg = preg_replace( '/\sfill=(["\']).*?\1/i', '', $svg );
+	$svg = preg_replace( '/<svg\b/i', '<svg fill="#fff" width="20" height="20"', $svg, 1 );
+
+	return null === $svg ? '' : $svg;
+}
 
 /**
  * Render the global settings page.
@@ -153,10 +190,9 @@ function llummio_editor_helpers_render_settings_page() {
 	$option   = LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION;
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Llummio Editor Helpers', 'llummio-editor-helpers' ); ?></h1>
+		<h1><?php esc_html_e( 'Global Schema', 'llummio-editor-helpers' ); ?></h1>
 		<form method="post" action="options.php">
 			<?php settings_fields( LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP ); ?>
-			<h2><?php esc_html_e( 'Global Schema', 'llummio-editor-helpers' ); ?></h2>
 			<p><?php esc_html_e( 'These settings describe the business for the whole site. Page-specific schema stays in the block editor sidebar.', 'llummio-editor-helpers' ); ?></p>
 			<table class="form-table" role="presentation">
 				<tr>

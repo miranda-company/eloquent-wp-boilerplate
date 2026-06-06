@@ -273,7 +273,7 @@ INSERT INTO `wp_options` VALUES (8,'start_of_week','1','on');
 INSERT INTO `wp_options` VALUES (9,'use_balanceTags','0','on');
 INSERT INTO `wp_options` VALUES (10,'use_smilies','1','on');
 INSERT INTO `wp_options` VALUES (11,'require_name_email','1','on');
-INSERT INTO `wp_options` VALUES (12,'comments_notify','1','on');
+INSERT INTO `wp_options` VALUES (12,'comments_notify','0','on');
 INSERT INTO `wp_options` VALUES (13,'posts_per_rss','10','on');
 INSERT INTO `wp_options` VALUES (14,'rss_use_excerpt','0','on');
 INSERT INTO `wp_options` VALUES (15,'mailserver_url','mail.example.com','on');
@@ -281,8 +281,8 @@ INSERT INTO `wp_options` VALUES (16,'mailserver_login','login@example.com','on')
 INSERT INTO `wp_options` VALUES (17,'mailserver_pass','','on');
 INSERT INTO `wp_options` VALUES (18,'mailserver_port','110','on');
 INSERT INTO `wp_options` VALUES (19,'default_category','1','on');
-INSERT INTO `wp_options` VALUES (20,'default_comment_status','open','on');
-INSERT INTO `wp_options` VALUES (21,'default_ping_status','open','on');
+INSERT INTO `wp_options` VALUES (20,'default_comment_status','closed','on');
+INSERT INTO `wp_options` VALUES (21,'default_ping_status','closed','on');
 INSERT INTO `wp_options` VALUES (22,'default_pingback_flag','1','on');
 INSERT INTO `wp_options` VALUES (23,'posts_per_page','10','on');
 INSERT INTO `wp_options` VALUES (24,'date_format','F j, Y','on');
@@ -486,8 +486,8 @@ CREATE TABLE `wp_posts` (
   `post_title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `post_excerpt` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `post_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'publish',
-  `comment_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'open',
-  `ping_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'open',
+  `comment_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'closed',
+  `ping_status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT 'closed',
   `post_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
   `post_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
   `to_ping` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,

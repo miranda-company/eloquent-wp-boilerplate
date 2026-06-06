@@ -10,7 +10,7 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.6.0`
+Version: `0.6.2`
 
 ### Purpose
 
@@ -32,7 +32,7 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Outputs one `<meta name="robots">` tag on singular content when robots controls are enabled.
 - Outputs one canonical `<link rel="canonical">` tag on singular content.
 - Outputs JSON-LD structured data for singular content when schema output is enabled.
-- Adds a global settings page at `Settings > Llummio Editor Helpers`.
+- Adds a top-level `Global Schema` admin menu item below `Llummio Forms`, using the Llummio SVG icon.
 - Adds automatic `Organization` or `LocalBusiness`, `WebSite`, `WebPage`, and `BlogPosting` schema.
 - Adds page-level schema controls for `Service`, `Article`, `FAQPage`, and disabled schema.
 - Registers the fields with the WordPress REST API for future editor integrations.
@@ -132,7 +132,7 @@ There is no canonical override field in the editor. If a project needs custom ca
 
 Schema is split between global business settings and page-level controls.
 
-Global business schema is managed in WordPress admin at `Settings > Llummio Editor Helpers`. Use that screen to set:
+Global business schema is managed in WordPress admin at `Global Schema`. Use that screen to set:
 
 - business schema type: `Organization` or `Local Business`;
 - business name;
@@ -230,7 +230,7 @@ The plugin depends on these WordPress APIs:
 - `wp.plugins.registerPlugin`
 - `wp.editor.PluginSidebar`
 - `register_setting`
-- `add_options_page`
+- `add_menu_page`
 - `get_option`
 - `save_post`
 - `pre_get_document_title`
@@ -257,7 +257,7 @@ When upgrading the blueprint to a new major WordPress version:
 10. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
 11. Confirm a singular page outputs one canonical tag.
 12. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-13. Open `Settings > Llummio Editor Helpers` and confirm the global schema settings page loads.
+13. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
 14. Save `Organization` settings and confirm the saved values stay after reload.
 15. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
 16. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
@@ -298,19 +298,22 @@ Folder: `app/public/wp-content/plugins/llummio-forms/`
 
 Main file: `app/public/wp-content/plugins/llummio-forms/llummio-forms.php`
 
-Version: `0.2.2`
+Version: `0.3.3`
 
 ### Purpose
 
-`Llummio Forms` provides a lightweight default lead form for Llummio service-business websites.
+`Llummio Forms` provides lightweight lead forms for Llummio service-business websites.
 
-It replaces the need to ship a full form-builder plugin in the blueprint when the project only needs a standard contact or lead form.
+It replaces the need to ship a full form-builder plugin in the blueprint when the project only needs standard contact or lead forms.
 
 ### What It Does
 
-- Adds a `Settings > Llummio Forms` settings page.
-- Adds the `[llummio_form]` shortcode.
-- Renders a fixed, configurable lead form.
+- Adds a top-level `Llummio Forms` admin menu using the Llummio SVG icon.
+- Adds a small dashboard with submission counts by form.
+- Adds a forms list and form editor.
+- Adds the `[llummio_form id="form-id"]` shortcode.
+- Supports multiple reusable form configurations.
+- Renders fixed, configurable lead forms.
 - Supports these common fields:
   - name;
   - second name;
@@ -321,9 +324,10 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
   - country;
   - comments.
 - Lets administrators choose which fields are shown and required.
-- Lets administrators edit field labels, the submit button label, and privacy/terms link text.
+- Lets administrators edit field labels, the submit button label, legal consent text, privacy/terms link text, and form error messages.
 - Provides simple desktop layout widths per field: full, half, or third.
-- Keeps email address and privacy consent required.
+- Keeps email address required.
+- Lets administrators enable or disable the privacy consent checkbox per form.
 - Uses WordPress nonce validation.
 - Adds a honeypot field.
 - Adds a minimum time check before submission.
@@ -334,7 +338,8 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
 - Sends an admin notification email.
 - Sends an optional user confirmation email.
 - Shows a confirmation message or redirects to a thank-you URL.
-- Supports terms and privacy policy URLs for the required consent checkbox.
+- Counts successful submissions per form.
+- Supports terms and privacy policy URLs for the consent checkbox.
 - Inherits the website font.
 - Provides simple color settings for fields and the submit button.
 
@@ -346,6 +351,7 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
 - File uploads.
 - Payment forms.
 - Entry storage.
+- Viewing individual submissions.
 - CSV exports.
 - CRM or marketing integrations.
 - SMTP delivery.
@@ -356,16 +362,26 @@ Use a full form plugin when a project needs advanced form behavior.
 
 ### How To Use It
 
-1. Go to `Settings > Llummio Forms`.
-2. Choose which fields should appear.
-3. Edit labels when the default Spanish text is not right for the project.
-4. Choose a desktop width for each field: full, half, or third.
-5. Set the submit button label and privacy/terms text.
-6. Set confirmation behavior.
-7. Set admin and user email notification text.
-8. Add terms and privacy policy URLs.
-9. Add reCAPTCHA keys when the project needs reCAPTCHA.
-10. Add the `[llummio_form]` shortcode to a page or pattern.
+1. Go to `Llummio Forms > Forms`.
+2. Create a form or edit the default form.
+3. Choose which fields should appear.
+4. Edit labels when the default Spanish text is not right for the project.
+5. Choose a desktop width for each field: full, half, or third.
+6. Edit the Spanish error messages if the project needs different wording.
+7. Set the submit button label and legal consent text.
+8. Set confirmation behavior.
+9. Set admin and user email notification text.
+10. Add terms and privacy policy URLs.
+11. Add reCAPTCHA keys when the project needs reCAPTCHA.
+12. Copy the shortcode from the form list or dashboard and add it to a page or pattern.
+
+Example:
+
+```text
+[llummio_form id="default"]
+```
+
+The form ID is generated from the form name when a form is created. Keep the ID stable because changing shortcodes in pages and patterns is a manual content task.
 
 ### Layout Control
 
@@ -377,11 +393,28 @@ The plugin intentionally avoids a drag-and-drop builder. Layout is controlled fr
 
 All fields stack to one column on smaller screens. This keeps the form responsive and predictable while still allowing common layouts such as two-column name/contact rows.
 
+### Legal Consent
+
+Privacy consent is enabled by default, but it can be disabled per form.
+
+The consent text is editable and supports two tokens:
+
+- `{terms}` inserts the terms link.
+- `{privacy}` inserts the privacy policy link.
+
+Example:
+
+```text
+Acepto los {terms} y la {privacy}.
+```
+
+The link labels and URLs are also editable. If the text does not include tokens, the plugin appends the configured legal links after the consent text.
+
 ### Security Model
 
 The plugin is designed for simple lead capture on trusted Llummio-managed sites.
 
-It does not store submissions in the database. This keeps the blueprint lighter and reduces the amount of personal data stored by default.
+It does not store submissions in the database. It only stores a numeric submission count per form. This keeps the blueprint lighter and reduces the amount of personal data stored by default.
 
 Every submission is checked with:
 
@@ -393,13 +426,27 @@ Every submission is checked with:
 - server-side email validation;
 - optional reCAPTCHA verification.
 
+### Dashboard
+
+The `Llummio Forms` dashboard shows:
+
+- form name;
+- shortcode;
+- number of successful submissions;
+- quick edit and count reset actions.
+
+The counter increments only after a valid submission passes validation and notification handling starts. It is meant as a lightweight activity signal, not analytics and not an entry database.
+
 ### WordPress APIs Used
 
 The plugin depends on these WordPress APIs:
 
-- `register_setting`
-- `add_options_page`
+- `add_menu_page`
+- `add_submenu_page`
+- `admin_post_*`
 - `add_shortcode`
+- `get_option`
+- `update_option`
 - `wp_nonce_field`
 - `wp_verify_nonce`
 - `wp_mail`
@@ -414,22 +461,31 @@ These are stable WordPress extension points. Still, check the plugin when the bl
 
 When upgrading the blueprint to a new major WordPress version:
 
-1. Confirm `Settings > Llummio Forms` opens.
-2. Confirm field visibility and required settings save.
-3. Confirm field label edits save and render on the frontend.
-4. Confirm the submit button label edit saves and renders on the frontend.
-5. Confirm full, half, and third field widths render correctly on desktop and stack on mobile.
-6. Confirm `[llummio_form]` renders on a page.
-7. Submit a valid form and confirm the success message appears.
-8. Switch confirmation to redirect and confirm the thank-you URL works.
-9. Confirm the admin notification email is sent.
-10. Confirm the user confirmation email is sent.
-11. Submit with an invalid email and confirm it is rejected.
-12. Submit with an invalid phone number and confirm it is rejected.
-13. Submit without privacy consent and confirm it is rejected.
-14. Enable reCAPTCHA with valid keys and confirm submission still works.
-15. Confirm no submissions are stored in the database.
-16. Confirm no PHP warnings appear in WordPress admin.
+1. Confirm the top-level `Llummio Forms` menu appears in WordPress admin.
+2. Confirm the dashboard opens and lists every form.
+3. Confirm `Llummio Forms > Forms` opens.
+4. Create a second form and confirm it appears in the forms list.
+5. Confirm each form shows a shortcode with its own ID.
+6. Confirm field visibility and required settings save per form.
+7. Confirm field label edits save and render on the frontend.
+8. Confirm editable error messages save and render on invalid submissions.
+9. Confirm the submit button label edit saves and renders on the frontend.
+10. Confirm full, half, and third field widths render correctly on desktop and stack on mobile.
+11. Confirm `[llummio_form id="default"]` renders on a page.
+12. Confirm a second form shortcode renders that form's labels and settings.
+13. Submit a valid form and confirm the success message appears.
+14. Confirm the dashboard count increases for the submitted form only.
+15. Switch confirmation to redirect and confirm the thank-you URL works.
+16. Confirm the admin notification email is sent.
+17. Confirm the user confirmation email is sent.
+18. Submit with an invalid email and confirm it is rejected.
+19. Submit with an invalid phone number and confirm it is rejected.
+20. Submit without privacy consent while consent is enabled and confirm it is rejected.
+21. Disable privacy consent and confirm the checkbox is not rendered.
+22. Add `{terms}` and `{privacy}` to the consent text and confirm the links render in the right place.
+23. Enable reCAPTCHA with valid keys and confirm submission still works.
+24. Confirm no submission entries or personal data are stored in the database.
+25. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 

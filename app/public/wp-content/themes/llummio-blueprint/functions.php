@@ -145,6 +145,94 @@ function llummio_blueprint_site_logo_fallback( $block_content, $block ) {
 
 add_filter( 'render_block_core/site-logo', 'llummio_blueprint_site_logo_fallback', 10, 2 );
 
+/**
+ * Disable WordPress comments for lean service-business sites.
+ */
+function llummio_blueprint_disable_comments_support() {
+	foreach ( get_post_types() as $post_type ) {
+		remove_post_type_support( $post_type, 'comments' );
+		remove_post_type_support( $post_type, 'trackbacks' );
+	}
+}
+
+add_action( 'init', 'llummio_blueprint_disable_comments_support', 100 );
+
+/**
+ * Keep comments and pingbacks closed on the front end.
+ *
+ * @param bool $open Whether comments or pingbacks are open.
+ */
+function llummio_blueprint_close_comments( $open ) {
+	return false;
+}
+
+add_filter( 'comments_open', 'llummio_blueprint_close_comments', 20 );
+add_filter( 'pings_open', 'llummio_blueprint_close_comments', 20 );
+
+/**
+ * Store new or updated content with comments and pingbacks closed.
+ *
+ * @param array $data Sanitized post data before it is saved.
+ */
+function llummio_blueprint_force_comments_closed_on_save( $data ) {
+	if ( ! empty( $data['post_type'] ) ) {
+		$data['comment_status'] = 'closed';
+		$data['ping_status']     = 'closed';
+	}
+
+	return $data;
+}
+
+add_filter( 'wp_insert_post_data', 'llummio_blueprint_force_comments_closed_on_save', 20 );
+
+/**
+ * Remove comment management surfaces from the admin area.
+ */
+function llummio_blueprint_hide_comments_admin_menu() {
+	remove_menu_page( 'edit-comments.php' );
+}
+
+add_action( 'admin_menu', 'llummio_blueprint_hide_comments_admin_menu', 999 );
+
+/**
+ * Redirect direct visits to the comments admin screen.
+ */
+function llummio_blueprint_redirect_comments_admin_screen() {
+	global $pagenow;
+
+	if ( 'edit-comments.php' === $pagenow ) {
+		wp_safe_redirect( admin_url() );
+		exit;
+	}
+}
+
+add_action( 'admin_init', 'llummio_blueprint_redirect_comments_admin_screen' );
+
+/**
+ * Remove the comments shortcut from the admin toolbar.
+ *
+ * @param WP_Admin_Bar $wp_admin_bar Admin toolbar instance.
+ */
+function llummio_blueprint_remove_comments_admin_bar_node( $wp_admin_bar ) {
+	$wp_admin_bar->remove_node( 'comments' );
+}
+
+add_action( 'admin_bar_menu', 'llummio_blueprint_remove_comments_admin_bar_node', 999 );
+
+/**
+ * Remove the comments column from post and page list tables.
+ *
+ * @param array $columns Admin list table columns.
+ */
+function llummio_blueprint_remove_comments_column( $columns ) {
+	unset( $columns['comments'] );
+
+	return $columns;
+}
+
+add_filter( 'manage_posts_columns', 'llummio_blueprint_remove_comments_column' );
+add_filter( 'manage_pages_columns', 'llummio_blueprint_remove_comments_column' );
+
 
 /**
  * Enqueue styles
