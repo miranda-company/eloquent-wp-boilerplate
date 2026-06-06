@@ -37,6 +37,24 @@ Text Domain: llummio-blueprint
     --padding-section-xl-mobile: 112px;
     --padding-section-xxl-mobile: 144px;
 
+    /* Border radius */
+    --border-radius-xxs: 8px;
+    --border-radius-xs: 12px;
+    --border-radius-s: 16px;
+    --border-radius-m: 32px;
+    --border-radius-l: 40px;
+    --border-radius-xl: 56px;
+    --border-radius-xxl: 64px;
+
+    /* Mobile border radius */
+    --border-radius-xxs-mobile: 6px;
+    --border-radius-xs-mobile: 8px;
+    --border-radius-s-mobile: 14px;
+    --border-radius-m-mobile: 24px;
+    --border-radius-l-mobile: 32px;
+    --border-radius-xl-mobile: 40px;
+    --border-radius-xxl-mobile: 56px;
+
     /* Text helpers */
     --text-s: clamp(0.8rem, 0.75rem + 0.25vw, 1rem);
 }
@@ -82,12 +100,12 @@ p {
 }
 
 /* Layout */
-:where(.wp-site-blocks) > * {
+:where(.wp-site-blocks)>* {
     margin-block-start: 0;
     margin-block-end: 0;
 }
 
-:root :where(.is-layout-flow) > * {
+:root :where(.is-layout-flow)>* {
     margin-block-start: 0;
     margin-block-end: 0;
 }
@@ -110,7 +128,7 @@ header {
 }
 
 /* Navigation */
-.gb-sub-menu > li {
+.gb-sub-menu>li {
     border-right: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
     border-bottom: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
     border-left: 1px solid var(--wp--preset--color--color-primary-600, #FA4338);
@@ -121,7 +139,7 @@ header {
 }
 
 /* Utilities */
-.video-bg > video {
+.video-bg>video {
     position: absolute;
     top: 50%;
     left: 50%;
