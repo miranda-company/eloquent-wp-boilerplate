@@ -10,13 +10,13 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.6.4`
+Version: `0.6.6`
 
 ### Purpose
 
 `Llummio Editor Helpers` collects small editing tools used in Llummio blueprint sites.
 
-It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, page-level GSAP and ScrollTrigger loading toggles, and an editor-only wireframe preview toggle.
+It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, page-level GSAP and ScrollTrigger loading toggles, editor-only wireframe previews, and optional page-level frontend wireframes.
 
 The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
 
@@ -38,6 +38,7 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Adds page-level performance controls for loading GSAP and ScrollTrigger only on pages that need them.
 - Registers the fields with the WordPress REST API for future editor integrations.
 - Adds an editor-only wireframe toggle for the theme `.wire` helper class.
+- Adds a saved page-level frontend wireframe toggle for showing `.wire` borders on the public page.
 
 ### What It Does Not Do
 
@@ -68,6 +69,8 @@ The plugin stores data in post meta:
 - `_llummio_schema_faq_items`
 - `_llummio_load_gsap`
 - `_llummio_load_scrolltrigger`
+- `_llummio_show_wire_frontend`
+- `_llummio_wire_frontend_color`
 
 The plugin also stores global business schema settings in the `llummio_editor_helpers_settings` option.
 
@@ -193,9 +196,14 @@ The theme also exposes these filters for developer-only overrides:
 
 ### Wireframe Toggle
 
-The sidebar includes a `Wireframe Tools` section with a `Show wire borders` checkbox.
+The sidebar includes a `Wireframe Tools` section with two wireframe checkboxes:
 
-When checked, the editor temporarily shows `.wire` elements with a 1px border. The toggle is editor-only and does not save anything to the page, theme, or starter database.
+- `Show wire borders`
+- `Show wire on front end`
+
+`Show wire borders` temporarily shows `.wire` elements with a 1px border inside the editor. This toggle is editor-only and does not save anything to the page, theme, or starter database.
+
+`Show wire on front end` is saved to the current page. When enabled, the public page outputs a small frontend style that shows `.wire` elements with a 1px border using the selected wire color. Use this only while reviewing layout structure and turn it off before launch.
 
 Editors can choose one of these wire colors:
 
@@ -203,7 +211,7 @@ Editors can choose one of these wire colors:
 - Chroma green: `#26ff00`
 - White: `#ffffff`
 
-The enabled state and selected color are stored in the browser, so each team member can keep their own wireframe setting.
+The editor-only enabled state and selected color are stored in the browser, so each team member can keep their own editor wireframe setting. When frontend wireframes are enabled, the selected color is also saved on the page.
 
 ### Supported Content
 
@@ -277,26 +285,28 @@ When upgrading the blueprint to a new major WordPress version:
 8. Enable `No follow` and confirm the robots meta tag includes both selected rules.
 9. Clear both fields and controls, then confirm the plugin stops outputting custom SEO data.
 10. Confirm the wireframe checkbox turns `.wire` borders on and off in the editor.
-11. Confirm `Load GSAP on this page` saves and reloads correctly.
-12. Confirm pages with the GSAP option disabled do not load `gsap.min.js`.
-13. Confirm pages with the GSAP option enabled load `gsap.min.js` and `animations.js`.
-14. Confirm `Load ScrollTrigger on this page` saves and reloads correctly.
-15. Confirm pages with ScrollTrigger disabled do not load `ScrollTrigger.min.js`.
-16. Confirm pages with ScrollTrigger enabled load `ScrollTrigger.min.js` when the vendor file exists.
-17. Confirm a singular page outputs one canonical tag.
-18. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-19. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
-20. Save `Organization` settings and confirm the saved values stay after reload.
-21. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
-22. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
-23. Confirm a post outputs `BlogPosting`.
-24. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
-25. Set a page to `Article` and confirm the page node changes to `Article`.
-26. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
-27. Set schema to `None` and confirm schema output stops on that page.
-28. Enable `No index` and confirm schema output stops on that page.
-29. Confirm no duplicate schema output appears if a full SEO plugin is active.
-30. Confirm no PHP warnings appear in WordPress admin.
+11. Confirm `Show wire on front end` saves and reloads correctly.
+12. Confirm the public page shows `.wire` borders only when `Show wire on front end` is enabled.
+13. Confirm `Load GSAP on this page` saves and reloads correctly.
+14. Confirm pages with the GSAP option disabled do not load `gsap.min.js`.
+15. Confirm pages with the GSAP option enabled load `gsap.min.js` and `animations.js`.
+16. Confirm `Load ScrollTrigger on this page` saves and reloads correctly.
+17. Confirm pages with ScrollTrigger disabled do not load `ScrollTrigger.min.js`.
+18. Confirm pages with ScrollTrigger enabled load `ScrollTrigger.min.js` when the vendor file exists.
+19. Confirm a singular page outputs one canonical tag.
+20. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
+21. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
+22. Save `Organization` settings and confirm the saved values stay after reload.
+23. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
+24. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
+25. Confirm a post outputs `BlogPosting`.
+26. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
+27. Set a page to `Article` and confirm the page node changes to `Article`.
+28. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
+29. Set schema to `None` and confirm schema output stops on that page.
+30. Enable `No index` and confirm schema output stops on that page.
+31. Confirm no duplicate schema output appears if a full SEO plugin is active.
+32. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 

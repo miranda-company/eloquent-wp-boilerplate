@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Llummio Editor Helpers
  * Description: Lightweight editor helpers for Llummio blueprint sites, including SEO fields, canonical tags, schema tools, performance toggles, and wireframe preview controls.
- * Version: 0.6.4
+ * Version: 0.6.6
  * Author: Llummio
  * Text Domain: llummio-editor-helpers
  */
@@ -22,9 +22,11 @@ const LLUMMIO_EDITOR_HELPERS_SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_FAQ_KEY  = '_llummio_schema_faq_items';
 const LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY   = '_llummio_load_gsap';
 const LLUMMIO_EDITOR_HELPERS_LOAD_SCROLLTRIGGER_KEY = '_llummio_load_scrolltrigger';
+const LLUMMIO_EDITOR_HELPERS_SHOW_WIRE_FRONTEND_KEY = '_llummio_show_wire_frontend';
+const LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY = '_llummio_wire_frontend_color';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION = 'llummio_editor_helpers_settings';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP  = 'llummio_editor_helpers_settings_group';
-const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.4';
+const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.6';
 
 /**
  * Register SEO metadata for public editable post types.
@@ -55,7 +57,7 @@ function llummio_editor_helpers_register_meta() {
 			)
 		);
 
-		foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY, LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY, LLUMMIO_EDITOR_HELPERS_LOAD_SCROLLTRIGGER_KEY ) as $meta_key ) {
+		foreach ( llummio_editor_helpers_boolean_meta_keys() as $meta_key ) {
 			register_post_meta(
 				$post_type,
 				$meta_key,
@@ -89,6 +91,18 @@ function llummio_editor_helpers_register_meta() {
 				'single'            => true,
 				'show_in_rest'      => true,
 				'sanitize_callback' => 'llummio_editor_helpers_sanitize_faq_items',
+				'auth_callback'     => 'llummio_editor_helpers_can_edit_meta',
+			)
+		);
+
+		register_post_meta(
+			$post_type,
+			LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY,
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => true,
+				'sanitize_callback' => 'llummio_editor_helpers_sanitize_wire_color',
 				'auth_callback'     => 'llummio_editor_helpers_can_edit_meta',
 			)
 		);
@@ -429,7 +443,7 @@ function llummio_editor_helpers_delete_empty_meta( $post_id ) {
 		delete_post_meta( $post_id, LLUMMIO_EDITOR_HELPERS_SCHEMA_TYPE_KEY );
 	}
 
-	foreach ( array( LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY, LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY, LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY, LLUMMIO_EDITOR_HELPERS_LOAD_SCROLLTRIGGER_KEY ) as $meta_key ) {
+	foreach ( llummio_editor_helpers_boolean_meta_keys() as $meta_key ) {
 		if ( ! llummio_editor_helpers_get_boolean_meta( $post_id, $meta_key ) ) {
 			delete_post_meta( $post_id, $meta_key );
 		}
@@ -635,6 +649,24 @@ function llummio_editor_helpers_structured_data() {
 add_action( 'wp_head', 'llummio_editor_helpers_structured_data', 2 );
 
 /**
+ * Show the theme wireframe helper on the frontend when a page opts in.
+ */
+function llummio_editor_helpers_frontend_wire_styles() {
+	if ( ! is_singular() || ! llummio_editor_helpers_get_boolean_meta( get_queried_object_id(), LLUMMIO_EDITOR_HELPERS_SHOW_WIRE_FRONTEND_KEY ) ) {
+		return;
+	}
+
+	$color = llummio_editor_helpers_get_wire_color( get_queried_object_id() );
+
+	printf(
+		'<style id="llummio-editor-helpers-wire-frontend">.wire{border:1px solid %s!important;}</style>' . "\n",
+		esc_attr( $color )
+	);
+}
+
+add_action( 'wp_head', 'llummio_editor_helpers_frontend_wire_styles', 20 );
+
+/**
  * Return a trimmed SEO field value.
  *
  * @param int    $post_id  Post ID.
@@ -663,6 +695,38 @@ function llummio_editor_helpers_get_boolean_meta( $post_id, $meta_key ) {
 }
 
 /**
+ * Return the saved frontend wire color.
+ */
+function llummio_editor_helpers_get_wire_color( $post_id ) {
+	$color = get_post_meta( $post_id, LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY, true );
+
+	return llummio_editor_helpers_sanitize_wire_color( $color );
+}
+
+/**
+ * Sanitize frontend wire colors to the allowed editor swatches.
+ */
+function llummio_editor_helpers_sanitize_wire_color( $color ) {
+	$color          = strtolower( trim( (string) $color ) );
+	$allowed_colors = array( '#1100ff', '#26ff00', '#ffffff' );
+
+	return in_array( $color, $allowed_colors, true ) ? $color : '#1100ff';
+}
+
+/**
+ * Return boolean post meta keys.
+ */
+function llummio_editor_helpers_boolean_meta_keys() {
+	return array(
+		LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY,
+		LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY,
+		LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY,
+		LLUMMIO_EDITOR_HELPERS_LOAD_SCROLLTRIGGER_KEY,
+		LLUMMIO_EDITOR_HELPERS_SHOW_WIRE_FRONTEND_KEY,
+	);
+}
+
+/**
  * Return general schema meta fields and their sanitizer callbacks.
  */
 function llummio_editor_helpers_schema_meta_fields() {
@@ -685,6 +749,7 @@ function llummio_editor_helpers_empty_string_meta_keys() {
 			LLUMMIO_EDITOR_HELPERS_DESCRIPTION_KEY,
 			LLUMMIO_EDITOR_HELPERS_SCHEMA_TYPE_KEY,
 			LLUMMIO_EDITOR_HELPERS_SCHEMA_FAQ_KEY,
+			LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY,
 		),
 		array_keys( llummio_editor_helpers_schema_meta_fields() )
 	);

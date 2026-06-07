@@ -51,6 +51,8 @@
 	var SCHEMA_FAQ_KEY = '_llummio_schema_faq_items';
 	var LOAD_GSAP_KEY = '_llummio_load_gsap';
 	var LOAD_SCROLLTRIGGER_KEY = '_llummio_load_scrolltrigger';
+	var SHOW_WIRE_FRONTEND_KEY = '_llummio_show_wire_frontend';
+	var WIRE_FRONTEND_COLOR_KEY = '_llummio_wire_frontend_color';
 	var TITLE_SUFFIX = ' %sep% %sitename%';
 	var TITLE_RECOMMENDED_LENGTH = 60;
 	var DESCRIPTION_RECOMMENDED_LENGTH = 160;
@@ -292,6 +294,9 @@
 		var faqItems = parseFaqItems( meta[ SCHEMA_FAQ_KEY ] );
 		var loadGsap = !! meta[ LOAD_GSAP_KEY ];
 		var loadScrollTrigger = !! meta[ LOAD_SCROLLTRIGGER_KEY ];
+		var showWireOnFrontend = !! meta[ SHOW_WIRE_FRONTEND_KEY ];
+		var savedWireframeColor = isAllowedWireframeColor( meta[ WIRE_FRONTEND_COLOR_KEY ] ) ? meta[ WIRE_FRONTEND_COLOR_KEY ] : '';
+		var activeWireframeColor = savedWireframeColor || wireframeColor;
 		var displayedSeoTitle = seoTitle || getDefaultSeoTitle( editorData.title );
 
 		function updateMeta( key, value ) {
@@ -338,7 +343,7 @@
 		function updateWireframeState( isEnabled ) {
 			setShowWireframes( isEnabled );
 			storeWireframeState( isEnabled );
-			setWireframeStyle( isEnabled, wireframeColor );
+			setWireframeStyle( isEnabled, activeWireframeColor );
 		}
 
 		function updateWireframeColor( color ) {
@@ -349,19 +354,20 @@
 			setWireframeColor( color );
 			storeWireframeColor( color );
 			setWireframeStyle( showWireframes, color );
+			updateMeta( WIRE_FRONTEND_COLOR_KEY, color );
 		}
 
 		useEffect( function() {
-			setWireframeStyle( showWireframes, wireframeColor );
+			setWireframeStyle( showWireframes, activeWireframeColor );
 
 			var interval = window.setInterval( function() {
-				setWireframeStyle( showWireframes, wireframeColor );
+				setWireframeStyle( showWireframes, activeWireframeColor );
 			}, 1000 );
 
 			return function() {
 				window.clearInterval( interval );
 			};
-		}, [ showWireframes, wireframeColor ] );
+		}, [ showWireframes, activeWireframeColor ] );
 
 		return el(
 			Fragment,
@@ -613,6 +619,22 @@
 						checked: showWireframes,
 						onChange: updateWireframeState,
 					} ),
+					el( CheckboxControl, {
+						label: __( 'Show wire on front end', 'llummio-editor-helpers' ),
+						help: __( 'Saves this page setting and shows .wire borders on the public page.', 'llummio-editor-helpers' ),
+						checked: showWireOnFrontend,
+						onChange: function( isChecked ) {
+							if ( isChecked ) {
+								var values = {};
+								values[ SHOW_WIRE_FRONTEND_KEY ] = true;
+								values[ WIRE_FRONTEND_COLOR_KEY ] = activeWireframeColor;
+								updateMetaValues( values );
+								return;
+							}
+
+							updateMeta( SHOW_WIRE_FRONTEND_KEY, false );
+						},
+					} ),
 					el(
 						'div',
 						{
@@ -631,7 +653,7 @@
 								className: 'llummio-editor-helpers__wire-color-swatches',
 							},
 							WIREFRAME_COLORS.map( function( option ) {
-								var isSelected = option.value === wireframeColor;
+								var isSelected = option.value === activeWireframeColor;
 
 								return el(
 									'button',

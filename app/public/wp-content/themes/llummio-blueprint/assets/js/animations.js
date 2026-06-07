@@ -23,7 +23,7 @@ function Animate() {
     let tl = gsap.timeline()
 
     // add the tweens to the timeline - Note we're using tl.to not gsap.to
-    tl.from(".box", { y: 50, autoAlpha: 0, duration: 1, stagger: 0.1 });
+    tl.from(".box", { y: 40, autoAlpha: 0, duration: 1, stagger: 0.1 });
 }
 
 
@@ -33,11 +33,15 @@ function AnimateOnTrigger() {
     let tl = gsap.timeline()
 
     // add the tweens to the timeline - Note we're using tl.to not gsap.to
-    tl.to(".box", {
+    gsap.from(".el-trigger", {
         scrollTrigger: {
             trigger: ".animation-trigger-container",
             markers: true,
-            toggleActions: "restart paus reverse pause"
-        }
+            toggleActions: "restart pause reverse pause"
+        },
+        y: 40,
+        autoAlpha: 0,
+        duration: 1,
+        stagger: 0.2
     });
 }
