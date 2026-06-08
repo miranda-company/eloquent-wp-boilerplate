@@ -207,6 +207,23 @@ Then test the export when the database change is important:
 
 If the exported database depends on theme file changes, commit `app/sql/starter.sql` and the changed theme files together.
 
+### Blueprint Check Helper
+
+Before committing blueprint changes, run:
+
+```bash
+php tools/check-blueprint.php
+```
+
+The helper checks that:
+
+- `Demo Page` is still the starter front page in `app/sql/starter.sql`.
+- The required theme files exist.
+- The approved plugin files exist.
+- The starter database activates the approved plugin stack.
+- Removed plugins are not present in the starter database.
+- The numbered docs still exist.
+
 ## Commit Standard
 
 Commit the exported theme files and database export together when they depend on each other.

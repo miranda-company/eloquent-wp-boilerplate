@@ -9,10 +9,10 @@ When improving the blueprint itself, use `docs/05-blueprint-editing-workflow.md`
 Use this checklist when starting a new website from the blueprint:
 
 1. Create a new local WordPress site for the client.
-2. Copy only the reusable blueprint theme, plugin, SQL, and docs files into the new site folder.
+2. Copy only the reusable blueprint theme, plugin, SQL, docs, and tools files into the new site folder.
 3. Keep Local's generated WordPress core files and `wp-config.php`.
-4. Import `app/sql/starter.sql` from Local's `Site shell`.
-5. Update `siteurl` and `home` to the new local domain before opening WordPress.
+4. Run the setup helper from Local's `Site shell`.
+5. Confirm `siteurl` and `home` match the new local domain before opening WordPress.
 6. Log in with the starter admin account.
 7. Confirm the front page is the starter `Demo Page`.
 8. Activate the `Llummio Blueprint` theme.
@@ -59,6 +59,7 @@ The important blueprint folders are:
 - `app/public/wp-content/plugins/`
 - `app/sql/starter.sql`
 - `docs/`
+- `tools/`
 
 Do not overwrite these Local-generated files and folders when creating a client site:
 
@@ -67,9 +68,43 @@ Do not overwrite these Local-generated files and folders when creating a client 
 - `app/public/wp-includes/`
 - WordPress root files such as `wp-load.php`, `wp-settings.php`, and `wp-login.php`
 
-WordPress core should be installed and managed by Local for the new client site. The blueprint only needs to provide the theme, approved plugins, starter SQL, and documentation.
+WordPress core should be installed and managed by Local for the new client site. The blueprint only needs to provide the theme, approved plugins, starter SQL, documentation, and setup helpers.
 
-### 1.3 Import The Starter Database
+### 1.3 Run The Setup Helper
+
+Use this process for the normal new-site setup.
+
+1. Start the Local site.
+2. In Local, open the site's `Site shell`.
+3. Confirm the shell opens in `app/public`.
+4. Run the setup helper, replacing the URL with the exact Local domain:
+
+```bash
+php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes
+```
+
+The helper imports `app/sql/starter.sql`, updates `siteurl` and `home`, activates the Llummio theme, activates the approved plugins, flushes permalinks, and confirms the starter `Demo Page`.
+
+If the helper cannot connect to the database, check Local's Database tab. If Local shows a custom port, rerun the helper with that port:
+
+```bash
+php ..\..\tools\setup-client-site.php --url=http://client-name.local --db-host=localhost:10005 --yes
+```
+
+After the helper passes:
+
+1. Restart the Local site.
+2. Log out of WordPress, or open the site in a private browser window.
+3. Confirm the starter admin works:
+
+```text
+Username: llummio-admin
+Password: llummio
+```
+
+4. Confirm old personal credentials do not work.
+
+### 1.4 Manual Starter Database Import
 
 Use this process for a fresh setup or when testing an updated `app/sql/starter.sql`.
 
@@ -161,10 +196,10 @@ If WP-CLI is not available in Site Shell, use Adminer as a fallback:
 3. Select the site's database, usually `local`.
 4. Drop the existing WordPress tables.
 5. Import `app/sql/starter.sql`.
-6. Update the `siteurl` and `home` rows manually, or run the SQL in `1.4 Update The Site URL`.
+6. Update the `siteurl` and `home` rows manually, or run the SQL in `1.5 Update The Site URL`.
 7. Restart the Local site before opening WordPress.
 
-### 1.4 Update The Site URL
+### 1.5 Update The Site URL
 
 Confirm WordPress uses the new Local domain.
 
@@ -201,7 +236,7 @@ If Local offers a `Fix it` button for the URL mismatch, it is okay to use it. It
 
 Do not continue building the client site until the homepage and WordPress admin both load cleanly.
 
-### 1.5 Open WordPress Admin
+### 1.6 Open WordPress Admin
 
 1. Open the Local site admin.
 2. Log in with the starter admin account: `llummio-admin`.
@@ -211,7 +246,7 @@ Do not continue building the client site until the homepage and WordPress admin 
 
 Do not create client user accounts until the site is ready for review or handoff.
 
-### 1.6 Activate Theme And Plugins
+### 1.7 Activate Theme And Plugins
 
 1. Go to Appearance > Themes.
 2. Activate `Llummio Blueprint`.
@@ -222,7 +257,7 @@ Do not create client user accounts until the site is ready for review or handoff
 
 If a plugin is not needed for the project, document the reason before removing it from the client build.
 
-### 1.7 Verify The Starter Site
+### 1.8 Verify The Starter Site
 
 Before starting client-specific work, check:
 

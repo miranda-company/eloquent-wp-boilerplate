@@ -6,11 +6,10 @@
  * php ..\..\tools\update-starter-demo-page.php
  */
 
-const LLUMMIO_DEMO_PAGE_DEFAULT_ID = 8;
-
+$config  = require __DIR__ . DIRECTORY_SEPARATOR . 'llummio-blueprint-config.php';
 $options = llummio_parse_options( $argv );
 $root    = dirname( __DIR__ );
-$post_id = isset( $options['post-id'] ) ? (int) $options['post-id'] : LLUMMIO_DEMO_PAGE_DEFAULT_ID;
+$post_id = isset( $options['post-id'] ) ? (int) $options['post-id'] : (int) $config['demo_page_id'];
 $sql     = isset( $options['sql'] ) ? $options['sql'] : $root . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'sql' . DIRECTORY_SEPARATOR . 'starter.sql';
 $dry_run = isset( $options['dry-run'] );
 
