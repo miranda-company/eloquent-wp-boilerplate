@@ -14,13 +14,14 @@ Use this checklist when starting a new website from the blueprint:
 4. Import `app/sql/starter.sql` from Local's `Site shell`.
 5. Update `siteurl` and `home` to the new local domain before opening WordPress.
 6. Log in with the starter admin account.
-7. Activate the `Llummio Blueprint` theme.
-8. Activate the approved plugins from `docs/07-plugin-stack.md`.
-9. Replace starter users, emails, logo, business schema, and site identity.
-10. Add client branding, content, media, forms, and legal pages.
-11. Check header, footer, forms, SEO basics, schema, and responsive layouts.
-12. Remove temporary content, visible wireframes, test data, and unused assets.
-13. Add production URLs, licenses, backups, SSL, caching, and final admin users before launch.
+7. Confirm the front page is the starter `Demo Page`.
+8. Activate the `Llummio Blueprint` theme.
+9. Activate the approved plugins from `docs/07-plugin-stack.md`.
+10. Replace starter users, emails, logo, business schema, and site identity.
+11. Add client branding, content, media, forms, and legal pages.
+12. Check header, footer, forms, SEO basics, schema, and responsive layouts.
+13. Remove temporary content, visible wireframes, test data, and unused assets.
+14. Add production URLs, licenses, backups, SSL, caching, and final admin users before launch.
 
 ## 1. Start From The Blueprint
 
@@ -114,13 +115,13 @@ wp db reset --yes
 
 6. Import the starter database.
 
-If the shell opens in `app/public`, use:
+If the shell opens in `app/public`, use only this command:
 
 ```bash
 wp db import ../sql/starter.sql
 ```
 
-If the shell opens in the site root, use:
+If the shell opens in the site root, use only this command:
 
 ```bash
 wp db import app/sql/starter.sql
@@ -226,6 +227,7 @@ If a plugin is not needed for the project, document the reason before removing i
 Before starting client-specific work, check:
 
 - The homepage loads.
+- The front page is the starter `Demo Page`.
 - The WordPress admin loads.
 - The `Llummio Blueprint` theme is active.
 - Required plugins are active.

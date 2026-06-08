@@ -273,8 +273,10 @@ Current Phase 1 status:
 - Starter database comments and pingbacks are closed by default.
 - Starter database active plugins match the approved lean stack.
 - Starter database default inactive widget blocks have been cleared.
+- Starter database front page now ships as `Demo Page`.
 - `style.css`, `generic.js`, and `animations.js` are focused on reusable foundation behavior.
 - Test-only GSAP, ScrollTrigger, and SplitText animation examples have been removed from `animations.js`.
+- A fresh Local smoke test passed using Site Shell, `wp db import ../sql/starter.sql`, corrected `siteurl` and `home`, and a Local database port in `DB_HOST`.
 
 ### Phase 2: Define Shared vs Client-Specific Boundaries
 

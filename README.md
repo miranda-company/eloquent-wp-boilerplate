@@ -10,6 +10,7 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 - Standard Llummio plugin stack, including premium plugins used internally.
 - Local app server configuration.
 - Cleaned starter database export at `app/sql/starter.sql`.
+- Maintenance helpers for keeping starter content in sync.
 
 ## Not Included
 

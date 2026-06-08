@@ -63,6 +63,28 @@ Only update `app/sql/starter.sql` when the blueprint database state should chang
 
 Do not update `app/sql/starter.sql` just because the header, footer, templates, or patterns changed. For those changes, use `Create Block Theme > Save Changes to Theme` and commit the changed theme files.
 
+### Updating The Demo Page
+
+The starter front page is `Demo Page`, currently page ID `8`. Any intentional change to this page should ship with the blueprint, because new client sites import it from `app/sql/starter.sql`.
+
+Use the focused updater for Demo Page edits. It updates only the page row and safe page metadata inside `app/sql/starter.sql`, so the diff stays small.
+
+1. Edit `Demo Page` in the blueprint WordPress site.
+2. Save the page in the editor.
+3. Open Local's `Site shell` for the blueprint site.
+4. Confirm the shell opens in `app/public`.
+5. Run:
+
+```bash
+php ..\..\tools\update-starter-demo-page.php
+```
+
+6. Review the Git diff for `app/sql/starter.sql`.
+7. Confirm the diff shows the expected Demo Page content change.
+8. Commit the changed `app/sql/starter.sql` with any related theme/plugin files.
+
+The updater intentionally skips noisy editor metadata such as `_edit_lock`. It is meant for normal Demo Page content changes. Use the full starter database export only when menus, forms, users, plugin settings, or broader database state changed.
+
 ### Before Exporting
 
 1. Save editor changes to the theme:

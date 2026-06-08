@@ -24,6 +24,7 @@ Each client project should start from this foundation, then receive its own bran
 | `app/sql/starter.sql` | Canonical clean starter database export. |
 | `conf/` | Local app server configuration. |
 | `docs/` | Internal setup, workflow, policy, and maintenance documentation. |
+| `tools/` | Small repository maintenance helpers. |
 | `logs/` | Local runtime logs. Ignored by Git. |
 
 ## Theme Conventions
