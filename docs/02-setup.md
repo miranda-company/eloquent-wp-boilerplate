@@ -12,7 +12,7 @@
 php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes
 ```
 
-6. If Local uses a custom database port and the helper cannot connect, rerun it with the Local port:
+6. The helper tries to detect Local's custom database port automatically. If it still cannot connect, rerun it with the Local port:
 
 ```bash
 php ..\..\tools\setup-client-site.php --url=http://client-name.local --db-host=localhost:10005 --yes

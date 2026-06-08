@@ -26,7 +26,7 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 3. Keep Local's generated WordPress core files and `wp-config.php`.
 4. Open Local's `Site shell`.
 5. Run `php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes`.
-6. If Local uses a custom database port, rerun with `--db-host=localhost:PORT`.
+6. If the helper cannot detect Local's custom database port, rerun with `--db-host=localhost:PORT`.
 7. Add premium plugin license keys inside WordPress admin after setup.
 8. Run `php tools/check-blueprint.php` before committing blueprint changes.
 

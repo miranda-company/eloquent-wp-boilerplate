@@ -103,11 +103,7 @@ function llummio_parse_options( array $argv ): array {
  * @return mixed
  */
 function llummio_run_wp_json( array $args ) {
-	$command = 'wp';
-
-	foreach ( $args as $arg ) {
-		$command .= ' ' . escapeshellarg( $arg );
-	}
+	$command = llummio_build_wp_command( array_merge( array( 'wp' ), $args ) );
 
 	$descriptor_spec = array(
 		0 => array( 'pipe', 'r' ),
@@ -140,6 +136,32 @@ function llummio_run_wp_json( array $args ) {
 	}
 
 	return $decoded;
+}
+
+/**
+ * @param array<int, string> $command Command parts.
+ * @return string
+ */
+function llummio_build_wp_command( array $command ): string {
+	$inner_command = implode( ' ', array_map( 'llummio_shell_arg', $command ) );
+
+	if ( 'Windows' === PHP_OS_FAMILY ) {
+		return 'cmd.exe /d /s /c ' . escapeshellarg( $inner_command );
+	}
+
+	return $inner_command;
+}
+
+/**
+ * @param string $arg Command argument.
+ * @return string
+ */
+function llummio_shell_arg( string $arg ): string {
+	if ( preg_match( '/^[A-Za-z0-9_@%+=:,.\/\\\\-]+$/', $arg ) ) {
+		return $arg;
+	}
+
+	return escapeshellarg( $arg );
 }
 
 /**

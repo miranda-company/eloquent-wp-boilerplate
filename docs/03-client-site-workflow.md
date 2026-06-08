@@ -83,9 +83,9 @@ Use this process for the normal new-site setup.
 php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes
 ```
 
-The helper imports `app/sql/starter.sql`, updates `siteurl` and `home`, activates the Llummio theme, activates the approved plugins, flushes permalinks, and confirms the starter `Demo Page`.
+The helper imports `app/sql/starter.sql`, updates `siteurl` and `home`, activates the Llummio theme, activates the approved plugins, flushes permalinks, and confirms the starter `Demo Page`. It also tries to detect Local's custom database port automatically.
 
-If the helper cannot connect to the database, check Local's Database tab. If Local shows a custom port, rerun the helper with that port:
+If the helper still cannot connect to the database, check Local's Database tab. If Local shows a custom port, rerun the helper with that port:
 
 ```bash
 php ..\..\tools\setup-client-site.php --url=http://client-name.local --db-host=localhost:10005 --yes

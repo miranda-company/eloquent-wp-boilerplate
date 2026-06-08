@@ -41,6 +41,13 @@ llummio_setup_run( array( 'wp', '--info' ) );
 if ( ! empty( $options['db-host'] ) ) {
 	llummio_setup_step( 'Updating Local database host.' );
 	llummio_setup_run( array( 'wp', 'config', 'set', 'DB_HOST', (string) $options['db-host'] ) );
+} else {
+	$detected_db_host = llummio_setup_detect_local_db_host( $root );
+
+	if ( null !== $detected_db_host ) {
+		llummio_setup_step( 'Detected Local database host.' );
+		llummio_setup_run( array( 'wp', 'config', 'set', 'DB_HOST', $detected_db_host ) );
+	}
 }
 
 llummio_setup_step( 'Checking database connection.' );
@@ -49,7 +56,7 @@ $db_check = llummio_setup_run( array( 'wp', 'db', 'check' ), false );
 if ( 0 !== $db_check['status'] ) {
 	llummio_setup_fail(
 		"WP-CLI could not connect to the database.\n" .
-		"If Local shows a custom database port, rerun with --db-host=localhost:PORT.\n" .
+		"If Local shows a custom database port, rerun with --db-host=localhost:PORT. Example: --db-host=localhost:10005\n" .
 		trim( $db_check['error'] )
 	);
 }
@@ -72,9 +79,9 @@ llummio_setup_step( 'Refreshing permalinks.' );
 llummio_setup_run( array( 'wp', 'rewrite', 'flush' ) );
 
 llummio_setup_step( 'Verifying starter site.' );
-$siteurl = trim( llummio_setup_run( array( 'wp', 'option', 'get', 'siteurl' ) )['output'] );
-$home    = trim( llummio_setup_run( array( 'wp', 'option', 'get', 'home' ) )['output'] );
-$title   = trim( llummio_setup_run( array( 'wp', 'post', 'get', (string) $config['demo_page_id'], '--field=post_title' ) )['output'] );
+$siteurl = trim( llummio_setup_run( array( 'wp', 'option', 'get', 'siteurl' ), true, false )['output'] );
+$home    = trim( llummio_setup_run( array( 'wp', 'option', 'get', 'home' ), true, false )['output'] );
+$title   = trim( llummio_setup_run( array( 'wp', 'post', 'get', (string) $config['demo_page_id'], '--field=post_title' ), true, false )['output'] );
 
 if ( $site_url !== $siteurl || $site_url !== $home ) {
 	llummio_setup_fail( "URL verification failed. siteurl={$siteurl}; home={$home}" );
@@ -128,10 +135,11 @@ function llummio_setup_step( string $message ): void {
 /**
  * @param array<int, string> $command Command parts.
  * @param bool               $fail_on_error Whether to exit on failure.
+ * @param bool               $show_output Whether to print command output.
  * @return array{status:int, output:string, error:string}
  */
-function llummio_setup_run( array $command, bool $fail_on_error = true ): array {
-	$command_string = implode( ' ', array_map( 'escapeshellarg', $command ) );
+function llummio_setup_run( array $command, bool $fail_on_error = true, bool $show_output = true ): array {
+	$command_string = llummio_setup_build_command( $command );
 
 	$descriptor_spec = array(
 		0 => array( 'pipe', 'r' ),
@@ -157,7 +165,7 @@ function llummio_setup_run( array $command, bool $fail_on_error = true ): array 
 		llummio_setup_fail( trim( $error ) ?: "Command failed: {$command_string}" );
 	}
 
-	if ( '' !== trim( $output ) ) {
+	if ( $show_output && '' !== trim( $output ) ) {
 		echo trim( $output ) . "\n";
 	}
 
@@ -166,6 +174,178 @@ function llummio_setup_run( array $command, bool $fail_on_error = true ): array 
 		'output' => $output,
 		'error'  => $error,
 	);
+}
+
+/**
+ * Try to infer Local's MySQL host from Local runtime files/env vars.
+ *
+ * @param string $root Local site root.
+ * @return string|null
+ */
+function llummio_setup_detect_local_db_host( string $root ): ?string {
+	$current_db_host = llummio_setup_run( array( 'wp', 'config', 'get', 'DB_HOST' ), false, false );
+	$current_db_host = 0 === $current_db_host['status'] ? trim( $current_db_host['output'] ) : '';
+
+	if ( '' !== $current_db_host && false !== strpos( $current_db_host, ':' ) ) {
+		return null;
+	}
+
+	$port = llummio_setup_detect_local_db_port( $root );
+
+	if ( null === $port ) {
+		return null;
+	}
+
+	$host = '' !== $current_db_host ? $current_db_host : 'localhost';
+
+	if ( '127.0.0.1' !== $host && 'localhost' !== $host ) {
+		return null;
+	}
+
+	return $host . ':' . $port;
+}
+
+/**
+ * @param string $root Local site root.
+ * @return string|null
+ */
+function llummio_setup_detect_local_db_port( string $root ): ?string {
+	$env_port = getenv( 'LOCAL_DB_PORT' ) ?: getenv( 'MYSQL_TCP_PORT' );
+
+	if ( llummio_setup_is_port( $env_port ) ) {
+		return (string) $env_port;
+	}
+
+	$site_config_port = llummio_setup_detect_port_from_local_site_json( $root );
+
+	if ( null !== $site_config_port ) {
+		return $site_config_port;
+	}
+
+	$php_ini = php_ini_loaded_file();
+
+	if ( false !== $php_ini && '' !== $php_ini ) {
+		$conf_dir = dirname( dirname( $php_ini ) );
+		$port     = llummio_setup_detect_port_from_mysql_config( $conf_dir . DIRECTORY_SEPARATOR . 'mysql' . DIRECTORY_SEPARATOR . 'my.cnf' );
+
+		if ( null !== $port ) {
+			return $port;
+		}
+	}
+
+	return null;
+}
+
+/**
+ * @param string $root Local site root.
+ * @return string|null
+ */
+function llummio_setup_detect_port_from_local_site_json( string $root ): ?string {
+	$path = $root . DIRECTORY_SEPARATOR . 'local-site.json';
+
+	if ( ! is_file( $path ) ) {
+		return null;
+	}
+
+	$contents = file_get_contents( $path );
+
+	if ( false === $contents ) {
+		return null;
+	}
+
+	$data = json_decode( $contents, true );
+
+	if ( ! is_array( $data ) ) {
+		return null;
+	}
+
+	return llummio_setup_find_port_in_array( $data );
+}
+
+/**
+ * @param mixed $value Value.
+ * @return string|null
+ */
+function llummio_setup_find_port_in_array( $value ): ?string {
+	if ( ! is_array( $value ) ) {
+		return null;
+	}
+
+	foreach ( $value as $key => $item ) {
+		if ( is_string( $key ) && 'port' === strtolower( $key ) && llummio_setup_is_port( $item ) ) {
+			return (string) $item;
+		}
+
+		$nested = llummio_setup_find_port_in_array( $item );
+
+		if ( null !== $nested ) {
+			return $nested;
+		}
+	}
+
+	return null;
+}
+
+/**
+ * @param string $path MySQL config path.
+ * @return string|null
+ */
+function llummio_setup_detect_port_from_mysql_config( string $path ): ?string {
+	if ( ! is_file( $path ) ) {
+		return null;
+	}
+
+	$contents = file_get_contents( $path );
+
+	if ( false === $contents ) {
+		return null;
+	}
+
+	if ( preg_match( '/^\s*port\s*=\s*([0-9]{2,5})\s*$/m', $contents, $matches ) ) {
+		return llummio_setup_is_port( $matches[1] ) ? $matches[1] : null;
+	}
+
+	return null;
+}
+
+/**
+ * @param mixed $port Port.
+ * @return bool
+ */
+function llummio_setup_is_port( $port ): bool {
+	if ( ! is_scalar( $port ) ) {
+		return false;
+	}
+
+	$port = (string) $port;
+
+	return (bool) preg_match( '/^[0-9]{2,5}$/', $port ) && (int) $port > 0 && (int) $port <= 65535;
+}
+
+/**
+ * @param array<int, string> $command Command parts.
+ * @return string
+ */
+function llummio_setup_build_command( array $command ): string {
+	$inner_command = implode( ' ', array_map( 'llummio_setup_shell_arg', $command ) );
+
+	if ( 'Windows' === PHP_OS_FAMILY ) {
+		return 'cmd.exe /d /s /c ' . escapeshellarg( $inner_command );
+	}
+
+	return $inner_command;
+}
+
+/**
+ * @param string $arg Command argument.
+ * @return string
+ */
+function llummio_setup_shell_arg( string $arg ): string {
+	if ( preg_match( '/^[A-Za-z0-9_@%+=:,.\/\\\\-]+$/', $arg ) ) {
+		return $arg;
+	}
+
+	return escapeshellarg( $arg );
 }
 
 /**
