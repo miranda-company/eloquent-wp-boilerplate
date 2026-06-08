@@ -10,7 +10,7 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 - Standard Llummio plugin stack, including premium plugins used internally.
 - Local app server configuration.
 - Cleaned starter database export at `app/sql/starter.sql`.
-- Maintenance helpers for keeping starter content in sync.
+- Maintenance helpers for packaging, setup, and blueprint checks.
 
 ## Not Included
 
@@ -22,13 +22,14 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 ## Use
 
 1. Create a new Local WordPress site.
-2. Copy only the reusable blueprint theme, approved plugins, starter SQL, docs, and tools into the site folder.
-3. Keep Local's generated WordPress core files and `wp-config.php`.
-4. Open Local's `Site shell`.
-5. Run `php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes`.
-6. If the helper cannot detect Local's custom database port, rerun with `--db-host=localhost:PORT`.
-7. Add premium plugin license keys inside WordPress admin after setup.
-8. Run `php tools/check-blueprint.php` before committing blueprint changes.
+2. From this repo, run `php tools/prepare-client-package.php --name=client-name`.
+3. Copy the prepared package contents into the new Local site folder.
+4. Keep Local's generated WordPress core files and `wp-config.php`.
+5. Open Local's `Site shell`.
+6. Run `php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes`.
+7. If the helper cannot detect Local's custom database port, rerun with `--db-host=localhost:PORT`.
+8. Add premium plugin license keys inside WordPress admin after setup.
+9. Run `php tools/check-blueprint.php` before committing blueprint changes.
 
 ## Documentation
 

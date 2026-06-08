@@ -9,19 +9,20 @@ When improving the blueprint itself, use `docs/05-blueprint-editing-workflow.md`
 Use this checklist when starting a new website from the blueprint:
 
 1. Create a new local WordPress site for the client.
-2. Copy only the reusable blueprint theme, plugin, SQL, docs, and tools files into the new site folder.
-3. Keep Local's generated WordPress core files and `wp-config.php`.
-4. Run the setup helper from Local's `Site shell`.
-5. Confirm `siteurl` and `home` match the new local domain before opening WordPress.
-6. Log in with the starter admin account.
-7. Confirm the front page is the starter `Demo Page`.
-8. Activate the `Llummio Blueprint` theme.
-9. Activate the approved plugins from `docs/07-plugin-stack.md`.
-10. Replace starter users, emails, logo, business schema, and site identity.
-11. Add client branding, content, media, forms, and legal pages.
-12. Check header, footer, forms, SEO basics, schema, and responsive layouts.
-13. Remove temporary content, visible wireframes, test data, and unused assets.
-14. Add production URLs, licenses, backups, SSL, caching, and final admin users before launch.
+2. Prepare a clean blueprint package.
+3. Copy the prepared package contents into the new site folder.
+4. Keep Local's generated WordPress core files and `wp-config.php`.
+5. Run the setup helper from Local's `Site shell`.
+6. Confirm `siteurl` and `home` match the new local domain before opening WordPress.
+7. Log in with the starter admin account.
+8. Confirm the front page is the starter `Demo Page`.
+9. Activate the `Llummio Blueprint` theme.
+10. Activate the approved plugins from `docs/07-plugin-stack.md`.
+11. Replace starter users, emails, logo, business schema, and site identity.
+12. Add client branding, content, media, forms, and legal pages.
+13. Check header, footer, forms, SEO basics, schema, and responsive layouts.
+14. Remove temporary content, visible wireframes, test data, and unused assets.
+15. Add production URLs, licenses, backups, SSL, caching, and final admin users before launch.
 
 ## 1. Start From The Blueprint
 
@@ -45,21 +46,38 @@ Password: llummio
 
 These credentials are only for local starter sites. Replace them before staging, production, client review, or handoff.
 
-### 1.2 Add The Blueprint Files
+### 1.2 Prepare The Blueprint Package
 
-1. Stop the Local site.
-2. Open the Local site folder.
-3. Copy only the reusable blueprint files into the Local site folder.
-4. Keep the Local-generated WordPress core files and `wp-config.php` from the new site.
-5. Do not copy old uploads, cache folders, logs, another client's media, or another site's `wp-config.php` into the new site.
+Run this from the blueprint repository before copying files into the new Local site:
 
-The important blueprint folders are:
+```bash
+php tools/prepare-client-package.php --name=client-name
+```
+
+The helper runs the blueprint check first, then creates an ignored `.blueprint-package-*` folder containing only the reusable files needed for a new site.
+
+The prepared package contains:
 
 - `app/public/wp-content/themes/llummio-blueprint/`
 - `app/public/wp-content/plugins/`
 - `app/sql/starter.sql`
 - `docs/`
 - `tools/`
+- `README.md`
+
+To also create a zip, run:
+
+```bash
+php tools/prepare-client-package.php --name=client-name --zip
+```
+
+### 1.3 Add The Blueprint Package
+
+1. Stop the Local site.
+2. Open the Local site folder.
+3. Copy the contents of the prepared package into the Local site folder.
+4. Keep the Local-generated WordPress core files and `wp-config.php` from the new site.
+5. Do not copy old uploads, cache folders, logs, another client's media, or another site's `wp-config.php` into the new site.
 
 Do not overwrite these Local-generated files and folders when creating a client site:
 
@@ -70,7 +88,7 @@ Do not overwrite these Local-generated files and folders when creating a client 
 
 WordPress core should be installed and managed by Local for the new client site. The blueprint only needs to provide the theme, approved plugins, starter SQL, documentation, and setup helpers.
 
-### 1.3 Run The Setup Helper
+### 1.4 Run The Setup Helper
 
 Use this process for the normal new-site setup.
 
@@ -104,7 +122,7 @@ Password: llummio
 
 4. Confirm old personal credentials do not work.
 
-### 1.4 Manual Starter Database Import
+### 1.5 Manual Starter Database Import
 
 Use this process for a fresh setup or when testing an updated `app/sql/starter.sql`.
 
@@ -196,10 +214,10 @@ If WP-CLI is not available in Site Shell, use Adminer as a fallback:
 3. Select the site's database, usually `local`.
 4. Drop the existing WordPress tables.
 5. Import `app/sql/starter.sql`.
-6. Update the `siteurl` and `home` rows manually, or run the SQL in `1.5 Update The Site URL`.
+6. Update the `siteurl` and `home` rows manually, or run the SQL in `1.6 Update The Site URL`.
 7. Restart the Local site before opening WordPress.
 
-### 1.5 Update The Site URL
+### 1.6 Update The Site URL
 
 Confirm WordPress uses the new Local domain.
 
@@ -236,7 +254,7 @@ If Local offers a `Fix it` button for the URL mismatch, it is okay to use it. It
 
 Do not continue building the client site until the homepage and WordPress admin both load cleanly.
 
-### 1.6 Open WordPress Admin
+### 1.7 Open WordPress Admin
 
 1. Open the Local site admin.
 2. Log in with the starter admin account: `llummio-admin`.
@@ -246,7 +264,7 @@ Do not continue building the client site until the homepage and WordPress admin 
 
 Do not create client user accounts until the site is ready for review or handoff.
 
-### 1.7 Activate Theme And Plugins
+### 1.8 Activate Theme And Plugins
 
 1. Go to Appearance > Themes.
 2. Activate `Llummio Blueprint`.
@@ -257,7 +275,7 @@ Do not create client user accounts until the site is ready for review or handoff
 
 If a plugin is not needed for the project, document the reason before removing it from the client build.
 
-### 1.8 Verify The Starter Site
+### 1.9 Verify The Starter Site
 
 Before starting client-specific work, check:
 
