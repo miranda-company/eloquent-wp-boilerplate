@@ -21,12 +21,13 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 ## Use
 
 1. Create a new Local WordPress site.
-2. Copy or clone this blueprint into the site folder.
-3. Install WordPress core if needed.
-4. Import `app/sql/starter.sql`.
-5. Activate the plugins listed in `docs/07-plugin-stack.md`.
-6. Activate the `llummio-blueprint` theme.
-7. Add premium plugin license keys inside WordPress admin after setup.
+2. Copy only the reusable blueprint theme, approved plugins, starter SQL, and docs into the site folder.
+3. Keep Local's generated WordPress core files and `wp-config.php`.
+4. Import `app/sql/starter.sql` from Local's `Site shell`.
+5. Confirm Local's database host and port are correct in `wp-config.php`.
+6. Activate the plugins listed in `docs/07-plugin-stack.md`.
+7. Activate the `llummio-blueprint` theme.
+8. Add premium plugin license keys inside WordPress admin after setup.
 
 ## Documentation
 
