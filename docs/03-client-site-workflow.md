@@ -64,26 +64,72 @@ WordPress core can be installed by Local. The blueprint does not need to track W
 
 Use this process for a fresh setup or when testing an updated `app/sql/starter.sql`.
 
+Use Local's `Site shell` when possible. It is faster than Adminer and lets the team import the starter database and fix the Local URL before opening WordPress.
+
 1. Start the Local site.
-2. In Local, open the site and go to the Database tab.
-3. Open Adminer from Local.
-4. Select the site's database, usually `local`.
-5. If the site already has content you need to keep, export a backup before continuing.
-6. For a re-import, select all existing WordPress tables and drop them before importing the starter database.
-7. Confirm the database no longer shows old `wp_` tables.
-8. Use Import to upload `app/sql/starter.sql`.
-9. Wait for the import to finish before opening WordPress admin.
-10. Log out of WordPress, or open the site in a private browser window.
-11. Confirm the starter admin works:
+2. In Local, open the site's `Site shell`.
+3. Confirm WP-CLI works:
+
+```bash
+wp --info
+```
+
+4. Reset the local database:
+
+```bash
+wp db reset --yes
+```
+
+5. Import the starter database.
+
+If the shell opens in `app/public`, use:
+
+```bash
+wp db import ../sql/starter.sql
+```
+
+If the shell opens in the site root, use:
+
+```bash
+wp db import app/sql/starter.sql
+```
+
+6. Update the imported URL values before opening WordPress. Replace the URL with the exact Local domain for the new site:
+
+```bash
+wp option update siteurl "http://client-name.local"
+wp option update home "http://client-name.local"
+```
+
+7. Confirm both values are correct:
+
+```bash
+wp option get siteurl
+wp option get home
+```
+
+8. Restart the Local site.
+9. Log out of WordPress, or open the site in a private browser window.
+10. Confirm the starter admin works:
 
 ```text
 Username: llummio-admin
 Password: llummio
 ```
 
-12. Confirm old personal credentials do not work.
+11. Confirm old personal credentials do not work.
 
-After import, the database may still contain the blueprint's original local URL. This is normal and should be corrected in the next step.
+After import, the database contains the blueprint's original local URL. This is normal, but it must be corrected before opening WordPress. If Local shows `Warning! This site's WordPress URL settings do not match the host set in Local`, fix the URL mismatch first.
+
+If WP-CLI is not available in Site Shell, use Adminer as a fallback:
+
+1. In Local, open the site and go to the Database tab.
+2. Open Adminer from Local.
+3. Select the site's database, usually `local`.
+4. Drop the existing WordPress tables.
+5. Import `app/sql/starter.sql`.
+6. Update the `siteurl` and `home` rows manually, or run the SQL in `1.4 Update The Site URL`.
+7. Restart the Local site before opening WordPress.
 
 ### 1.4 Update The Site URL
 
@@ -101,6 +147,26 @@ https://client-name.local
 ```
 
 If the imported starter database uses another domain, replace it with the new Local domain before continuing.
+
+In Adminer, run this SQL after importing `app/sql/starter.sql`, replacing the URL with the exact Local site domain:
+
+```sql
+UPDATE wp_options
+SET option_value = 'http://client-name.local'
+WHERE option_name IN ('siteurl', 'home');
+```
+
+Then restart the Local site before opening WordPress admin.
+
+If Local offers a `Fix it` button for the URL mismatch, it is okay to use it. It should update these same values. If the site still shows a `502 Request Error` after fixing the URL:
+
+1. Stop the Local site.
+2. Start the Local site again.
+3. Confirm `siteurl` and `home` still match the Local domain.
+4. Confirm no other Local site is using the same domain.
+5. Check Local's PHP and router logs for the first real error.
+
+Do not continue building the client site until the homepage and WordPress admin both load cleanly.
 
 ### 1.5 Open WordPress Admin
 
