@@ -41,5 +41,6 @@ Read these documents in order:
 7. `docs/07-plugin-stack.md` lists the approved plugin stack.
 8. `docs/08-internal-plugins.md` documents the internal Llummio plugins.
 9. `docs/09-maintenance.md` describes the ongoing care routine for client sites.
+10. `docs/10-ideal-architecture-roadmap.md` explains the long-term architecture for updating many client sites professionally.
 
 Keep this repository private.
