@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Llummio Editor Helpers
  * Description: Lightweight editor helpers for Llummio blueprint sites, including SEO fields, canonical tags, schema tools, performance toggles, and wireframe preview controls.
- * Version: 0.6.6
+ * Version: 0.6.7
  * Author: Llummio
  * Text Domain: llummio-editor-helpers
  */
@@ -22,11 +22,12 @@ const LLUMMIO_EDITOR_HELPERS_SCHEMA_SERVICE_AREA_KEY = '_llummio_schema_service_
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_FAQ_KEY  = '_llummio_schema_faq_items';
 const LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY   = '_llummio_load_gsap';
 const LLUMMIO_EDITOR_HELPERS_LOAD_SCROLLTRIGGER_KEY = '_llummio_load_scrolltrigger';
+const LLUMMIO_EDITOR_HELPERS_LOAD_SPLITTEXT_KEY = '_llummio_load_splittext';
 const LLUMMIO_EDITOR_HELPERS_SHOW_WIRE_FRONTEND_KEY = '_llummio_show_wire_frontend';
 const LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY = '_llummio_wire_frontend_color';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION = 'llummio_editor_helpers_settings';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP  = 'llummio_editor_helpers_settings_group';
-const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.6';
+const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.7';
 
 /**
  * Register SEO metadata for public editable post types.
@@ -722,6 +723,7 @@ function llummio_editor_helpers_boolean_meta_keys() {
 		LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY,
 		LLUMMIO_EDITOR_HELPERS_LOAD_GSAP_KEY,
 		LLUMMIO_EDITOR_HELPERS_LOAD_SCROLLTRIGGER_KEY,
+		LLUMMIO_EDITOR_HELPERS_LOAD_SPLITTEXT_KEY,
 		LLUMMIO_EDITOR_HELPERS_SHOW_WIRE_FRONTEND_KEY,
 	);
 }

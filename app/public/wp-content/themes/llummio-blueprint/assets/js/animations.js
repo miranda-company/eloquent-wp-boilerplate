@@ -6,34 +6,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.documentElement.classList.add("llummio-gsap-ready");
-    Animate();
+
+    animations();
 
     if (window.ScrollTrigger) {
         window.gsap.registerPlugin(window.ScrollTrigger);
         document.documentElement.classList.add("llummio-scrolltrigger-ready");
-        AnimateOnTrigger();
+
+        animateOnTrigger();
+    }
+
+    if (window.SplitText) {
+        window.gsap.registerPlugin(window.SplitText);
+        document.documentElement.classList.add("llummio-splittext-ready");
+
+        animateSplitText();
     }
 });
 
 
-function Animate() {
-    console.log("Animating page");
-
-    // Create a timeline
-    let tl = gsap.timeline()
-
-    // add the tweens to the timeline - Note we're using tl.to not gsap.to
-    tl.from(".box", { y: 40, autoAlpha: 0, duration: 1, stagger: 0.1 });
+function animations() {
+    const tl = gsap.timeline();
+    tl.from(".anim-el", { y: 40, autoAlpha: 0, duration: 1, stagger: 0.25 });
 }
 
 
-function AnimateOnTrigger() {
-    console.log("Animating on scroll trigger");
-    // Create a timeline
-    let tl = gsap.timeline()
-
-    // add the tweens to the timeline - Note we're using tl.to not gsap.to
-    gsap.from(".el-trigger", {
+function animateOnTrigger() {
+    gsap.from(".anim-el-on-trigger", {
         scrollTrigger: {
             trigger: ".animation-trigger-container",
             markers: true,
@@ -42,6 +41,21 @@ function AnimateOnTrigger() {
         y: 40,
         autoAlpha: 0,
         duration: 1,
-        stagger: 0.2
+        stagger: 0.25
     });
+}
+
+function animateSplitText() {
+    console.log("Split Text Animation");
+
+    var split = SplitText.create(".split-text", {
+        type: "words"
+    });
+
+    gsap.from(split.words, {
+        y: 40,
+        autoAlpha: 0,
+        stagger: 0.25
+    });
+
 }

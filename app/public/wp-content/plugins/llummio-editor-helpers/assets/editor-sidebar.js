@@ -51,6 +51,7 @@
 	var SCHEMA_FAQ_KEY = '_llummio_schema_faq_items';
 	var LOAD_GSAP_KEY = '_llummio_load_gsap';
 	var LOAD_SCROLLTRIGGER_KEY = '_llummio_load_scrolltrigger';
+	var LOAD_SPLITTEXT_KEY = '_llummio_load_splittext';
 	var SHOW_WIRE_FRONTEND_KEY = '_llummio_show_wire_frontend';
 	var WIRE_FRONTEND_COLOR_KEY = '_llummio_wire_frontend_color';
 	var TITLE_SUFFIX = ' %sep% %sitename%';
@@ -294,6 +295,7 @@
 		var faqItems = parseFaqItems( meta[ SCHEMA_FAQ_KEY ] );
 		var loadGsap = !! meta[ LOAD_GSAP_KEY ];
 		var loadScrollTrigger = !! meta[ LOAD_SCROLLTRIGGER_KEY ];
+		var loadSplitText = !! meta[ LOAD_SPLITTEXT_KEY ];
 		var showWireOnFrontend = !! meta[ SHOW_WIRE_FRONTEND_KEY ];
 		var savedWireframeColor = isAllowedWireframeColor( meta[ WIRE_FRONTEND_COLOR_KEY ] ) ? meta[ WIRE_FRONTEND_COLOR_KEY ] : '';
 		var activeWireframeColor = savedWireframeColor || wireframeColor;
@@ -592,6 +594,7 @@
 							var values = {};
 							values[ LOAD_GSAP_KEY ] = isChecked;
 							values[ LOAD_SCROLLTRIGGER_KEY ] = isChecked ? loadScrollTrigger : false;
+							values[ LOAD_SPLITTEXT_KEY ] = isChecked ? loadSplitText : false;
 							updateMetaValues( values );
 						},
 					} ),
@@ -603,6 +606,17 @@
 							var values = {};
 							values[ LOAD_GSAP_KEY ] = isChecked ? true : loadGsap;
 							values[ LOAD_SCROLLTRIGGER_KEY ] = isChecked;
+							updateMetaValues( values );
+						},
+					} ),
+					el( CheckboxControl, {
+						label: __( 'Load SplitText on this page', 'llummio-editor-helpers' ),
+						help: __( 'Use only when this page needs text-splitting GSAP animations.', 'llummio-editor-helpers' ),
+						checked: loadSplitText,
+						onChange: function( isChecked ) {
+							var values = {};
+							values[ LOAD_GSAP_KEY ] = isChecked ? true : loadGsap;
+							values[ LOAD_SPLITTEXT_KEY ] = isChecked;
 							updateMetaValues( values );
 						},
 					} )

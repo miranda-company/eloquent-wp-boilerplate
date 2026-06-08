@@ -10,13 +10,13 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.6.6`
+Version: `0.6.7`
 
 ### Purpose
 
 `Llummio Editor Helpers` collects small editing tools used in Llummio blueprint sites.
 
-It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, page-level GSAP and ScrollTrigger loading toggles, editor-only wireframe previews, and optional page-level frontend wireframes.
+It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, page-level GSAP, ScrollTrigger, and SplitText loading toggles, editor-only wireframe previews, and optional page-level frontend wireframes.
 
 The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
 
@@ -35,7 +35,7 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Adds a top-level `Global Schema` admin menu item below `Llummio Forms`, using the Llummio SVG icon.
 - Adds automatic `Organization` or `LocalBusiness`, `WebSite`, `WebPage`, and `BlogPosting` schema.
 - Adds page-level schema controls for `Service`, `Article`, `FAQPage`, and disabled schema.
-- Adds page-level performance controls for loading GSAP and ScrollTrigger only on pages that need them.
+- Adds page-level performance controls for loading GSAP, ScrollTrigger, and SplitText only on pages that need them.
 - Registers the fields with the WordPress REST API for future editor integrations.
 - Adds an editor-only wireframe toggle for the theme `.wire` helper class.
 - Adds a saved page-level frontend wireframe toggle for showing `.wire` borders on the public page.
@@ -69,6 +69,7 @@ The plugin stores data in post meta:
 - `_llummio_schema_faq_items`
 - `_llummio_load_gsap`
 - `_llummio_load_scrolltrigger`
+- `_llummio_load_splittext`
 - `_llummio_show_wire_frontend`
 - `_llummio_wire_frontend_color`
 
@@ -182,10 +183,13 @@ The sidebar includes a `Performance Tools` section with these page-level checkbo
 
 - `Load GSAP on this page`
 - `Load ScrollTrigger on this page`
+- `Load SplitText on this page`
 
 GSAP is disabled by default. Enable it only on pages that have custom GSAP animations. The theme reads the saved `_llummio_load_gsap` meta value and loads `gsap.min.js` plus `assets/js/animations.js` only for that page.
 
 ScrollTrigger is also disabled by default. Enable it only on pages that need scroll-based GSAP animations. ScrollTrigger depends on GSAP, so turning ScrollTrigger on also turns GSAP on. The theme only enqueues `assets/vendor/gsap/ScrollTrigger.min.js` when the page has `_llummio_load_scrolltrigger` enabled and the vendor file exists.
+
+SplitText is also disabled by default. Enable it only on pages that need text-splitting GSAP animations. SplitText depends on GSAP, so turning SplitText on also turns GSAP on. The theme only enqueues `assets/vendor/gsap/SplitText.min.js` when the page has `_llummio_load_splittext` enabled and the vendor file exists.
 
 General site JavaScript belongs in the theme's `assets/js/generic.js` file and loads independently of GSAP.
 
@@ -193,6 +197,7 @@ The theme also exposes these filters for developer-only overrides:
 
 - `llummio_blueprint_page_needs_gsap`
 - `llummio_blueprint_page_needs_scrolltrigger`
+- `llummio_blueprint_page_needs_splittext`
 
 ### Wireframe Toggle
 
@@ -293,20 +298,23 @@ When upgrading the blueprint to a new major WordPress version:
 16. Confirm `Load ScrollTrigger on this page` saves and reloads correctly.
 17. Confirm pages with ScrollTrigger disabled do not load `ScrollTrigger.min.js`.
 18. Confirm pages with ScrollTrigger enabled load `ScrollTrigger.min.js` when the vendor file exists.
-19. Confirm a singular page outputs one canonical tag.
-20. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-21. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
-22. Save `Organization` settings and confirm the saved values stay after reload.
-23. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
-24. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
-25. Confirm a post outputs `BlogPosting`.
-26. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
-27. Set a page to `Article` and confirm the page node changes to `Article`.
-28. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
-29. Set schema to `None` and confirm schema output stops on that page.
-30. Enable `No index` and confirm schema output stops on that page.
-31. Confirm no duplicate schema output appears if a full SEO plugin is active.
-32. Confirm no PHP warnings appear in WordPress admin.
+19. Confirm `Load SplitText on this page` saves and reloads correctly.
+20. Confirm pages with SplitText disabled do not load `SplitText.min.js`.
+21. Confirm pages with SplitText enabled load `SplitText.min.js` when the vendor file exists.
+22. Confirm a singular page outputs one canonical tag.
+23. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
+24. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
+25. Save `Organization` settings and confirm the saved values stay after reload.
+26. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
+27. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
+28. Confirm a post outputs `BlogPosting`.
+29. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
+30. Set a page to `Article` and confirm the page node changes to `Article`.
+31. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
+32. Set schema to `None` and confirm schema output stops on that page.
+33. Enable `No index` and confirm schema output stops on that page.
+34. Confirm no duplicate schema output appears if a full SEO plugin is active.
+35. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 

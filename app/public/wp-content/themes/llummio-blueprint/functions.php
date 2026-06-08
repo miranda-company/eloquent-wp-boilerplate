@@ -303,6 +303,22 @@ function llummio_blueprint_enqueue_page_scripts() {
 		}
 	}
 
+	if ( llummio_blueprint_page_needs_splittext() ) {
+		$splittext_path = get_theme_file_path( 'assets/vendor/gsap/SplitText.min.js' );
+
+		if ( file_exists( $splittext_path ) ) {
+			wp_enqueue_script(
+				'gsap-splittext',
+				get_theme_file_uri( 'assets/vendor/gsap/SplitText.min.js' ),
+				array( 'gsap-js' ),
+				filemtime( $splittext_path ),
+				true
+			);
+
+			$animation_dependencies[] = 'gsap-splittext';
+		}
+	}
+
 	wp_enqueue_script(
 		'llummio-blueprint-animations',
 		get_theme_file_uri( 'assets/js/animations.js' ),
@@ -356,6 +372,29 @@ function llummio_blueprint_page_needs_scrolltrigger() {
 	return (bool) apply_filters(
 		'llummio_blueprint_page_needs_scrolltrigger',
 		$needs_scrolltrigger,
+		$post
+	);
+}
+
+/**
+ * Check whether the current page opted into GSAP SplitText.
+ */
+function llummio_blueprint_page_needs_splittext() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_queried_object();
+
+	if ( ! $post instanceof WP_Post ) {
+		return false;
+	}
+
+	$needs_splittext = '1' === get_post_meta( $post->ID, '_llummio_load_splittext', true );
+
+	return (bool) apply_filters(
+		'llummio_blueprint_page_needs_splittext',
+		$needs_splittext,
 		$post
 	);
 }

@@ -35,6 +35,7 @@ Theme JavaScript is split by purpose:
 - `assets/js/generic.js` loads across the site for small behavior that does not require GSAP.
 - `assets/js/animations.js` loads only on pages that opt in to GSAP from the Llummio Editor Helpers sidebar.
 - `assets/vendor/gsap/ScrollTrigger.min.js` is loaded only on pages that opt in to ScrollTrigger from the same sidebar.
+- `assets/vendor/gsap/SplitText.min.js` is loaded only on pages that opt in to SplitText from the same sidebar.
 
 Create extra page-specific JavaScript files only when a page has a large or unusual interaction that would make `animations.js` harder to maintain.
 
