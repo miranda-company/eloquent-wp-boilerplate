@@ -33,7 +33,7 @@ The theme stylesheet should stay small and readable. Keep reusable tokens, base 
 Theme JavaScript is split by purpose:
 
 - `assets/js/generic.js` loads across the site for small behavior that does not require GSAP.
-- `assets/js/animations.js` loads only on pages that opt in to GSAP from the Llummio Editor Helpers sidebar.
+- `assets/js/animations.js` loads only on pages that opt in to GSAP from the Llummio Editor Helpers sidebar. Keep it free of test-only animation examples; add only reusable animation patterns or project code that has been intentionally promoted back into the shared blueprint.
 - `assets/vendor/gsap/ScrollTrigger.min.js` is loaded only on pages that opt in to ScrollTrigger from the same sidebar.
 - `assets/vendor/gsap/SplitText.min.js` is loaded only on pages that opt in to SplitText from the same sidebar.
 

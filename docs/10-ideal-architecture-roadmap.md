@@ -267,6 +267,15 @@ Tasks:
 - Remove test-only animation examples from shared files when no longer needed.
 - Confirm the blueprint can create a new site without manual cleanup surprises.
 
+Current Phase 1 status:
+
+- Docs are numbered and listed in reading order from `01` to `10`.
+- Starter database comments and pingbacks are closed by default.
+- Starter database active plugins match the approved lean stack.
+- Starter database default inactive widget blocks have been cleared.
+- `style.css`, `generic.js`, and `animations.js` are focused on reusable foundation behavior.
+- Test-only GSAP, ScrollTrigger, and SplitText animation examples have been removed from `animations.js`.
+
 ### Phase 2: Define Shared vs Client-Specific Boundaries
 
 Goal: stop client-specific code from entering shared files.
