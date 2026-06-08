@@ -2,7 +2,24 @@
 
 This workflow describes how Llummio should create a new client website from the blueprint.
 
-When improving the blueprint itself, use `docs/blueprint-editing-workflow.md` before committing changes made in the WordPress Site Editor.
+When improving the blueprint itself, use `docs/05-blueprint-editing-workflow.md` before committing changes made in the WordPress Site Editor.
+
+## Quick Checklist
+
+Use this checklist when starting a new website from the blueprint:
+
+1. Create a new local WordPress site for the client.
+2. Copy the blueprint files into the new site folder.
+3. Import `app/sql/starter.sql`.
+4. Update `siteurl` and `home` to the new local domain.
+5. Log in with the starter admin account.
+6. Activate the `Llummio Blueprint` theme.
+7. Activate the approved plugins from `docs/07-plugin-stack.md`.
+8. Replace starter users, emails, logo, business schema, and site identity.
+9. Add client branding, content, media, forms, and legal pages.
+10. Check header, footer, forms, SEO basics, schema, and responsive layouts.
+11. Remove temporary content, visible wireframes, test data, and unused assets.
+12. Add production URLs, licenses, backups, SSL, caching, and final admin users before launch.
 
 ## 1. Start From The Blueprint
 
@@ -100,7 +117,7 @@ Do not create client user accounts until the site is ready for review or handoff
 1. Go to Appearance > Themes.
 2. Activate `Llummio Blueprint`.
 3. Go to Plugins.
-4. Activate the approved plugins listed in `docs/plugin-stack.md`.
+4. Activate the approved plugins listed in `docs/07-plugin-stack.md`.
 5. Add premium plugin license keys inside WordPress admin.
 6. Do not commit license keys, update tokens, or account-specific data.
 

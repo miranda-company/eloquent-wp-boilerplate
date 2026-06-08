@@ -10,4 +10,4 @@ The dashboard shows submission counts by form, but submissions are not stored in
 
 This plugin intentionally uses WordPress' normal email system through `wp_mail()`. Configure SMTP at the server level or with a dedicated SMTP plugin when a project needs authenticated mail delivery.
 
-See `docs/internal-plugins.md` for maintenance notes and upgrade testing.
+See `docs/08-internal-plugins.md` for maintenance notes and upgrade testing.

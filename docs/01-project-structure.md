@@ -41,7 +41,7 @@ Create extra page-specific JavaScript files only when a page has a large or unus
 
 ## Blueprint Editing
 
-When editing templates, template parts, or GenerateBlocks patterns in WordPress, the first save lands in the database. Use the workflow in `docs/blueprint-editing-workflow.md` to save those editor changes back into the theme files before committing.
+When editing templates, template parts, or GenerateBlocks patterns in WordPress, the first save lands in the database. Use the workflow in `docs/05-blueprint-editing-workflow.md` to save those editor changes back into the theme files before committing.
 
 ## What Belongs In Git
 

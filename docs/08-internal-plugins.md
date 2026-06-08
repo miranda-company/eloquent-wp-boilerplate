@@ -334,7 +334,7 @@ Replace this plugin with RankMath or another full SEO plugin when a project need
 If this plugin changes:
 
 - Update the version in the plugin header.
-- Update `docs/plugin-stack.md` if the version changes.
+- Update `docs/07-plugin-stack.md` if the version changes.
 - Update this document if behavior or compatibility assumptions change.
 - Confirm `app/sql/starter.sql` still activates `llummio-editor-helpers/llummio-editor-helpers.php`.
 
@@ -553,7 +553,7 @@ Replace this plugin with a full form plugin when a project needs:
 If this plugin changes:
 
 - Update the version in the plugin header.
-- Update `docs/plugin-stack.md` if the version changes.
+- Update `docs/07-plugin-stack.md` if the version changes.
 - Update this document if behavior or compatibility assumptions change.
 - Confirm `app/sql/starter.sql` still activates `llummio-forms/llummio-forms.php`.
 
@@ -682,6 +682,6 @@ Replace this plugin with a full SVG sanitizer plugin when:
 If this plugin changes:
 
 - Update the version in the plugin header.
-- Update `docs/plugin-stack.md` if the version changes.
+- Update `docs/07-plugin-stack.md` if the version changes.
 - Update this document if behavior or security assumptions change.
 - Confirm `app/sql/starter.sql` still activates `llummio-svg-uploads/llummio-svg-uploads.php`.

@@ -12,7 +12,7 @@ This blueprint includes the standard Llummio plugin stack.
 | Llummio Forms | `llummio-forms` | 0.3.3 |
 | Llummio SVG Uploads | `llummio-svg-uploads` | 0.1.0 |
 
-Internal Llummio plugins are documented in `docs/internal-plugins.md`.
+Internal Llummio plugins are documented in `docs/08-internal-plugins.md`.
 
 ## Premium Plugins
 

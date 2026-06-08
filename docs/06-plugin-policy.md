@@ -8,7 +8,7 @@ Use plugins for stable, reusable functionality. Avoid plugins for small visual t
 
 ## Approved Plugin Stack
 
-The current approved stack is listed in `docs/plugin-stack.md`.
+The current approved stack is listed in `docs/07-plugin-stack.md`.
 
 When plugin versions change, update that file.
 
