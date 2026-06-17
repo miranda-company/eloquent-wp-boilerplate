@@ -42,6 +42,15 @@
 	var DESCRIPTION_KEY = '_llummio_seo_description';
 	var NOINDEX_KEY = '_llummio_seo_noindex';
 	var NOFOLLOW_KEY = '_llummio_seo_nofollow';
+	var OG_TITLE_KEY = '_llummio_og_title';
+	var OG_DESCRIPTION_KEY = '_llummio_og_description';
+	var OG_IMAGE_KEY = '_llummio_og_image';
+	var OG_URL_KEY = '_llummio_og_url';
+	var OG_TYPE_KEY = '_llummio_og_type';
+	var TWITTER_CARD_KEY = '_llummio_twitter_card';
+	var TWITTER_TITLE_KEY = '_llummio_twitter_title';
+	var TWITTER_DESCRIPTION_KEY = '_llummio_twitter_description';
+	var TWITTER_IMAGE_KEY = '_llummio_twitter_image';
 	var SCHEMA_TYPE_KEY = '_llummio_schema_type';
 	var SCHEMA_NAME_KEY = '_llummio_schema_name';
 	var SCHEMA_DESCRIPTION_KEY = '_llummio_schema_description';
@@ -95,6 +104,38 @@
 		{
 			label: __( 'FAQ Page', 'llummio-editor-helpers' ),
 			value: 'faq',
+		},
+	];
+	var OG_TYPE_OPTIONS = [
+		{
+			label: __( 'Default', 'llummio-editor-helpers' ),
+			value: '',
+		},
+		{
+			label: 'website',
+			value: 'website',
+		},
+		{
+			label: 'article',
+			value: 'article',
+		},
+		{
+			label: 'profile',
+			value: 'profile',
+		},
+	];
+	var TWITTER_CARD_OPTIONS = [
+		{
+			label: __( 'Default', 'llummio-editor-helpers' ),
+			value: '',
+		},
+		{
+			label: 'summary_large_image',
+			value: 'summary_large_image',
+		},
+		{
+			label: 'summary',
+			value: 'summary',
 		},
 	];
 	var ENTITY_SCHEMA_TYPES = [ 'service' ];
@@ -286,6 +327,15 @@
 		var seoDescription = meta[ DESCRIPTION_KEY ] || '';
 		var noindex = !! meta[ NOINDEX_KEY ];
 		var nofollow = !! meta[ NOFOLLOW_KEY ];
+		var ogTitle = meta[ OG_TITLE_KEY ] || '';
+		var ogDescription = meta[ OG_DESCRIPTION_KEY ] || '';
+		var ogImage = meta[ OG_IMAGE_KEY ] || '';
+		var ogUrl = meta[ OG_URL_KEY ] || '';
+		var ogType = meta[ OG_TYPE_KEY ] || '';
+		var twitterCard = meta[ TWITTER_CARD_KEY ] || '';
+		var twitterTitle = meta[ TWITTER_TITLE_KEY ] || '';
+		var twitterDescription = meta[ TWITTER_DESCRIPTION_KEY ] || '';
+		var twitterImage = meta[ TWITTER_IMAGE_KEY ] || '';
 		var schemaType = meta[ SCHEMA_TYPE_KEY ] || 'default';
 		var schemaName = meta[ SCHEMA_NAME_KEY ] || '';
 		var schemaDescription = meta[ SCHEMA_DESCRIPTION_KEY ] || '';
@@ -448,6 +498,90 @@
 							},
 						} )
 					)
+				),
+				el(
+					PanelBody,
+					{
+						title: __( 'Social Sharing', 'llummio-editor-helpers' ),
+						initialOpen: false,
+					},
+					el( TextControl, {
+						label: __( 'Open Graph Title', 'llummio-editor-helpers' ),
+						value: ogTitle,
+						help: __( 'Leave empty to use the SEO title or page title.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( OG_TITLE_KEY, value );
+						},
+					} ),
+					el( TextareaControl, {
+						label: __( 'Open Graph Description', 'llummio-editor-helpers' ),
+						value: ogDescription,
+						rows: 4,
+						help: __( 'Leave empty to use the SEO description, global default, or page excerpt.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( OG_DESCRIPTION_KEY, value );
+						},
+					} ),
+					el( TextControl, {
+						label: __( 'Open Graph Image URL', 'llummio-editor-helpers' ),
+						value: ogImage,
+						type: 'url',
+						help: __( 'Leave empty to use the featured image or global default image.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( OG_IMAGE_KEY, value );
+						},
+					} ),
+					el( TextControl, {
+						label: __( 'Open Graph URL', 'llummio-editor-helpers' ),
+						value: ogUrl,
+						type: 'url',
+						help: __( 'Leave empty to use the canonical URL.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( OG_URL_KEY, value );
+						},
+					} ),
+					el( SelectControl, {
+						label: __( 'Open Graph Type', 'llummio-editor-helpers' ),
+						value: ogType,
+						options: OG_TYPE_OPTIONS,
+						onChange: function( value ) {
+							updateMeta( OG_TYPE_KEY, value );
+						},
+					} ),
+					el( SelectControl, {
+						label: __( 'Twitter Card', 'llummio-editor-helpers' ),
+						value: twitterCard,
+						options: TWITTER_CARD_OPTIONS,
+						onChange: function( value ) {
+							updateMeta( TWITTER_CARD_KEY, value );
+						},
+					} ),
+					el( TextControl, {
+						label: __( 'Twitter Title', 'llummio-editor-helpers' ),
+						value: twitterTitle,
+						help: __( 'Leave empty to use the Open Graph title.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( TWITTER_TITLE_KEY, value );
+						},
+					} ),
+					el( TextareaControl, {
+						label: __( 'Twitter Description', 'llummio-editor-helpers' ),
+						value: twitterDescription,
+						rows: 4,
+						help: __( 'Leave empty to use the Open Graph description.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( TWITTER_DESCRIPTION_KEY, value );
+						},
+					} ),
+					el( TextControl, {
+						label: __( 'Twitter Image URL', 'llummio-editor-helpers' ),
+						value: twitterImage,
+						type: 'url',
+						help: __( 'Leave empty to use the Open Graph image.', 'llummio-editor-helpers' ),
+						onChange: function( value ) {
+							updateMeta( TWITTER_IMAGE_KEY, value );
+						},
+					} )
 				),
 				el(
 					PanelBody,

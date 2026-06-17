@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Llummio Editor Helpers
- * Description: Lightweight editor helpers for Llummio blueprint sites, including SEO fields, canonical tags, schema tools, performance toggles, and wireframe preview controls.
- * Version: 0.6.7
+ * Description: Lightweight editor helpers for Llummio blueprint sites, including SEO fields, social sharing metadata, canonical tags, schema tools, performance toggles, and wireframe preview controls.
+ * Version: 0.6.8
  * Author: Llummio
  * Text Domain: llummio-editor-helpers
  */
@@ -13,6 +13,15 @@ const LLUMMIO_EDITOR_HELPERS_TITLE_KEY       = '_llummio_seo_title';
 const LLUMMIO_EDITOR_HELPERS_DESCRIPTION_KEY = '_llummio_seo_description';
 const LLUMMIO_EDITOR_HELPERS_NOINDEX_KEY     = '_llummio_seo_noindex';
 const LLUMMIO_EDITOR_HELPERS_NOFOLLOW_KEY    = '_llummio_seo_nofollow';
+const LLUMMIO_EDITOR_HELPERS_OG_TITLE_KEY    = '_llummio_og_title';
+const LLUMMIO_EDITOR_HELPERS_OG_DESCRIPTION_KEY = '_llummio_og_description';
+const LLUMMIO_EDITOR_HELPERS_OG_IMAGE_KEY    = '_llummio_og_image';
+const LLUMMIO_EDITOR_HELPERS_OG_URL_KEY      = '_llummio_og_url';
+const LLUMMIO_EDITOR_HELPERS_OG_TYPE_KEY     = '_llummio_og_type';
+const LLUMMIO_EDITOR_HELPERS_TWITTER_CARD_KEY = '_llummio_twitter_card';
+const LLUMMIO_EDITOR_HELPERS_TWITTER_TITLE_KEY = '_llummio_twitter_title';
+const LLUMMIO_EDITOR_HELPERS_TWITTER_DESCRIPTION_KEY = '_llummio_twitter_description';
+const LLUMMIO_EDITOR_HELPERS_TWITTER_IMAGE_KEY = '_llummio_twitter_image';
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_TYPE_KEY = '_llummio_schema_type';
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_NAME_KEY = '_llummio_schema_name';
 const LLUMMIO_EDITOR_HELPERS_SCHEMA_DESCRIPTION_KEY = '_llummio_schema_description';
@@ -27,7 +36,7 @@ const LLUMMIO_EDITOR_HELPERS_SHOW_WIRE_FRONTEND_KEY = '_llummio_show_wire_fronte
 const LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY = '_llummio_wire_frontend_color';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION = 'llummio_editor_helpers_settings';
 const LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP  = 'llummio_editor_helpers_settings_group';
-const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.7';
+const LLUMMIO_EDITOR_HELPERS_VERSION         = '0.6.8';
 
 /**
  * Register SEO metadata for public editable post types.
@@ -121,6 +130,20 @@ function llummio_editor_helpers_register_meta() {
 				)
 			);
 		}
+
+		foreach ( llummio_editor_helpers_social_meta_fields() as $meta_key => $sanitize_callback ) {
+			register_post_meta(
+				$post_type,
+				$meta_key,
+				array(
+					'type'              => 'string',
+					'single'            => true,
+					'show_in_rest'      => true,
+					'sanitize_callback' => $sanitize_callback,
+					'auth_callback'     => 'llummio_editor_helpers_can_edit_meta',
+				)
+			);
+		}
 	}
 }
 
@@ -144,12 +167,12 @@ function llummio_editor_helpers_register_settings() {
 add_action( 'admin_init', 'llummio_editor_helpers_register_settings' );
 
 /**
- * Add the Global Schema admin page.
+ * Add the Global SEO admin page.
  */
 function llummio_editor_helpers_add_settings_page() {
 	add_menu_page(
-		__( 'Global Schema', 'llummio-editor-helpers' ),
-		__( 'Global Schema', 'llummio-editor-helpers' ),
+		__( 'Global SEO', 'llummio-editor-helpers' ),
+		__( 'Global SEO', 'llummio-editor-helpers' ),
 		'manage_options',
 		'llummio-editor-helpers',
 		'llummio_editor_helpers_render_settings_page',
@@ -207,10 +230,11 @@ function llummio_editor_helpers_render_settings_page() {
 	$option   = LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION;
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Global Schema', 'llummio-editor-helpers' ); ?></h1>
+		<h1><?php esc_html_e( 'Global SEO', 'llummio-editor-helpers' ); ?></h1>
 		<form method="post" action="options.php">
 			<?php settings_fields( LLUMMIO_EDITOR_HELPERS_SETTINGS_GROUP ); ?>
-			<p><?php esc_html_e( 'These settings describe the business for the whole site. Page-specific schema stays in the block editor sidebar.', 'llummio-editor-helpers' ); ?></p>
+			<p><?php esc_html_e( 'These settings describe the business and default social sharing metadata for the whole site. Page-specific overrides stay in the block editor sidebar.', 'llummio-editor-helpers' ); ?></p>
+			<h2><?php esc_html_e( 'Business Schema', 'llummio-editor-helpers' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row">
@@ -238,6 +262,44 @@ function llummio_editor_helpers_render_settings_page() {
 				llummio_editor_helpers_render_settings_text_field( 'price_range', __( 'Price range', 'llummio-editor-helpers' ), $settings );
 				?>
 			</table>
+			<h2><?php esc_html_e( 'Social Sharing Defaults', 'llummio-editor-helpers' ); ?></h2>
+			<p><?php esc_html_e( 'These values are fallbacks. Page-level social fields and featured images take priority when they exist.', 'llummio-editor-helpers' ); ?></p>
+			<table class="form-table" role="presentation">
+				<?php
+				llummio_editor_helpers_render_settings_text_field( 'social_og_title', __( 'Default Open Graph title', 'llummio-editor-helpers' ), $settings );
+				llummio_editor_helpers_render_settings_textarea_field( 'social_og_description', __( 'Default Open Graph description', 'llummio-editor-helpers' ), $settings );
+				llummio_editor_helpers_render_settings_url_field( 'social_og_image', __( 'Default Open Graph image URL', 'llummio-editor-helpers' ), $settings );
+				?>
+				<tr>
+					<th scope="row">
+						<label for="llummio-editor-helpers-social-og-type"><?php esc_html_e( 'Default Open Graph type', 'llummio-editor-helpers' ); ?></label>
+					</th>
+					<td>
+						<select id="llummio-editor-helpers-social-og-type" name="<?php echo esc_attr( $option ); ?>[social_og_type]">
+							<?php foreach ( llummio_editor_helpers_og_types() as $type ) : ?>
+								<option value="<?php echo esc_attr( $type ); ?>" <?php selected( $settings['social_og_type'], $type ); ?>><?php echo esc_html( $type ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</td>
+				</tr>
+				<?php
+				llummio_editor_helpers_render_settings_text_field( 'social_twitter_title', __( 'Default Twitter title', 'llummio-editor-helpers' ), $settings );
+				llummio_editor_helpers_render_settings_textarea_field( 'social_twitter_description', __( 'Default Twitter description', 'llummio-editor-helpers' ), $settings );
+				llummio_editor_helpers_render_settings_url_field( 'social_twitter_image', __( 'Default Twitter image URL', 'llummio-editor-helpers' ), $settings );
+				?>
+				<tr>
+					<th scope="row">
+						<label for="llummio-editor-helpers-social-twitter-card"><?php esc_html_e( 'Default Twitter card', 'llummio-editor-helpers' ); ?></label>
+					</th>
+					<td>
+						<select id="llummio-editor-helpers-social-twitter-card" name="<?php echo esc_attr( $option ); ?>[social_twitter_card]">
+							<?php foreach ( llummio_editor_helpers_twitter_card_types() as $type ) : ?>
+								<option value="<?php echo esc_attr( $type ); ?>" <?php selected( $settings['social_twitter_card'], $type ); ?>><?php echo esc_html( $type ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</td>
+				</tr>
+			</table>
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -253,6 +315,31 @@ function llummio_editor_helpers_render_settings_page() {
  */
 function llummio_editor_helpers_render_settings_text_field( $key, $label, $settings ) {
 	llummio_editor_helpers_render_settings_input_field( $key, $label, $settings, 'text' );
+}
+
+/**
+ * Render a textarea setting field.
+ *
+ * @param string $key      Setting key.
+ * @param string $label    Field label.
+ * @param array  $settings Current settings.
+ */
+function llummio_editor_helpers_render_settings_textarea_field( $key, $label, $settings ) {
+	?>
+	<tr>
+		<th scope="row">
+			<label for="<?php echo esc_attr( 'llummio-editor-helpers-' . $key ); ?>"><?php echo esc_html( $label ); ?></label>
+		</th>
+		<td>
+			<textarea
+				id="<?php echo esc_attr( 'llummio-editor-helpers-' . $key ); ?>"
+				class="large-text"
+				rows="3"
+				name="<?php echo esc_attr( LLUMMIO_EDITOR_HELPERS_SETTINGS_OPTION . '[' . $key . ']' ); ?>"
+			><?php echo esc_textarea( isset( $settings[ $key ] ) ? $settings[ $key ] : '' ); ?></textarea>
+		</td>
+	</tr>
+	<?php
 }
 
 /**
@@ -385,6 +472,14 @@ function llummio_editor_helpers_default_settings() {
 		'country'      => '',
 		'service_area' => '',
 		'price_range'  => '',
+		'social_og_title' => '',
+		'social_og_description' => '',
+		'social_og_image' => '',
+		'social_og_type' => 'website',
+		'social_twitter_card' => 'summary_large_image',
+		'social_twitter_title' => '',
+		'social_twitter_description' => '',
+		'social_twitter_image' => '',
 	);
 }
 
@@ -416,6 +511,14 @@ function llummio_editor_helpers_sanitize_settings( $settings ) {
 	$clean['logo_url']    = isset( $settings['logo_url'] ) ? esc_url_raw( $settings['logo_url'] ) : '';
 	$clean['website_url'] = isset( $settings['website_url'] ) ? esc_url_raw( $settings['website_url'] ) : '';
 	$clean['email']       = isset( $settings['email'] ) ? sanitize_email( $settings['email'] ) : '';
+	$clean['social_og_title'] = isset( $settings['social_og_title'] ) ? sanitize_text_field( $settings['social_og_title'] ) : '';
+	$clean['social_og_description'] = isset( $settings['social_og_description'] ) ? sanitize_textarea_field( $settings['social_og_description'] ) : '';
+	$clean['social_og_image'] = isset( $settings['social_og_image'] ) ? esc_url_raw( $settings['social_og_image'] ) : '';
+	$clean['social_og_type'] = llummio_editor_helpers_sanitize_og_type( isset( $settings['social_og_type'] ) ? $settings['social_og_type'] : 'website' );
+	$clean['social_twitter_card'] = llummio_editor_helpers_sanitize_twitter_card( isset( $settings['social_twitter_card'] ) ? $settings['social_twitter_card'] : 'summary_large_image' );
+	$clean['social_twitter_title'] = isset( $settings['social_twitter_title'] ) ? sanitize_text_field( $settings['social_twitter_title'] ) : '';
+	$clean['social_twitter_description'] = isset( $settings['social_twitter_description'] ) ? sanitize_textarea_field( $settings['social_twitter_description'] ) : '';
+	$clean['social_twitter_image'] = isset( $settings['social_twitter_image'] ) ? esc_url_raw( $settings['social_twitter_image'] ) : '';
 
 	return $clean;
 }
@@ -551,6 +654,49 @@ function llummio_editor_helpers_robots_meta() {
 add_action( 'wp_head', 'llummio_editor_helpers_robots_meta', 1 );
 
 /**
+ * Output Open Graph and Twitter metadata for singular content.
+ */
+function llummio_editor_helpers_social_meta() {
+	if ( llummio_editor_helpers_should_skip_frontend_output() || ! is_singular() ) {
+		return;
+	}
+
+	$post_id = get_queried_object_id();
+
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$metadata = llummio_editor_helpers_get_social_metadata( $post_id );
+
+	foreach ( $metadata['og'] as $property => $content ) {
+		if ( '' === $content ) {
+			continue;
+		}
+
+		printf(
+			'<meta property="%s" content="%s" />' . "\n",
+			esc_attr( $property ),
+			esc_attr( $content )
+		);
+	}
+
+	foreach ( $metadata['twitter'] as $name => $content ) {
+		if ( '' === $content ) {
+			continue;
+		}
+
+		printf(
+			'<meta name="%s" content="%s" />' . "\n",
+			esc_attr( $name ),
+			esc_attr( $content )
+		);
+	}
+}
+
+add_action( 'wp_head', 'llummio_editor_helpers_social_meta', 1 );
+
+/**
  * Replace the WordPress default canonical tag when this plugin handles SEO output.
  */
 function llummio_editor_helpers_prepare_canonical_link() {
@@ -597,6 +743,195 @@ function llummio_editor_helpers_get_canonical_url( $post_id ) {
 	$url = function_exists( 'wp_get_canonical_url' ) ? wp_get_canonical_url( $post_id ) : get_permalink( $post_id );
 
 	return (string) apply_filters( 'llummio_editor_helpers_canonical_url', $url ? $url : '', $post_id );
+}
+
+/**
+ * Return Open Graph and Twitter metadata for a post.
+ *
+ * @param int $post_id Post ID.
+ */
+function llummio_editor_helpers_get_social_metadata( $post_id ) {
+	$settings    = llummio_editor_helpers_get_settings();
+	$title       = llummio_editor_helpers_get_social_title( $post_id );
+	$description = llummio_editor_helpers_get_social_description( $post_id );
+	$image       = llummio_editor_helpers_get_social_image( $post_id );
+	$url         = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_OG_URL_KEY );
+
+	if ( '' === $url ) {
+		$url = llummio_editor_helpers_get_canonical_url( $post_id );
+	}
+
+	$og_type      = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_OG_TYPE_KEY );
+	$twitter_card = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_TWITTER_CARD_KEY );
+
+	if ( '' === $og_type ) {
+		$og_type = 'post' === get_post_type( $post_id ) ? 'article' : $settings['social_og_type'];
+	}
+
+	if ( '' === $twitter_card ) {
+		$twitter_card = $settings['social_twitter_card'];
+	}
+
+	$metadata = array(
+		'og'      => array(
+			'og:title'       => $title,
+			'og:description' => $description,
+			'og:image'       => $image,
+			'og:url'         => $url,
+			'og:type'        => llummio_editor_helpers_sanitize_og_type( $og_type ),
+		),
+		'twitter' => array(
+			'twitter:card'        => llummio_editor_helpers_sanitize_twitter_card( $twitter_card ),
+			'twitter:title'       => llummio_editor_helpers_get_social_twitter_title( $post_id, $title ),
+			'twitter:description' => llummio_editor_helpers_get_social_twitter_description( $post_id, $description ),
+			'twitter:image'       => llummio_editor_helpers_get_social_twitter_image( $post_id, $image ),
+		),
+	);
+
+	return apply_filters( 'llummio_editor_helpers_social_metadata', $metadata, $post_id );
+}
+
+/**
+ * Return the Open Graph title with page-level and global fallbacks.
+ *
+ * @param int $post_id Post ID.
+ */
+function llummio_editor_helpers_get_social_title( $post_id ) {
+	$title = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_OG_TITLE_KEY );
+
+	if ( '' !== $title ) {
+		return llummio_editor_helpers_replace_title_tokens( $title );
+	}
+
+	$title = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_TITLE_KEY );
+
+	if ( '' !== $title ) {
+		return llummio_editor_helpers_replace_title_tokens( $title );
+	}
+
+	$settings = llummio_editor_helpers_get_settings();
+
+	return '' !== $settings['social_og_title'] ? llummio_editor_helpers_replace_title_tokens( $settings['social_og_title'] ) : get_the_title( $post_id );
+}
+
+/**
+ * Return the Open Graph description with page-level and global fallbacks.
+ *
+ * @param int $post_id Post ID.
+ */
+function llummio_editor_helpers_get_social_description( $post_id ) {
+	$description = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_OG_DESCRIPTION_KEY );
+
+	if ( '' !== $description ) {
+		return $description;
+	}
+
+	$description = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_DESCRIPTION_KEY );
+
+	if ( '' !== $description ) {
+		return $description;
+	}
+
+	$settings = llummio_editor_helpers_get_settings();
+
+	if ( '' !== $settings['social_og_description'] ) {
+		return $settings['social_og_description'];
+	}
+
+	return llummio_editor_helpers_get_schema_description( $post_id );
+}
+
+/**
+ * Return the Open Graph image with page-level, featured image, and global fallbacks.
+ *
+ * @param int $post_id Post ID.
+ */
+function llummio_editor_helpers_get_social_image( $post_id ) {
+	$image = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_OG_IMAGE_KEY );
+
+	if ( '' !== $image ) {
+		return $image;
+	}
+
+	$image = get_the_post_thumbnail_url( $post_id, 'full' );
+
+	if ( $image ) {
+		return $image;
+	}
+
+	$settings = llummio_editor_helpers_get_settings();
+
+	if ( '' !== $settings['social_og_image'] ) {
+		return $settings['social_og_image'];
+	}
+
+	return '' !== $settings['social_twitter_image'] ? $settings['social_twitter_image'] : '';
+}
+
+/**
+ * Return the Twitter title with page-level and Open Graph fallbacks.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $fallback Fallback title.
+ */
+function llummio_editor_helpers_get_social_twitter_title( $post_id, $fallback ) {
+	$title = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_TWITTER_TITLE_KEY );
+
+	if ( '' !== $title ) {
+		return llummio_editor_helpers_replace_title_tokens( $title );
+	}
+
+	$settings = llummio_editor_helpers_get_settings();
+
+	if ( '' !== $settings['social_twitter_title'] ) {
+		return llummio_editor_helpers_replace_title_tokens( $settings['social_twitter_title'] );
+	}
+
+	return $fallback;
+}
+
+/**
+ * Return the Twitter description with page-level and Open Graph fallbacks.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $fallback Fallback description.
+ */
+function llummio_editor_helpers_get_social_twitter_description( $post_id, $fallback ) {
+	$description = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_TWITTER_DESCRIPTION_KEY );
+
+	if ( '' !== $description ) {
+		return $description;
+	}
+
+	$settings = llummio_editor_helpers_get_settings();
+
+	if ( '' !== $settings['social_twitter_description'] ) {
+		return $settings['social_twitter_description'];
+	}
+
+	return $fallback;
+}
+
+/**
+ * Return the Twitter image with page-level and Open Graph fallbacks.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $fallback Fallback image URL.
+ */
+function llummio_editor_helpers_get_social_twitter_image( $post_id, $fallback ) {
+	$image = llummio_editor_helpers_get_meta( $post_id, LLUMMIO_EDITOR_HELPERS_TWITTER_IMAGE_KEY );
+
+	if ( '' !== $image ) {
+		return $image;
+	}
+
+	$settings = llummio_editor_helpers_get_settings();
+
+	if ( '' !== $settings['social_twitter_image'] ) {
+		return $settings['social_twitter_image'];
+	}
+
+	return $fallback;
 }
 
 /**
@@ -742,6 +1077,23 @@ function llummio_editor_helpers_schema_meta_fields() {
 }
 
 /**
+ * Return social sharing meta fields and their sanitizer callbacks.
+ */
+function llummio_editor_helpers_social_meta_fields() {
+	return array(
+		LLUMMIO_EDITOR_HELPERS_OG_TITLE_KEY                    => 'sanitize_text_field',
+		LLUMMIO_EDITOR_HELPERS_OG_DESCRIPTION_KEY              => 'sanitize_textarea_field',
+		LLUMMIO_EDITOR_HELPERS_OG_IMAGE_KEY                    => 'esc_url_raw',
+		LLUMMIO_EDITOR_HELPERS_OG_URL_KEY                      => 'esc_url_raw',
+		LLUMMIO_EDITOR_HELPERS_OG_TYPE_KEY                     => 'llummio_editor_helpers_sanitize_optional_og_type',
+		LLUMMIO_EDITOR_HELPERS_TWITTER_CARD_KEY                => 'llummio_editor_helpers_sanitize_optional_twitter_card',
+		LLUMMIO_EDITOR_HELPERS_TWITTER_TITLE_KEY               => 'sanitize_text_field',
+		LLUMMIO_EDITOR_HELPERS_TWITTER_DESCRIPTION_KEY         => 'sanitize_textarea_field',
+		LLUMMIO_EDITOR_HELPERS_TWITTER_IMAGE_KEY               => 'esc_url_raw',
+	);
+}
+
+/**
  * Return string post meta keys that should not store empty values.
  */
 function llummio_editor_helpers_empty_string_meta_keys() {
@@ -753,8 +1105,74 @@ function llummio_editor_helpers_empty_string_meta_keys() {
 			LLUMMIO_EDITOR_HELPERS_SCHEMA_FAQ_KEY,
 			LLUMMIO_EDITOR_HELPERS_WIRE_FRONTEND_COLOR_KEY,
 		),
-		array_keys( llummio_editor_helpers_schema_meta_fields() )
+		array_keys( llummio_editor_helpers_schema_meta_fields() ),
+		array_keys( llummio_editor_helpers_social_meta_fields() )
 	);
+}
+
+/**
+ * Return allowed Open Graph types.
+ */
+function llummio_editor_helpers_og_types() {
+	return array(
+		'website',
+		'article',
+		'profile',
+	);
+}
+
+/**
+ * Return allowed Twitter card types.
+ */
+function llummio_editor_helpers_twitter_card_types() {
+	return array(
+		'summary_large_image',
+		'summary',
+	);
+}
+
+/**
+ * Sanitize the Open Graph type.
+ *
+ * @param string $value Open Graph type.
+ */
+function llummio_editor_helpers_sanitize_og_type( $value ) {
+	$value = sanitize_key( $value );
+
+	return in_array( $value, llummio_editor_helpers_og_types(), true ) ? $value : 'website';
+}
+
+/**
+ * Sanitize an optional page-level Open Graph type.
+ *
+ * @param string $value Open Graph type.
+ */
+function llummio_editor_helpers_sanitize_optional_og_type( $value ) {
+	$value = sanitize_key( $value );
+
+	return '' === $value || in_array( $value, llummio_editor_helpers_og_types(), true ) ? $value : '';
+}
+
+/**
+ * Sanitize the Twitter card type.
+ *
+ * @param string $value Twitter card type.
+ */
+function llummio_editor_helpers_sanitize_twitter_card( $value ) {
+	$value = sanitize_key( $value );
+
+	return in_array( $value, llummio_editor_helpers_twitter_card_types(), true ) ? $value : 'summary_large_image';
+}
+
+/**
+ * Sanitize an optional page-level Twitter card type.
+ *
+ * @param string $value Twitter card type.
+ */
+function llummio_editor_helpers_sanitize_optional_twitter_card( $value ) {
+	$value = sanitize_key( $value );
+
+	return '' === $value || in_array( $value, llummio_editor_helpers_twitter_card_types(), true ) ? $value : '';
 }
 
 /**

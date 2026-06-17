@@ -10,15 +10,15 @@ Folder: `app/public/wp-content/plugins/llummio-editor-helpers/`
 
 Main file: `app/public/wp-content/plugins/llummio-editor-helpers/llummio-editor-helpers.php`
 
-Version: `0.6.7`
+Version: `0.6.8`
 
 ### Purpose
 
 `Llummio Editor Helpers` collects small editing tools used in Llummio blueprint sites.
 
-It currently includes lightweight SEO fields, global business schema settings, page-level schema tools, page-level GSAP, ScrollTrigger, and SplitText loading toggles, editor-only wireframe previews, and optional page-level frontend wireframes.
+It currently includes lightweight SEO fields, social sharing metadata, global business schema settings, page-level schema tools, page-level GSAP, ScrollTrigger, and SplitText loading toggles, editor-only wireframe previews, and optional page-level frontend wireframes.
 
-The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
+The SEO tools replace the small part of RankMath that Llummio normally uses on simple sites: custom SEO titles, custom SEO descriptions, robots controls, Open Graph/Twitter metadata, automatic canonical tags, and simple structured data. They do not try to replace a full SEO suite.
 
 ### What It Does
 
@@ -30,9 +30,11 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 - Overrides the frontend document title on singular content when an SEO title exists.
 - Outputs one `<meta name="description">` tag on singular content when an SEO description exists.
 - Outputs one `<meta name="robots">` tag on singular content when robots controls are enabled.
+- Outputs Open Graph and Twitter metadata for singular content.
 - Outputs one canonical `<link rel="canonical">` tag on singular content.
 - Outputs JSON-LD structured data for singular content when schema output is enabled.
-- Adds a top-level `Global Schema` admin menu item below `Llummio Forms`, using the Llummio SVG icon.
+- Adds a top-level `Global SEO` admin menu item below `Llummio Forms`, using the Llummio SVG icon.
+- Adds global social sharing defaults for Open Graph and Twitter metadata.
 - Adds automatic `Organization` or `LocalBusiness`, `WebSite`, `WebPage`, and `BlogPosting` schema.
 - Adds page-level schema controls for `Service`, `Article`, `FAQPage`, and disabled schema.
 - Adds page-level performance controls for loading GSAP, ScrollTrigger, and SplitText only on pages that need them.
@@ -43,7 +45,6 @@ The SEO tools replace the small part of RankMath that Llummio normally uses on s
 ### What It Does Not Do
 
 - XML sitemaps.
-- Open Graph or social images.
 - Redirects.
 - Canonical URL override controls.
 - Keyword analysis.
@@ -60,6 +61,15 @@ The plugin stores data in post meta:
 - `_llummio_seo_description`
 - `_llummio_seo_noindex`
 - `_llummio_seo_nofollow`
+- `_llummio_og_title`
+- `_llummio_og_description`
+- `_llummio_og_image`
+- `_llummio_og_url`
+- `_llummio_og_type`
+- `_llummio_twitter_card`
+- `_llummio_twitter_title`
+- `_llummio_twitter_description`
+- `_llummio_twitter_image`
 - `_llummio_schema_type`
 - `_llummio_schema_name`
 - `_llummio_schema_description`
@@ -73,11 +83,52 @@ The plugin stores data in post meta:
 - `_llummio_show_wire_frontend`
 - `_llummio_wire_frontend_color`
 
-The plugin also stores global business schema settings in the `llummio_editor_helpers_settings` option.
+The plugin also stores global business schema settings and social sharing defaults in the `llummio_editor_helpers_settings` option.
 
 Empty fields are deleted from post meta instead of saved as empty strings.
 Disabled robots controls are deleted from post meta instead of saved as false values.
 Disabled performance controls are deleted from post meta instead of saved as false values.
+
+### Social Sharing
+
+Social sharing is split between global defaults and page-level overrides.
+
+Global social defaults are managed in WordPress admin at `Global SEO`. Use the `Social Sharing Defaults` section to set:
+
+- default Open Graph title;
+- default Open Graph description;
+- default Open Graph image URL;
+- default Open Graph type;
+- default Twitter card;
+- default Twitter title;
+- default Twitter description;
+- default Twitter image URL.
+
+The page editor sidebar includes a `Social Sharing` section with page-level overrides for:
+
+- `og:title`;
+- `og:description`;
+- `og:image`;
+- `og:url`;
+- `og:type`;
+- `twitter:card`;
+- `twitter:title`;
+- `twitter:description`;
+- `twitter:image`.
+
+Leave page-level fields empty when the page should use the normal fallback behavior.
+
+Frontend fallback order:
+
+- `og:title`: page Open Graph title, SEO title, global Open Graph title, page title.
+- `og:description`: page Open Graph description, SEO description, global Open Graph description, page excerpt.
+- `og:image`: page Open Graph image, featured image, global Open Graph image, global Twitter image.
+- `og:url`: page Open Graph URL, canonical URL.
+- `og:type`: page Open Graph type, `article` for posts, global Open Graph type.
+- `twitter:card`: page Twitter card, global Twitter card.
+- `twitter:title`: page Twitter title, global Twitter title, Open Graph title.
+- `twitter:description`: page Twitter description, global Twitter description, Open Graph description.
+- `twitter:image`: page Twitter image, global Twitter image, Open Graph image.
 
 ### How To Use It
 
@@ -140,7 +191,7 @@ There is no canonical override field in the editor. If a project needs custom ca
 
 Schema is split between global business settings and page-level controls.
 
-Global business schema is managed in WordPress admin at `Global Schema`. Use that screen to set:
+Global business schema is managed in WordPress admin at `Global SEO`. Use the `Business Schema` section to set:
 
 - business schema type: `Organization` or `Local Business`;
 - business name;
@@ -235,14 +286,14 @@ add_filter(
 
 ### Compatibility With Full SEO Plugins
 
-The plugin avoids frontend title and description output when common full SEO plugins are active:
+The plugin avoids frontend title, description, robots, canonical, Open Graph, Twitter, and schema output when common full SEO plugins are active:
 
 - RankMath
 - Yoast SEO
 - All in One SEO
 - SEOPress
 
-The fields can still exist in the editor, but frontend output is skipped to avoid duplicate SEO tags, duplicate canonical tags, and duplicate structured data.
+The fields can still exist in the editor, but frontend output is skipped to avoid duplicate SEO tags, duplicate social tags, duplicate canonical tags, and duplicate structured data.
 
 To force output anyway:
 
@@ -302,19 +353,23 @@ When upgrading the blueprint to a new major WordPress version:
 20. Confirm pages with SplitText disabled do not load `SplitText.min.js`.
 21. Confirm pages with SplitText enabled load `SplitText.min.js` when the vendor file exists.
 22. Confirm a singular page outputs one canonical tag.
-23. Confirm no duplicate title/description/robots/canonical output appears if a full SEO plugin is active.
-24. Open `Global Schema` in the WordPress admin sidebar and confirm the global schema settings page loads.
-25. Save `Organization` settings and confirm the saved values stay after reload.
-26. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
-27. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
-28. Confirm a post outputs `BlogPosting`.
-29. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
-30. Set a page to `Article` and confirm the page node changes to `Article`.
-31. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
-32. Set schema to `None` and confirm schema output stops on that page.
-33. Enable `No index` and confirm schema output stops on that page.
-34. Confirm no duplicate schema output appears if a full SEO plugin is active.
-35. Confirm no PHP warnings appear in WordPress admin.
+23. Open `Global SEO` in the WordPress admin sidebar and confirm the settings page loads.
+24. Save a default Open Graph image and Twitter card, then confirm the values stay after reload.
+25. Confirm a page without a social image override uses its featured image when one exists.
+26. Confirm a page without a featured image uses the global Open Graph image.
+27. Set page-level Open Graph and Twitter overrides, save, and confirm the frontend outputs the expected `og:*` and `twitter:*` tags.
+28. Confirm no duplicate title/description/robots/canonical/social output appears if a full SEO plugin is active.
+29. Save `Organization` settings and confirm the saved values stay after reload.
+30. Switch the global schema type to `Local Business`, save contact/address details, and confirm the saved values stay after reload.
+31. Confirm a normal page outputs one JSON-LD block with the global `Organization` or `LocalBusiness`, `WebSite`, and `WebPage`.
+32. Confirm a post outputs `BlogPosting`.
+33. Set a page to `Service`, add visible service details, and confirm the `Service` node appears.
+34. Set a page to `Article` and confirm the page node changes to `Article`.
+35. Set a page to `FAQ Page`, add one visible FAQ, and confirm `FAQPage` output appears.
+36. Set schema to `None` and confirm schema output stops on that page.
+37. Enable `No index` and confirm schema output stops on that page.
+38. Confirm no duplicate schema output appears if a full SEO plugin is active.
+39. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 
@@ -323,7 +378,6 @@ Replace this plugin with RankMath or another full SEO plugin when a project need
 - sitemap control;
 - advanced schema control;
 - custom JSON-LD editing;
-- Open Graph/social metadata;
 - redirect management;
 - advanced robots/canonical controls;
 - SEO scoring or content analysis;
