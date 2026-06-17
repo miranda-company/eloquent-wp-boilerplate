@@ -2,14 +2,14 @@
 /**
  * Plugin Name: Llummio Forms
  * Description: Lightweight secure lead forms for Llummio blueprint sites.
- * Version: 0.3.3
+ * Version: 0.3.4
  * Author: Llummio
  * Text Domain: llummio-forms
  */
 
 defined( 'ABSPATH' ) || exit;
 
-const LLUMMIO_FORMS_VERSION         = '0.3.3';
+const LLUMMIO_FORMS_VERSION         = '0.3.4';
 const LLUMMIO_FORMS_LEGACY_SETTINGS = 'llummio_forms_settings';
 const LLUMMIO_FORMS_FORMS_OPTION    = 'llummio_forms_forms';
 const LLUMMIO_FORMS_COUNTS_OPTION   = 'llummio_forms_submission_counts';
@@ -467,6 +467,8 @@ function llummio_forms_render_form_editor( $form_id ) {
 				<?php
 				llummio_forms_render_scoped_checkbox_setting( $option, 'send_admin_email', __( 'Send admin email', 'llummio-forms' ), $settings );
 				llummio_forms_render_scoped_input_setting( $option, 'admin_email', __( 'Admin recipient', 'llummio-forms' ), $settings, 'email' );
+				llummio_forms_render_scoped_input_setting( $option, 'from_name', __( 'From name', 'llummio-forms' ), $settings, 'text' );
+				llummio_forms_render_scoped_input_setting( $option, 'from_email', __( 'From email', 'llummio-forms' ), $settings, 'email' );
 				llummio_forms_render_scoped_input_setting( $option, 'admin_subject', __( 'Admin subject', 'llummio-forms' ), $settings, 'text' );
 				llummio_forms_render_scoped_checkbox_setting( $option, 'send_user_email', __( 'Send user confirmation email', 'llummio-forms' ), $settings );
 				llummio_forms_render_scoped_input_setting( $option, 'user_subject', __( 'User subject', 'llummio-forms' ), $settings, 'text' );
@@ -638,10 +640,10 @@ function llummio_forms_send_notifications( $settings, $data ) {
 	$site = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 
 	if ( ! empty( $settings['send_admin_email'] ) && is_email( $settings['admin_email'] ) ) {
-		$headers = array();
+		$headers = llummio_forms_get_email_headers( $settings );
 
 		if ( is_email( $data['email'] ) ) {
-			$headers[] = 'Reply-To: ' . llummio_forms_get_full_name( $data ) . ' <' . $data['email'] . '>';
+			$headers[] = 'Reply-To: ' . llummio_forms_format_email_mailbox( llummio_forms_get_full_name( $data ), $data['email'] );
 		}
 
 		wp_mail(
@@ -656,7 +658,8 @@ function llummio_forms_send_notifications( $settings, $data ) {
 		wp_mail(
 			$data['email'],
 			llummio_forms_replace_tokens( $settings['user_subject'], $data ),
-			llummio_forms_replace_tokens( $settings['user_message'], $data ) . "\n\n" . $site
+			llummio_forms_replace_tokens( $settings['user_message'], $data ) . "\n\n" . $site,
+			llummio_forms_get_email_headers( $settings )
 		);
 	}
 }
@@ -747,6 +750,8 @@ function llummio_forms_default_form_settings() {
 		'privacy_link_label'   => __( 'Política de privacidad', 'llummio-forms' ),
 		'send_admin_email'     => true,
 		'admin_email'          => get_option( 'admin_email' ),
+		'from_name'            => get_bloginfo( 'name' ),
+		'from_email'           => get_option( 'admin_email' ),
 		'admin_subject'        => __( 'Nueva solicitud desde la web', 'llummio-forms' ),
 		'send_user_email'      => true,
 		'user_subject'         => __( 'Hemos recibido tu mensaje', 'llummio-forms' ),
@@ -886,8 +891,18 @@ function llummio_forms_sanitize_form_settings( $settings, $existing = array() ) 
 
 	$clean['send_admin_email'] = ! empty( $settings['send_admin_email'] );
 	$clean['admin_email']      = isset( $settings['admin_email'] ) ? sanitize_email( $settings['admin_email'] ) : get_option( 'admin_email' );
+	$clean['from_name']        = isset( $settings['from_name'] ) ? sanitize_text_field( $settings['from_name'] ) : $defaults['from_name'];
+	$clean['from_email']       = isset( $settings['from_email'] ) ? sanitize_email( $settings['from_email'] ) : $defaults['from_email'];
 	$clean['send_user_email']  = ! empty( $settings['send_user_email'] );
 	$clean['user_message']     = isset( $settings['user_message'] ) ? sanitize_textarea_field( $settings['user_message'] ) : $defaults['user_message'];
+
+	if ( '' === $clean['from_name'] ) {
+		$clean['from_name'] = $defaults['from_name'];
+	}
+
+	if ( ! is_email( $clean['from_email'] ) ) {
+		$clean['from_email'] = is_email( $defaults['from_email'] ) ? $defaults['from_email'] : get_option( 'admin_email' );
+	}
 
 	$clean['recaptcha_enabled']    = ! empty( $settings['recaptcha_enabled'] );
 	$clean['recaptcha_site_key']   = isset( $settings['recaptcha_site_key'] ) ? sanitize_text_field( $settings['recaptcha_site_key'] ) : '';
@@ -1135,6 +1150,49 @@ function llummio_forms_get_admin_email_body( $data ) {
  */
 function llummio_forms_get_full_name( $data ) {
 	return trim( $data['first_name'] . ' ' . $data['second_name'] . ' ' . $data['last_name'] );
+}
+
+/**
+ * Return email headers for form notifications.
+ *
+ * @param array $settings Form settings.
+ */
+function llummio_forms_get_email_headers( $settings ) {
+	$from_email = isset( $settings['from_email'] ) ? sanitize_email( $settings['from_email'] ) : '';
+	$from_name  = isset( $settings['from_name'] ) ? sanitize_text_field( $settings['from_name'] ) : '';
+
+	if ( ! is_email( $from_email ) ) {
+		$from_email = sanitize_email( get_option( 'admin_email' ) );
+	}
+
+	if ( '' === $from_name ) {
+		$from_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
+	}
+
+	if ( ! is_email( $from_email ) ) {
+		return array();
+	}
+
+	return array(
+		'From: ' . llummio_forms_format_email_mailbox( $from_name, $from_email ),
+	);
+}
+
+/**
+ * Format a safe mailbox header value.
+ *
+ * @param string $name  Display name.
+ * @param string $email Email address.
+ */
+function llummio_forms_format_email_mailbox( $name, $email ) {
+	$name  = trim( str_replace( array( "\r", "\n", '<', '>' ), '', wp_specialchars_decode( sanitize_text_field( $name ), ENT_QUOTES ) ) );
+	$email = sanitize_email( $email );
+
+	if ( '' === $name ) {
+		return $email;
+	}
+
+	return $name . ' <' . $email . '>';
 }
 
 /**

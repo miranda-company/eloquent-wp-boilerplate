@@ -344,7 +344,7 @@ Folder: `app/public/wp-content/plugins/llummio-forms/`
 
 Main file: `app/public/wp-content/plugins/llummio-forms/llummio-forms.php`
 
-Version: `0.3.3`
+Version: `0.3.4`
 
 ### Purpose
 
@@ -383,6 +383,7 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
 - Validates Spanish-style phone numbers, including optional `+34`.
 - Sends an admin notification email.
 - Sends an optional user confirmation email.
+- Lets administrators set the notification From name and From email per form.
 - Shows a confirmation message or redirects to a thank-you URL.
 - Counts successful submissions per form.
 - Supports terms and privacy policy URLs for the consent checkbox.
@@ -402,7 +403,7 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
 - CRM or marketing integrations.
 - SMTP delivery.
 
-The plugin sends mail through WordPress' normal `wp_mail()` function. Configure SMTP at the server level or with a dedicated SMTP plugin when a project needs authenticated mail delivery.
+The plugin sends mail through WordPress' normal `wp_mail()` function and lets each form set its notification From name and From email. Configure SMTP at the server level or with a dedicated SMTP plugin when a project needs authenticated mail delivery.
 
 Use a full form plugin when a project needs advanced form behavior.
 
@@ -416,7 +417,7 @@ Use a full form plugin when a project needs advanced form behavior.
 6. Edit the Spanish error messages if the project needs different wording.
 7. Set the submit button label and legal consent text.
 8. Set confirmation behavior.
-9. Set admin and user email notification text.
+9. Set admin and user email notification text, From name, and From email.
 10. Add terms and privacy policy URLs.
 11. Add reCAPTCHA keys when the project needs reCAPTCHA.
 12. Copy the shortcode from the form list or dashboard and add it to a page or pattern.
@@ -524,14 +525,15 @@ When upgrading the blueprint to a new major WordPress version:
 15. Switch confirmation to redirect and confirm the thank-you URL works.
 16. Confirm the admin notification email is sent.
 17. Confirm the user confirmation email is sent.
-18. Submit with an invalid email and confirm it is rejected.
-19. Submit with an invalid phone number and confirm it is rejected.
-20. Submit without privacy consent while consent is enabled and confirm it is rejected.
-21. Disable privacy consent and confirm the checkbox is not rendered.
-22. Add `{terms}` and `{privacy}` to the consent text and confirm the links render in the right place.
-23. Enable reCAPTCHA with valid keys and confirm submission still works.
-24. Confirm no submission entries or personal data are stored in the database.
-25. Confirm no PHP warnings appear in WordPress admin.
+18. Confirm both emails use the configured From name and From email.
+19. Submit with an invalid email and confirm it is rejected.
+20. Submit with an invalid phone number and confirm it is rejected.
+21. Submit without privacy consent while consent is enabled and confirm it is rejected.
+22. Disable privacy consent and confirm the checkbox is not rendered.
+23. Add `{terms}` and `{privacy}` to the consent text and confirm the links render in the right place.
+24. Enable reCAPTCHA with valid keys and confirm submission still works.
+25. Confirm no submission entries or personal data are stored in the database.
+26. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 
