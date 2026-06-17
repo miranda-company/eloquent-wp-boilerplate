@@ -4,6 +4,8 @@ Lightweight secure lead forms for trusted Llummio blueprint sites.
 
 Use the `[llummio_form id="default"]` shortcode to render a form. Create and edit forms from the `Llummio Forms` admin menu. Configure fields, editable labels, optional legal consent, editable Spanish error messages, desktop field widths, confirmation behavior, email notifications, From name/email, reCAPTCHA, terms/privacy URLs, and basic colors per form.
 
+After same-page success messages or validation errors, the page returns to the submitted form instead of leaving the visitor at the top of the page.
+
 Legal consent text supports `{terms}` and `{privacy}` tokens so each form can choose exactly where those links appear.
 
 The dashboard shows submission counts by form, but submissions are not stored in the database.

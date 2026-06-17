@@ -2,14 +2,14 @@
 /**
  * Plugin Name: Llummio Forms
  * Description: Lightweight secure lead forms for Llummio blueprint sites.
- * Version: 0.3.4
+ * Version: 0.3.5
  * Author: Llummio
  * Text Domain: llummio-forms
  */
 
 defined( 'ABSPATH' ) || exit;
 
-const LLUMMIO_FORMS_VERSION         = '0.3.4';
+const LLUMMIO_FORMS_VERSION         = '0.3.5';
 const LLUMMIO_FORMS_LEGACY_SETTINGS = 'llummio_forms_settings';
 const LLUMMIO_FORMS_FORMS_OPTION    = 'llummio_forms_forms';
 const LLUMMIO_FORMS_COUNTS_OPTION   = 'llummio_forms_submission_counts';
@@ -220,12 +220,15 @@ function llummio_forms_handle_submission() {
 	}
 
 	wp_safe_redirect(
-		add_query_arg(
-			array(
-				'llummio_form_status' => 'success',
-				'llummio_form_id'     => $form_id,
+		llummio_forms_add_form_anchor(
+			add_query_arg(
+				array(
+					'llummio_form_status' => 'success',
+					'llummio_form_id'     => $form_id,
+				),
+				llummio_forms_get_current_url()
 			),
-			llummio_forms_get_current_url()
+			$form_id
 		)
 	);
 	exit;
@@ -522,10 +525,12 @@ function llummio_forms_render_shortcode( $atts = array() ) {
 	$errors        = ! empty( $submission['errors'] ) ? $submission['errors'] : array();
 	$values        = ! empty( $submission['data'] ) ? $submission['data'] : array();
 	$success_match = 'success' === $status && $status_form === $form_id;
+	$form_anchor   = llummio_forms_get_form_anchor( $form_id );
+	$form_action   = llummio_forms_add_form_anchor( llummio_forms_get_current_url(), $form_id );
 
 	ob_start();
 	?>
-	<form class="llummio-form" style="<?php echo esc_attr( llummio_forms_get_form_style_attribute( $settings ) ); ?>" method="post" action="<?php echo esc_url( llummio_forms_get_current_url() ); ?>" novalidate>
+	<form id="<?php echo esc_attr( $form_anchor ); ?>" class="llummio-form" style="<?php echo esc_attr( llummio_forms_get_form_style_attribute( $settings ) ); ?>" method="post" action="<?php echo esc_url( $form_action ); ?>" novalidate>
 		<?php if ( $success_match ) : ?>
 			<div class="llummio-form__message llummio-form__message--success">
 				<?php echo esc_html( $settings['confirmation_message'] ); ?>
@@ -1219,6 +1224,27 @@ function llummio_forms_get_current_url() {
 	$uri    = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
 
 	return remove_query_arg( array( 'llummio_form_status', 'llummio_form_id' ), $scheme . $host . $uri );
+}
+
+/**
+ * Return a stable form anchor.
+ *
+ * @param string $form_id Form ID.
+ */
+function llummio_forms_get_form_anchor( $form_id ) {
+	return 'llummio-form-' . sanitize_html_class( $form_id );
+}
+
+/**
+ * Add the form anchor to a URL.
+ *
+ * @param string $url     URL.
+ * @param string $form_id Form ID.
+ */
+function llummio_forms_add_form_anchor( $url, $form_id ) {
+	$url = explode( '#', $url, 2 )[0];
+
+	return $url . '#' . llummio_forms_get_form_anchor( $form_id );
 }
 
 /**

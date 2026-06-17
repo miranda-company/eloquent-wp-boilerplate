@@ -2,6 +2,7 @@
 	display: grid;
 	gap: 1rem;
 	font-family: inherit;
+	scroll-margin-top: 96px;
 }
 
 .llummio-form__field {

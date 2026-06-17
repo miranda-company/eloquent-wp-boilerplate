@@ -344,7 +344,7 @@ Folder: `app/public/wp-content/plugins/llummio-forms/`
 
 Main file: `app/public/wp-content/plugins/llummio-forms/llummio-forms.php`
 
-Version: `0.3.4`
+Version: `0.3.5`
 
 ### Purpose
 
@@ -385,6 +385,7 @@ It replaces the need to ship a full form-builder plugin in the blueprint when th
 - Sends an optional user confirmation email.
 - Lets administrators set the notification From name and From email per form.
 - Shows a confirmation message or redirects to a thank-you URL.
+- Keeps the submitted form in view after same-page success messages or validation errors.
 - Counts successful submissions per form.
 - Supports terms and privacy policy URLs for the consent checkbox.
 - Inherits the website font.
@@ -521,19 +522,21 @@ When upgrading the blueprint to a new major WordPress version:
 11. Confirm `[llummio_form id="default"]` renders on a page.
 12. Confirm a second form shortcode renders that form's labels and settings.
 13. Submit a valid form and confirm the success message appears.
-14. Confirm the dashboard count increases for the submitted form only.
-15. Switch confirmation to redirect and confirm the thank-you URL works.
-16. Confirm the admin notification email is sent.
-17. Confirm the user confirmation email is sent.
-18. Confirm both emails use the configured From name and From email.
-19. Submit with an invalid email and confirm it is rejected.
-20. Submit with an invalid phone number and confirm it is rejected.
-21. Submit without privacy consent while consent is enabled and confirm it is rejected.
-22. Disable privacy consent and confirm the checkbox is not rendered.
-23. Add `{terms}` and `{privacy}` to the consent text and confirm the links render in the right place.
-24. Enable reCAPTCHA with valid keys and confirm submission still works.
-25. Confirm no submission entries or personal data are stored in the database.
-26. Confirm no PHP warnings appear in WordPress admin.
+14. Confirm the page returns to the submitted form instead of the top of the page.
+15. Confirm the dashboard count increases for the submitted form only.
+16. Switch confirmation to redirect and confirm the thank-you URL works.
+17. Confirm the admin notification email is sent.
+18. Confirm the user confirmation email is sent.
+19. Confirm both emails use the configured From name and From email.
+20. Submit with an invalid email and confirm it is rejected.
+21. Confirm the page returns to the submitted form after the validation error.
+22. Submit with an invalid phone number and confirm it is rejected.
+23. Submit without privacy consent while consent is enabled and confirm it is rejected.
+24. Disable privacy consent and confirm the checkbox is not rendered.
+25. Add `{terms}` and `{privacy}` to the consent text and confirm the links render in the right place.
+26. Enable reCAPTCHA with valid keys and confirm submission still works.
+27. Confirm no submission entries or personal data are stored in the database.
+28. Confirm no PHP warnings appear in WordPress admin.
 
 ### When To Replace It
 
