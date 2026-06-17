@@ -15,7 +15,12 @@ Text Domain: llummio-blueprint
 
 /* Theme tokens */
 :root {
+    /* Container widths */
+    --container-max-width: 1444px;
+    --container-min-width: 720px;
+
     /* Desktop section spacing */
+    --gap-size-default: 24px;
     --padding-section-lateral-default: 40px;
     --padding-section-unit: 8px;
     --padding-section-xxs: 16px;
@@ -27,6 +32,7 @@ Text Domain: llummio-blueprint
     --padding-section-xxl: 200px;
 
     /* Mobile section spacing */
+    --gap-size-default-mobile: 16px;
     --padding-section-lateral-default-mobile: 16px;
     --padding-section-unit-mobile: 8px;
     --padding-section-xxs-mobile: 12px;

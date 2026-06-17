@@ -42,7 +42,5 @@ app/public/wp-content/themes/llummio-blueprint/assets/fonts/Lexend*.ttf
 Thumbs.db
 *.log
 
-# Local packaging helpers
+# Local helper runtime
 .tools/
-.blueprint-package-*/
-llummio-wp-blueprint-prepared-*.zip
