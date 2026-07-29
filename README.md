@@ -36,6 +36,39 @@ The setup helper is intentionally local-tool agnostic. It works with tools like 
 php ..\..\tools\setup-client-site.php --url=http://client-name.test --wp-command="ddev wp" --yes
 ```
 
+## New Website Setup Checklist
+
+Use this short checklist when creating a new client website from the blueprint:
+
+1. Create a fresh local WordPress site for the client.
+2. Pull or download the latest blueprint repository.
+3. Copy only the reusable blueprint files into the new site.
+4. Keep the local tool's generated WordPress core files and `wp-config.php`.
+5. Open the site's WP-CLI shell or terminal.
+6. Run the setup helper with the new local URL:
+
+```bash
+php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes
+```
+
+7. If the database connection fails, rerun with the local database host and port:
+
+```bash
+php ..\..\tools\setup-client-site.php --url=http://client-name.local --db-host=localhost:10005 --yes
+```
+
+8. Confirm the setup helper reports `Demo Page` as the starter page.
+9. Open WordPress admin and log in with the starter admin:
+
+```text
+Username: llummio-admin
+Password: llummio
+```
+
+10. Confirm the homepage, admin, theme, plugins, header, footer, and forms load correctly.
+11. Replace starter details with client branding, users, logo, site identity, forms, legal pages, Global SEO, and content.
+12. Add premium plugin licenses inside WordPress admin. Do not commit license keys.
+
 ## Documentation
 
 Read these documents in order:
