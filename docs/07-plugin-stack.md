@@ -4,9 +4,9 @@ This blueprint includes the standard Llummio plugin stack.
 
 | Plugin | Folder | Version |
 | --- | --- | --- |
-| Advanced Custom Fields | `advanced-custom-fields` | 6.8.3 |
-| Create Block Theme | `create-block-theme` | 2.9.0 |
-| GenerateBlocks | `generateblocks` | 2.2.1 |
+| Advanced Custom Fields | `advanced-custom-fields` | 6.8.6 |
+| Create Block Theme | `create-block-theme` | 2.10.1 |
+| GenerateBlocks | `generateblocks` | 2.4.0 |
 | GenerateBlocks Pro | `generateblocks-pro` | 2.6.0-beta.3 |
 | Llummio Editor Helpers | `llummio-editor-helpers` | 0.6.8 |
 | Llummio Forms | `llummio-forms` | 0.3.5 |

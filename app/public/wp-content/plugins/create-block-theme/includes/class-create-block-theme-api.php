@@ -13,6 +13,7 @@ require_once __DIR__ . '/create-theme/theme-utils.php';
 require_once __DIR__ . '/create-theme/theme-readme.php';
 require_once __DIR__ . '/create-theme/theme-fonts.php';
 require_once __DIR__ . '/create-theme/theme-create.php';
+require_once __DIR__ . '/create-theme/theme-settings-save.php';
 
 /**
  * The api functionality of the plugin leveraged by the site editor UI.
@@ -42,7 +43,7 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_export_theme' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -53,7 +54,7 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_update_theme' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -64,7 +65,18 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_save_theme' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
+				},
+			)
+		);
+		register_rest_route(
+			'create-block-theme/v1',
+			'/theme-settings',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_save_theme_settings' ),
+				'permission_callback' => function () {
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -75,7 +87,7 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_clone_theme' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -86,7 +98,7 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_create_variation' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -97,7 +109,7 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_create_blank_theme' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -108,7 +120,7 @@ class CBT_Theme_API {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'rest_create_child_theme' ),
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			)
 		);
@@ -129,8 +141,12 @@ class CBT_Theme_API {
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => array( $this, 'rest_reset_theme' ),
+				// /reset-theme doesn't mutate theme files (it only clears
+				// user customisations from the DB), but is gated on the same
+				// cap as the file-mutating routes for permission-surface
+				// consistency.
 				'permission_callback' => function () {
-					return current_user_can( 'edit_theme_options' );
+					return self::can_modify_theme();
 				},
 			),
 		);
@@ -395,6 +411,41 @@ class CBT_Theme_API {
 	}
 
 	/**
+	 * Persist a partial theme.json payload from the Edit Theme Settings modal.
+	 *
+	 * Accepts the keys `settings`, `customTemplates`, `templateParts`, and
+	 * `removedShadowDefaults`. Only keys present in the payload are written;
+	 * missing keys leave the existing theme.json untouched.
+	 */
+	function rest_save_theme_settings( $request ) {
+		// `get_json_params()` returns null (or a scalar) for empty or
+		// non-object request bodies. The service signature requires an array,
+		// so guard here and return a 400 rather than letting the type hint
+		// fatal at the service boundary.
+		$payload = $request->get_json_params();
+		if ( ! is_array( $payload ) ) {
+			return new WP_Error(
+				'cbt_invalid_payload',
+				__( 'Request body must be a JSON object.', 'create-block-theme' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$result = CBT_Theme_Settings_Save::run( $payload );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return new WP_REST_Response(
+			array(
+				'status'     => 'SUCCESS',
+				'theme_json' => $result,
+			)
+		);
+	}
+
+	/**
 	 * Get a list of all the font families used in the theme.
 	 *
 	 * It includes the font families from the theme.json data (theme.json file + global styles) and the theme style variations.
@@ -456,5 +507,27 @@ class CBT_Theme_API {
 		$sanitized_theme['slug']                = sanitize_title( $theme['name'] );
 		$sanitized_theme['text_domain']         = $sanitized_theme['slug'];
 		return $sanitized_theme;
+	}
+
+	/**
+	 * Permission check for filesystem-mutating REST routes.
+	 *
+	 * Combines two WordPress Core primitives:
+	 *
+	 *  - `current_user_can( 'edit_themes' )` — Core's canonical theme-file
+	 *    capability. Held by Administrators on single-site, super-admins on
+	 *    multisite (NOT sub-site admins), and automatically denied when
+	 *    `DISALLOW_FILE_EDIT` is defined. This single check covers the
+	 *    multisite tenant boundary and the `DISALLOW_FILE_EDIT` hardening
+	 *    that the plugin honoured pre-v2.1.2.
+	 *  - `wp_is_file_mod_allowed( 'create_block_theme_modify_theme' )` —
+	 *    Core's canonical file-modification gate. Handles `DISALLOW_FILE_MODS`
+	 *    and the `file_mod_allowed` filter (used by hosts / security plugins).
+	 *
+	 * @return bool True when both checks pass.
+	 */
+	public static function can_modify_theme() {
+		return current_user_can( 'edit_themes' )
+			&& wp_is_file_mod_allowed( 'create_block_theme_modify_theme' );
 	}
 }

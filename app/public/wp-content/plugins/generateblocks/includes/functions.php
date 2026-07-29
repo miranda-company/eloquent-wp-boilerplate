@@ -651,6 +651,47 @@ function generateblocks_get_background_image_css( $type, $settings ) {
 }
 
 /**
+ * Determine whether an HTML attribute name holds a URL value.
+ *
+ * @since 2.3.0
+ *
+ * @param string $name The attribute name.
+ * @return bool True when the attribute should be treated as a URL.
+ */
+function generateblocks_is_url_attribute( $name ) {
+	/*
+	 * Attributes whose value the browser resolves as a URL and that can carry a
+	 * javascript:/data: scheme that EXECUTES — esc_url() must neutralize these. This list
+	 * also drives static htmlAttributes escaping (generateblocks_attr(),
+	 * generateblocks_get_escaped_html_attribute()), not just dynamic tags, so every entry
+	 * changes how existing stored values render — keep it tight:
+	 *   - href/src/action: original set.
+	 *   - formaction/xlink:href: javascript:-capable navigation sinks whose names are
+	 *     unambiguous on any element.
+	 * Deliberately excluded:
+	 *   - `data`: only a URL on <object>; the bare name is generic and a custom `data`
+	 *     attribute holding plain text would be rewritten ("plain value" →
+	 *     "http://plain%20value"). Core's WP_HTML_Tag_Processor::set_attribute() already
+	 *     esc_url()'s every wp_kses_uri_attributes() name (data included) on the paths
+	 *     that write attributes through it, so the <object data> sink keeps core's
+	 *     treatment there without this list matching it name-only.
+	 *   - fetch-only URL attributes (poster, cite, background): not execution sinks, and
+	 *     esc_url() would rewrite scheme-less values (a misused cite="Author Name" becomes
+	 *     http://Author%20Name) — a back-compat regression for no security gain.
+	 *   - list-valued attributes (ping, srcset): single-URL esc_url() corrupts the list.
+	 */
+	$url_attributes = array(
+		'href',
+		'src',
+		'action',
+		'formaction',
+		'xlink:href',
+	);
+
+	return in_array( strtolower( (string) $name ), $url_attributes, true );
+}
+
+/**
  * Build list of attributes into a string and apply contextual filter on string.
  *
  * The contextual filter is of the form `generateblocks_attr_{context}_output`.
@@ -678,7 +719,13 @@ function generateblocks_attr( $context, $attributes = array(), $settings = array
 		if ( true === $value ) {
 			$output .= esc_html( $key ) . ' ';
 		} else {
-			$output .= sprintf( '%s="%s" ', esc_html( $key ), esc_attr( $value ) );
+			$is_url_attribute = generateblocks_is_url_attribute( $key );
+
+			$escaped_value = $is_url_attribute
+				? esc_url( do_shortcode( $value ) )
+				: esc_attr( $value );
+
+			$output .= sprintf( '%s="%s" ', esc_html( $key ), $escaped_value );
 		}
 	}
 
@@ -1263,7 +1310,7 @@ function generateblocks_maybe_add_block_css( $content = '', $data = [] ) {
 		// Add inline <style> elements if we don't have access to wp_head.
 		$content = sprintf(
 			'<style>%s</style>',
-			$css
+			wp_strip_all_tags( $css )
 		) . $content;
 	} else {
 		// Add our CSS to the pool of existing CSS in wp_head.
@@ -1327,7 +1374,7 @@ function generateblocks_maybe_add_legacy_block_css( $content = '', $data = [] ) 
 			if ( $compiled_css ) {
 				$content = sprintf(
 					'<style>%s</style>',
-					$compiled_css
+					wp_strip_all_tags( $compiled_css )
 				) . $content;
 			}
 		} else {
@@ -2018,6 +2065,37 @@ function generateblocks_use_v1_blocks() {
 }
 
 /**
+ * Declare which extension points this version of GenerateBlocks supports.
+ *
+ * Companion plugins (GenerateBlocks Pro, GenerateCloud) should call this with
+ * function_exists() to detect features rather than checking GENERATEBLOCKS_VERSION,
+ * so version skew between plugins degrades gracefully.
+ *
+ * Known features:
+ *  - 'block-inspector-slot': v2 blocks render their inspector via the
+ *    `<BlockInspectorControls>` wrapper, which exposes the
+ *    `generateblocks.editor.inspectorControls` and
+ *    `generateblocks.editor.areInspectorControlsDisabled` filters.
+ *
+ * @param string $feature Feature key.
+ * @return bool
+ */
+function generateblocks_supports( $feature ) {
+	$features = [
+		'block-inspector-slot' => true,
+	];
+
+	/**
+	 * Filter the map of supported GenerateBlocks features.
+	 *
+	 * @param array $features Map of feature key => bool.
+	 */
+	$features = apply_filters( 'generateblocks_supported_features', $features );
+
+	return ! empty( $features[ $feature ] );
+}
+
+/**
  * Add custom attributes to a block.
  *
  * @since 2.0.0
@@ -2085,15 +2163,10 @@ function generateblocks_get_block_classes( $block_slug, $block_attributes, $with
 function generateblocks_get_backup_html_attributes( $block_slug, $attributes ) {
 	$classes = generateblocks_get_block_classes( $block_slug, $attributes );
 
-	$html_attributes = generateblocks_with_html_attributes(
-		[
-			'id'    => $attributes['anchor'] ?? null,
-			'class' => implode( ' ', $classes ),
-		],
-		$attributes
-	);
-
-	return $html_attributes;
+	return [
+		'id'    => $attributes['anchor'] ?? null,
+		'class' => implode( ' ', $classes ),
+	];
 }
 
 /**
@@ -2128,8 +2201,7 @@ function generateblocks_get_processed_html_attributes( $html ) {
  * @param string $value The raw attribute value.
  */
 function generateblocks_get_escaped_html_attribute( $name, $value ) {
-	$url_fields   = [ 'src', 'href' ];
-	$is_url_field = in_array( $name, $url_fields, true );
+	$is_url_field = generateblocks_is_url_attribute( $name );
 
 	if ( $is_url_field && ! empty( $value ) ) {
 		$value = do_shortcode( $value ); // esc_url() escapes shortcodes, so we need to do this first.

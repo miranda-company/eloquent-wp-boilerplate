@@ -119,6 +119,7 @@ function generateblocks_do_block_editor_assets() {
 			'disableGoogleFonts' => generateblocks_get_option( 'disable_google_fonts' ),
 			'typographyFontFamilyList' => generateblocks_get_font_family_list(),
 			'useV1Blocks' => generateblocks_use_v1_blocks(),
+			'hasBlockInspectorControlsSlot' => generateblocks_supports( 'block-inspector-slot' ),
 		)
 	);
 
@@ -222,48 +223,30 @@ function generateblocks_do_block_editor_assets() {
 		$packages_asset_info['version']
 	);
 
-	// Enqueue scripts for all edge22 packages in the plugin.
-	$package_json = GENERATEBLOCKS_DIR . 'package.json';
+	$edge22_packages = [
+		'block-styles',
+		'components',
+		'styles-builder',
+	];
 
-	if ( file_exists( $package_json ) ) {
-		$package_json_parsed = json_decode(
-			file_get_contents( $package_json ), // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+	foreach ( $edge22_packages as $name ) {
+		$package_asset_info = generateblocks_get_enqueue_assets( "{$name}-imported" );
+		$script_asset_info = generateblocks_get_enqueue_assets( $name );
+
+		wp_register_script(
+			"generateblocks-$name",
+			GENERATEBLOCKS_DIR_URL . 'dist/' . $name . '.js',
+			$package_asset_info['dependencies'],
+			$script_asset_info['version'],
 			true
 		);
 
-		$edge22_packages = array_filter(
-			$package_json_parsed['dependencies'],
-			function( $package_name ) {
-				return 0 === strpos( $package_name, '@edge22/' );
-			},
-			ARRAY_FILTER_USE_KEY
+		wp_register_style(
+			"generateblocks-$name",
+			false,
+			[ 'generateblocks-packages' ],
+			$packages_asset_info['version']
 		);
-
-		foreach ( $edge22_packages as $name => $version ) {
-			$name = str_replace( '@edge22/', '', $name );
-			$path = GENERATEBLOCKS_DIR . "dist/{$name}-imported.asset.php";
-
-			if ( ! file_exists( $path ) ) {
-				continue;
-			}
-
-			$package_info = require $path;
-
-			wp_register_script(
-				"generateblocks-$name",
-				GENERATEBLOCKS_DIR_URL . 'dist/' . $name . '.js',
-				$package_info['dependencies'],
-				$version,
-				true
-			);
-
-			wp_register_style(
-				"generateblocks-$name",
-				GENERATEBLOCKS_DIR_URL . 'dist/' . $name . '.css',
-				[],
-				$version
-			);
-		}
 	}
 
 	$editor_assets = generateblocks_get_enqueue_assets( 'editor' );
@@ -279,6 +262,10 @@ function generateblocks_do_block_editor_assets() {
 	$tags = GenerateBlocks_Register_Dynamic_Tag::get_tags();
 	$tag_list = [];
 
+	$can_author_dynamic_data = class_exists( 'GenerateBlocks_Dynamic_Tag_Security' ) &&
+		method_exists( 'GenerateBlocks_Dynamic_Tag_Security', 'user_can_author_dynamic_data' ) &&
+		GenerateBlocks_Dynamic_Tag_Security::user_can_author_dynamic_data();
+
 	foreach ( $tags as $tag => $data ) {
 		$relevant_data = $data;
 		unset( $relevant_data['return'] );
@@ -292,6 +279,16 @@ function generateblocks_do_block_editor_assets() {
 		'generateBlocksEditor',
 		[
 			'useV1Blocks'        => generateblocks_use_v1_blocks(),
+			/**
+			 * Filters whether WordPress 7.0's core "Additional CSS" textarea is
+			 * shown on GenerateBlocks blocks. We disable it by default because our
+			 * blocks have their own CSS editing; return true to re-enable it.
+			 *
+			 * @since 2.3.0
+			 *
+			 * @param bool $enabled Whether to allow the core Additional CSS field.
+			 */
+			'enableCoreAdditionalCss' => (bool) apply_filters( 'generateblocks_enable_core_additional_css', false ),
 			'dynamicTags'        => $tag_list,
 			'hasGPFontLibrary'   => function_exists( 'generatepress_is_module_active' )
 				? generatepress_is_module_active( 'generate_package_font_library', 'GENERATE_FONT_LIBRARY' )
@@ -299,7 +296,10 @@ function generateblocks_do_block_editor_assets() {
 			'dateFormat' => get_option( 'date_format' ),
 			'wpContentUrl' => content_url(),
 			'typographyFontFamilyList' => generateblocks_get_font_family_list(),
-			'dynamicTagsPreview' => apply_filters( 'generateblocks_dynamic_tags_preview', true ) ? 'enabled' : 'disabled',
+			'dynamicTagsPreview' => $can_author_dynamic_data && apply_filters( 'generateblocks_dynamic_tags_preview', true ) ? 'enabled' : 'disabled',
+			// Editor UI gate only — the save gate and render-time taint model enforce
+			// this server-side regardless of what the client does with the flag.
+			'canAuthorDynamicData' => $can_author_dynamic_data,
 		]
 	);
 
