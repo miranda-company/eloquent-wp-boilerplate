@@ -48,7 +48,7 @@ Do not rely on `app/sql/starter.sql` as the only place where reusable header, fo
 
 ## Updating The Starter Database
 
-`app/sql/starter.sql` is the database that a new Local site imports when starting from the blueprint. Updating it means replacing the old committed SQL export with a fresh, clean export from your current blueprint site.
+`app/sql/starter.sql` is the database that a new local site imports when starting from the blueprint. Updating it means replacing the old committed SQL export with a fresh, clean export from your current blueprint site.
 
 This is separate from saving header, footer, template, or pattern changes to the theme. Those changes should live in the theme files first. The database export should only capture the WordPress starter state that cannot live cleanly in theme files.
 
@@ -71,7 +71,7 @@ Use the focused updater for Demo Page edits. It updates only the page row and sa
 
 1. Edit `Demo Page` in the blueprint WordPress site.
 2. Save the page in the editor.
-3. Open Local's `Site shell` for the blueprint site.
+3. Open the blueprint site's WP-CLI shell or terminal.
 4. Confirm the shell opens in `app/public`.
 5. Run:
 
@@ -130,11 +130,11 @@ Use the WordPress UI first:
 
 Only clear a template or template part after its latest version has already been saved to the theme files. Clearing customizations tells WordPress to stop using the database copy and return to the theme file version.
 
-If the UI does not show a clear reset option, use Adminer carefully:
+If the UI does not show a clear reset option, use the local database tool carefully:
 
 1. Export a backup of the current database first.
-2. Open Local's `Database` tab.
-3. Open `Adminer`.
+2. Open the database view provided by the local tool.
+3. Open `Adminer`, `phpMyAdmin`, or the available database UI.
 4. Select the WordPress database, usually `local`.
 5. Open the `wp_posts` table.
 6. Filter for these post types:
@@ -166,13 +166,13 @@ WHERE post_type IN ('wp_template', 'wp_template_part');
 
 Use that SQL only on the blueprint site, only after exporting the latest template changes to theme files, and only after taking a database backup.
 
-### Exporting With Local And Adminer
+### Exporting With A Database Tool
 
 Use this process when you are ready to replace `app/sql/starter.sql`.
 
-1. Start the blueprint site in Local.
-2. Open Local's `Database` tab.
-3. Open `Adminer`.
+1. Start the blueprint site in your local WordPress tool.
+2. Open the local database view.
+3. Open `Adminer`, `phpMyAdmin`, or the available database UI.
 4. Select the WordPress database, usually `local`.
 5. Open `Export`.
 6. Export all WordPress tables.
@@ -198,7 +198,7 @@ Before committing, check the new `app/sql/starter.sql` for:
 
 Then test the export when the database change is important:
 
-1. Create or use a separate throwaway Local site.
+1. Create or use a separate throwaway local WordPress site.
 2. Import the new `app/sql/starter.sql`.
 3. Confirm WordPress loads.
 4. Confirm the starter admin works.

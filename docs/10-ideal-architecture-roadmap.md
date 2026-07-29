@@ -11,7 +11,7 @@ It includes:
 - the `Llummio Blueprint` theme;
 - internal Llummio plugins;
 - the approved plugin stack;
-- Local configuration;
+- local development configuration;
 - a clean starter database export;
 - documentation for setup, editing, plugin policy, and maintenance.
 
@@ -276,7 +276,7 @@ Current Phase 1 status:
 - Starter database front page now ships as `Demo Page`.
 - `style.css`, `generic.js`, and `animations.js` are focused on reusable foundation behavior.
 - Test-only GSAP, ScrollTrigger, and SplitText animation examples have been removed from `animations.js`.
-- A fresh Local smoke test passed using Site Shell, `wp db import ../sql/starter.sql`, corrected `siteurl` and `home`, and a Local database port in `DB_HOST`.
+- A fresh Local WP smoke test passed using Site Shell, `wp db import ../sql/starter.sql`, corrected `siteurl` and `home`, and a Local WP database port in `DB_HOST`.
 
 ### Phase 2: Define Shared vs Client-Specific Boundaries
 

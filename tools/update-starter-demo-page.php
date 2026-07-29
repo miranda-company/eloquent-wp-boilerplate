@@ -2,7 +2,7 @@
 /**
  * Update the committed starter database with the current blueprint Demo Page.
  *
- * Run from Local's Site Shell for the blueprint site:
+ * Run from the blueprint site's WP-CLI shell or terminal:
  * php ..\..\tools\update-starter-demo-page.php
  */
 
@@ -114,7 +114,7 @@ function llummio_run_wp_json( array $args ) {
 	$process = proc_open( $command, $descriptor_spec, $pipes );
 
 	if ( ! is_resource( $process ) ) {
-		llummio_fail( 'Could not start WP-CLI. Run this from Local\'s Site Shell for the blueprint site.' );
+		llummio_fail( 'Could not start WP-CLI. Run this from the blueprint site\'s WP-CLI shell or terminal.' );
 	}
 
 	fclose( $pipes[0] );

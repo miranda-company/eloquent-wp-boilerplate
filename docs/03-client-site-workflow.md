@@ -10,8 +10,8 @@ Use this checklist when starting a new website from the blueprint:
 
 1. Create a new local WordPress site for the client.
 2. Copy only the reusable blueprint theme, plugin, SQL, docs, and tools files into the new site folder.
-3. Keep Local's generated WordPress core files and `wp-config.php`.
-4. Run the setup helper from Local's `Site shell`.
+3. Keep the local tool's generated WordPress core files and `wp-config.php`.
+4. Run the setup helper from the site's WP-CLI shell or terminal.
 5. Confirm `siteurl` and `home` match the new local domain before opening WordPress.
 6. Log in with the starter admin account.
 7. Confirm the front page is the starter `Demo Page`.
@@ -27,13 +27,13 @@ Use this checklist when starting a new website from the blueprint:
 
 Use this process when creating a new client site from the Llummio blueprint.
 
-### 1.1 Create The Local Site
+### 1.1 Create The Local WordPress Site
 
-1. Open Local (https://localwp.com/).
+1. Open your preferred local WordPress tool.
 2. Create a new WordPress site for the client.
 3. Name the site using this convention: `client-name-dev`.
 4. Use the current Llummio standard PHP and MySQL versions unless the project requires something different.
-5. When Local asks for the WordPress admin user, use the starter credentials:
+5. When the local tool asks for the WordPress admin user, use the starter credentials:
 
 ```text
 Username: llummio-admin
@@ -41,16 +41,25 @@ Email: info@llumm.io
 Password: llummio
 ```
 
-6. Finish the Local setup and confirm the empty WordPress site opens in the browser.
+6. Finish the local setup and confirm the empty WordPress site opens in the browser.
+
+Recommended local tools:
+
+- WordPress Studio (https://developer.wordpress.com/pt-br/studio/).
+- Local WP.
+- DDEV.
+- DevKinsta.
+
+The blueprint should not depend on one local app. The only requirements are WordPress files, a database, and WP-CLI access.
 
 These credentials are only for local starter sites. Replace them before staging, production, client review, or handoff.
 
 ### 1.2 Add The Blueprint Files
 
-1. Stop the Local site.
-2. Open the Local site folder.
-3. Copy only the reusable blueprint files into the Local site folder.
-4. Keep the Local-generated WordPress core files and `wp-config.php` from the new site.
+1. Stop the local site.
+2. Open the local site folder.
+3. Copy only the reusable blueprint files into the local site folder.
+4. Keep the local tool-generated WordPress core files and `wp-config.php` from the new site.
 5. Do not copy old uploads, cache folders, logs, another client's media, or another site's `wp-config.php` into the new site.
 
 The important blueprint folders are:
@@ -61,39 +70,45 @@ The important blueprint folders are:
 - `docs/`
 - `tools/`
 
-Do not overwrite these Local-generated files and folders when creating a client site:
+Do not overwrite these local tool-generated files and folders when creating a client site:
 
 - `app/public/wp-config.php`
 - `app/public/wp-admin/`
 - `app/public/wp-includes/`
 - WordPress root files such as `wp-load.php`, `wp-settings.php`, and `wp-login.php`
 
-WordPress core should be installed and managed by Local for the new client site. The blueprint only needs to provide the theme, approved plugins, starter SQL, documentation, and setup helpers.
+WordPress core should be installed and managed by the chosen local tool for the new client site. The blueprint only needs to provide the theme, approved plugins, starter SQL, documentation, and setup helpers.
 
 ### 1.3 Run The Setup Helper
 
 Use this process for the normal new-site setup.
 
-1. Start the Local site.
-2. In Local, open the site's `Site shell`.
-3. Confirm the shell opens in `app/public`.
-4. Run the setup helper, replacing the URL with the exact Local domain:
+1. Start the local site.
+2. Open the site's WP-CLI shell or terminal.
+3. Confirm the shell opens in `app/public`, or move into that folder.
+4. Run the setup helper, replacing the URL with the exact local domain:
 
 ```bash
 php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes
 ```
 
-The helper imports `app/sql/starter.sql`, updates `siteurl` and `home`, activates the Llummio theme, activates the approved plugins, flushes permalinks, and confirms the starter `Demo Page`. It also tries to detect Local's custom database port automatically.
+The helper imports `app/sql/starter.sql`, updates `siteurl` and `home`, activates the Llummio theme, activates the approved plugins, flushes permalinks, and confirms the starter `Demo Page`. It also tries to detect common local database ports automatically.
 
-If the helper still cannot connect to the database, check Local's Database tab. If Local shows a custom port, rerun the helper with that port:
+If the helper still cannot connect to the database, check the database settings shown by the local tool. If it shows a custom host or port, rerun the helper with that value:
 
 ```bash
 php ..\..\tools\setup-client-site.php --url=http://client-name.local --db-host=localhost:10005 --yes
 ```
 
+If the local tool wraps WP-CLI, pass the wrapper with `--wp-command`:
+
+```bash
+php ..\..\tools\setup-client-site.php --url=http://client-name.test --wp-command="ddev wp" --yes
+```
+
 After the helper passes:
 
-1. Restart the Local site.
+1. Restart the local site.
 2. Log out of WordPress, or open the site in a private browser window.
 3. Confirm the starter admin works:
 
@@ -108,17 +123,17 @@ Password: llummio
 
 Use this process for a fresh setup or when testing an updated `app/sql/starter.sql`.
 
-Use Local's `Site shell` when possible. It is faster than Adminer and lets the team import the starter database and fix the Local URL before opening WordPress.
+Use the site's WP-CLI shell or terminal when possible. It is faster than a database UI and lets the team import the starter database and fix the local URL before opening WordPress.
 
-1. Start the Local site.
-2. In Local, open the site's `Site shell`.
+1. Start the local site.
+2. Open the site's WP-CLI shell or terminal.
 3. Confirm WP-CLI works:
 
 ```bash
 wp --info
 ```
 
-4. Confirm the site is using the new Local database connection:
+4. Confirm the site is using the new local database connection:
 
 ```bash
 wp config get DB_HOST
@@ -126,9 +141,9 @@ wp config get DB_NAME
 wp config get DB_USER
 ```
 
-Compare `DB_HOST` with the host and port shown in Local's Database tab.
+Compare `DB_HOST` with the host and port shown by the local tool.
 
-If Local shows a custom database port, `DB_HOST` must include it. For example, if Local shows port `10005`, use:
+If the local tool shows a custom database port, `DB_HOST` must include it. For example, if it shows port `10005`, use:
 
 ```bash
 wp config set DB_HOST "localhost:10005"
@@ -140,7 +155,7 @@ Then confirm the database connection works:
 wp db check
 ```
 
-If `wp db` commands fail with `Can't connect to MySQL server on 'localhost:3306'`, the new site may be using a copied `wp-config.php` from another Local site, or `DB_HOST` may be missing Local's database port. Restore the `wp-config.php` generated by Local, or update `DB_HOST` to match the host and port shown in Local's Database tab before continuing.
+If `wp db` commands fail with `Can't connect to MySQL server on 'localhost:3306'`, the new site may be using a copied `wp-config.php` from another site, or `DB_HOST` may be missing the local tool's database port. Restore the `wp-config.php` generated by the local tool, or update `DB_HOST` to match the host and port shown by the tool before continuing.
 
 5. Reset the local database:
 
@@ -162,7 +177,7 @@ If the shell opens in the site root, use only this command:
 wp db import app/sql/starter.sql
 ```
 
-7. Update the imported URL values before opening WordPress. Replace the URL with the exact Local domain for the new site:
+7. Update the imported URL values before opening WordPress. Replace the URL with the exact local domain for the new site:
 
 ```bash
 wp option update siteurl "http://client-name.local"
@@ -176,7 +191,7 @@ wp option get siteurl
 wp option get home
 ```
 
-9. Restart the Local site.
+9. Restart the local site.
 10. Log out of WordPress, or open the site in a private browser window.
 11. Confirm the starter admin works:
 
@@ -187,36 +202,36 @@ Password: llummio
 
 12. Confirm old personal credentials do not work.
 
-After import, the database contains the blueprint's original local URL. This is normal, but it must be corrected before opening WordPress. If Local shows `Warning! This site's WordPress URL settings do not match the host set in Local`, fix the URL mismatch first.
+After import, the database contains the blueprint's original local URL. This is normal, but it must be corrected before opening WordPress. If your local tool warns that WordPress URL settings do not match the local host, fix the URL mismatch first.
 
-If WP-CLI is not available in Site Shell, use Adminer as a fallback:
+If WP-CLI is not available, use the database tool provided by the local app as a fallback:
 
-1. In Local, open the site and go to the Database tab.
-2. Open Adminer from Local.
+1. Open the local site's database view.
+2. Open Adminer, phpMyAdmin, or the database UI provided by the tool.
 3. Select the site's database, usually `local`.
 4. Drop the existing WordPress tables.
 5. Import `app/sql/starter.sql`.
 6. Update the `siteurl` and `home` rows manually, or run the SQL in `1.5 Update The Site URL`.
-7. Restart the Local site before opening WordPress.
+7. Restart the local site before opening WordPress.
 
 ### 1.5 Update The Site URL
 
-Confirm WordPress uses the new Local domain.
+Confirm WordPress uses the new local domain.
 
 Check:
 
 - `siteurl`
 - `home`
 
-Both values should match the new Local domain, for example:
+Both values should match the new local domain, for example:
 
 ```text
 https://client-name.local
 ```
 
-If the imported starter database uses another domain, replace it with the new Local domain before continuing.
+If the imported starter database uses another domain, replace it with the new local domain before continuing.
 
-In Adminer, run this SQL after importing `app/sql/starter.sql`, replacing the URL with the exact Local site domain:
+In the database UI, run this SQL after importing `app/sql/starter.sql`, replacing the URL with the exact local site domain:
 
 ```sql
 UPDATE wp_options
@@ -224,21 +239,21 @@ SET option_value = 'http://client-name.local'
 WHERE option_name IN ('siteurl', 'home');
 ```
 
-Then restart the Local site before opening WordPress admin.
+Then restart the local site before opening WordPress admin.
 
-If Local offers a `Fix it` button for the URL mismatch, it is okay to use it. It should update these same values. If the site still shows a `502 Request Error` after fixing the URL:
+If the local tool offers a URL mismatch repair button, it is okay to use it. It should update these same values. If Local WP shows a `502 Request Error` after fixing the URL:
 
-1. Stop the Local site.
-2. Start the Local site again.
-3. Confirm `siteurl` and `home` still match the Local domain.
-4. Confirm no other Local site is using the same domain.
-5. Check Local's PHP and router logs for the first real error.
+1. Stop the Local WP site.
+2. Start the Local WP site again.
+3. Confirm `siteurl` and `home` still match the local domain.
+4. Confirm no other Local WP site is using the same domain.
+5. Check Local WP's PHP and router logs for the first real error.
 
 Do not continue building the client site until the homepage and WordPress admin both load cleanly.
 
 ### 1.6 Open WordPress Admin
 
-1. Open the Local site admin.
+1. Open the WordPress admin for the local site.
 2. Log in with the starter admin account: `llummio-admin`.
 3. Confirm the admin email is correct for the local starter site.
 4. Create or update the internal Llummio admin user.

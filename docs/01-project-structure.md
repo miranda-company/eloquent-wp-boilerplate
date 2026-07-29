@@ -22,7 +22,7 @@ Each client project should start from this foundation, then receive its own bran
 | `app/public/wp-content/themes/llummio-blueprint/` | Llummio block theme foundation. |
 | `app/public/wp-content/plugins/` | Approved internal plugin stack. |
 | `app/sql/starter.sql` | Canonical clean starter database export. |
-| `conf/` | Local app server configuration. |
+| `conf/` | Local WP app server configuration kept for Local-compatible workflows. |
 | `docs/` | Internal setup, workflow, policy, and maintenance documentation. |
 | `tools/` | Small repository maintenance helpers. |
 | `logs/` | Local runtime logs. Ignored by Git. |
@@ -49,7 +49,7 @@ When editing templates, template parts, or GenerateBlocks patterns in WordPress,
 - Theme files.
 - Approved plugin code used by the blueprint.
 - Documentation.
-- Local configuration templates.
+- Tool-specific local development configuration templates.
 - One clean starter database export.
 - Small reusable assets required by the theme.
 
@@ -59,7 +59,7 @@ When editing templates, template parts, or GenerateBlocks patterns in WordPress,
 - Uploads and generated media.
 - Cache folders.
 - Logs.
-- Local-only database exports.
+- Tool-specific local database exports.
 - Plugin license keys.
 - Production credentials.
 - WordPress session tokens.

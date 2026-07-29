@@ -2,13 +2,13 @@
 
 Private company-owned WordPress blueprint for starting Llummio client websites.
 
-Llummio designs and develops clean, lean, modern WordPress websites for service businesses. This repository is internal build infrastructure for that work. It includes the reusable Llummio block theme, the standard plugin stack, Local configuration, and a cleaned starter database export.
+Llummio designs and develops clean, lean, modern WordPress websites for service businesses. This repository is internal build infrastructure for that work. It includes the reusable Llummio block theme, the standard plugin stack, local development configuration, and a cleaned starter database export.
 
 ## Included
 
 - Llummio Blueprint block theme.
 - Standard Llummio plugin stack, including premium plugins used internally.
-- Local app server configuration.
+- Local development configuration.
 - Cleaned starter database export at `app/sql/starter.sql`.
 - Maintenance helpers for setup and blueprint checks.
 
@@ -21,14 +21,20 @@ Llummio designs and develops clean, lean, modern WordPress websites for service 
 
 ## Use
 
-1. Create a new Local WordPress site.
+1. Create a new local WordPress site in the tool you prefer.
 2. Copy only the reusable blueprint theme, approved plugins, starter SQL, docs, and tools into the site folder.
-3. Keep Local's generated WordPress core files and `wp-config.php`.
-4. Open Local's `Site shell`.
+3. Keep the local tool's generated WordPress core files and `wp-config.php`.
+4. Open the site's WP-CLI shell or terminal.
 5. Run `php ..\..\tools\setup-client-site.php --url=http://client-name.local --yes`.
-6. If the helper cannot detect Local's custom database port, rerun with `--db-host=localhost:PORT`.
+6. If the helper cannot detect a custom database host or port, rerun with `--db-host=HOST:PORT`.
 7. Add premium plugin license keys inside WordPress admin after setup.
 8. Run `php tools/check-blueprint.php` before committing blueprint changes.
+
+The setup helper is intentionally local-tool agnostic. It works with tools like Local WP, WordPress Studio (https://developer.wordpress.com/pt-br/studio/), DDEV, DevKinsta, or any setup where the site has WordPress files, a database, and WP-CLI access. If WP-CLI is wrapped by the tool, pass it with `--wp-command`, for example:
+
+```bash
+php ..\..\tools\setup-client-site.php --url=http://client-name.test --wp-command="ddev wp" --yes
+```
 
 ## Documentation
 
