@@ -6,8 +6,8 @@ Author URI: https://llumm.io/
 Description: A reusable WordPress block theme foundation for custom websites.
 Requires at least: 7.0
 Tested up to: 7.0
-Requires PHP: 5.7
-Version: 0.1.0
+Requires PHP: 7.4
+Version: 1.0.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: llummio-blueprint
@@ -17,7 +17,11 @@ Text Domain: llummio-blueprint
 :root {
     /* Container widths */
     --container-max-width: 1444px;
-    --container-min-width: 720px;
+    --container-max-width-l: 920px;
+    --container-max-width-m: 720px;
+    --container-max-width-s: 580px;
+    --container-max-height: 580px;
+    --container-max-height-mobile: 320px;
 
     /* Desktop section spacing */
     --gap-size-default: 24px;
